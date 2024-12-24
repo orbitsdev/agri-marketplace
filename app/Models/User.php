@@ -3,6 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Cart;
+use App\Models\Order;
+use App\Models\Farmer;
+use App\Models\Location;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Laravel\Jetstream\HasProfilePhoto;
@@ -100,6 +104,8 @@ class User extends Authenticatable implements HasMedia
     }
 
 
+
+
     
 
 public function getImage()
@@ -112,4 +118,34 @@ public function getImage()
 
 
 }
+
+public function farmer()
+{
+    return $this->hasOne(Farmer::class);
+}
+
+public function locations()
+{
+    return $this->hasMany(Location::class);
+}
+
+// has many orders
+public function orders()
+{
+    return $this->hasMany(Order::class);
+}
+
+
+// has many carts
+public function carts()
+{
+    return $this->hasMany(Cart::class);
+}
+
+// has many notifications
+public function notifications()
+{
+    return $this->hasMany(Notification::class);
+}
+
 }

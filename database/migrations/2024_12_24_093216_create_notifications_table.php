@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('farmers', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->string('farm_name')->nullable();
-            $table->string('location')->nullable();
-            $table->string('farm_size')->nullable();
-            $table->text('description')->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); 
+            $table->text('message')->nullable();
+            $table->enum('type', ['sms', 'system'])->default('system');
+            $table->enum('status', ['Pending', 'sent'])->default('Pending'); 
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('farmers');
+        Schema::dropIfExists('notifications');
     }
 };

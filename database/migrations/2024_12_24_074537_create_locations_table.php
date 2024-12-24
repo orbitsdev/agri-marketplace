@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('region')->nullable();
             $table->string('province')->nullable();
             $table->string('city_municipality')->nullable();
             $table->string('barangay')->nullable();
             $table->string('street')->nullable();
             $table->string('zip_code')->nullable();
+            $table->boolean('is_default')->default(false);
             $table->timestamps();
         });
     }

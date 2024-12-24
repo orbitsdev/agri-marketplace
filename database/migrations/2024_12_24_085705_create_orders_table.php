@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('farmer_id')->constrained('farmers')->onDelete('cascade');
-            $table->string('product_name')->nullable();
-            $table->text('description')->nullable();
-            $table->bigInteger('quantity')->nullable();
+            $table->foreignId('buyer_id')->constrained('users')->onDelete('cascade');
             $table->double('price')->nullable();
-            $table->enum('status', ['Available', 'Sold', 'Pending'])->default('Available');
+            $table->enum('status', ['Pending', 'Confirm', 'Cancelled','Completed'])->default('Pending');
+            $table->double('total', 10, 2)->nullable(); // Total price for the order
+
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('orders');
     }
 };
