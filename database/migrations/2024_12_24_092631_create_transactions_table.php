@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
             $table->double('amount')->nullable();
-            $table->enum('status', ['Pending', 'Success', 'Failed'])->default('Available');
+            $table->enum('status', ['Pending', 'Success', 'Failed'])->default('Pending');
             $table->string('payment_method')->nullable();
             $table->string('payment_reference')->nullable();
             $table->timestamp('transaction_date')->nullable();

@@ -5,6 +5,8 @@ use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Models\Farmer;
+
 class Document extends Model  implements HasMedia
 {
     use HasFactory;
@@ -12,10 +14,17 @@ class Document extends Model  implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('image')->singleFile();
-        $this->addMediaCollection('gallery');
+        $this->addMediaCollection('file')->singleFile();
+       
+
+        $this->addMediaCollection('files');
     
         
+    }
+
+    public function farmer()
+    {
+        return $this->belongsTo(Farmer::class);
     }
 
 }
