@@ -15,19 +15,25 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name'=> 'Market Place Admin',
+            'first_name'=> 'Admin',
+            'middle_name'=> 'K',
+            'last_name'=> 'Marketplace',
             'email'=> 'admin@agrimarketplace.com',
             'password'=> Hash::make('password'),
             'role'=> User::ADMIN,
          ]);
         User::create([
-            'name'=> 'Buyer User',
+           'first_name'=> 'Buyer',
+           'middle_name'=> 'K',
+           'last_name'=> 'Marketplace',
             'email'=> 'buyer@agrimarketplace.com',
             'password'=> Hash::make('password'),
             'role'=> User::BUYER,
          ]);
         User::create([
-            'name'=> 'Farmer User',
+            'first_name'=> 'Farmer',
+            'middle_name'=> 'K',
+            'last_name'=> 'Marketplace',
             'email'=> 'farmer@agrimarketplace.com',
             'password'=> Hash::make('password'),
             'role'=> User::FARMER,

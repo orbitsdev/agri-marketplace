@@ -41,7 +41,9 @@ class User extends Authenticatable implements HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'middle_name',
+        'last_name',
         'email',
         'password',
     ];
@@ -75,4 +77,39 @@ class User extends Authenticatable implements HasMedia
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ADMIN;
+    }
+
+    public function isBuyer(): bool
+    {
+        return $this->role === self::BUYER;
+    }
+
+    public function isFarmer(): bool
+    {
+        return $this->role === self::FARMER;
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('image')->singleFile();
+        
+    }
+
+
+    
+
+public function getImage()
+{
+    if ($this->hasMedia()) {
+        return $this->getFirstMediaUrl();
+    }
+
+    return url('images/placeholder-image.jpg');
+
+
+}
 }

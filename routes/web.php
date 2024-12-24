@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +23,14 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
+    
+   
+    Route::get('/dashboard', function () { 
+        if(Auth::user()->isAdmin()){
+            return redirect('/admin');
+        }else{
+            return redirect('/dashboard');
+        }
     })->name('dashboard');
+    Route::get('/user-dashboard', function () { return view('dashboard');})->name('user.dashboard');
 });
