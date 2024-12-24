@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Filament\Panel;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Cart;
 use App\Models\Order;
@@ -11,14 +11,15 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Notifications\Notifiable;
-use Filament\Tables\Columns\Layout\Panel;
+
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Filament\Models\Contracts\HasName;
+use Filament\Models\Contracts\FilamentUser;
+class User extends Authenticatable implements FilamentUser, HasName , HasMedia {
 
-class User extends Authenticatable implements HasMedia
-{
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
@@ -81,7 +82,19 @@ class User extends Authenticatable implements HasMedia
     protected $appends = [
         'profile_photo_url',
     ];
-
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;
+        // return match($panel->getId()){
+        //     'admin'=> $this->hasAnyRole(['Admin']),
+        //     'clinic'=> $this->hasAnyRole(['Admin','Veterenarian']),
+        //     'client'=> $this->hasAnyRole(['Admin','Client','Veterenarian']),
+        // };
+    }
+    public function getFilamentName(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
     public function isAdmin(): bool
     {
         return $this->role === self::ADMIN;
