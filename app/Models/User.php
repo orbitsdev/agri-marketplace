@@ -7,17 +7,19 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Farmer;
 use App\Models\Location;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
+use Filament\Models\Contracts\HasName;
+
 use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Notifications\Notifiable;
-
+use Filament\Models\Contracts\FilamentUser;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Filament\Models\Contracts\HasName;
-use Filament\Models\Contracts\FilamentUser;
+
 class User extends Authenticatable implements FilamentUser, HasName , HasMedia {
 
     use HasApiTokens;
@@ -116,8 +118,28 @@ class User extends Authenticatable implements FilamentUser, HasName , HasMedia {
         
     }
 
+    public function getFullNameAttribute()
+    {
+        $firstName = $this->first_name ?? '';
+        $lastName = $this->last_name ?? '';
+        $middleName = $this->middle_name ?? '';
+    
+        return $lastName . ',' . $firstName.' '.$middleName;
+    }
+    // make function to get fullname  lower case slug 
+    
+    
+public function fullNameSlug()
+{
+    $firstName = $this->first_name ?? '';
+    $lastName = $this->last_name ?? '';
 
+    // Combine first name and last name with a dash
+    $slug = $firstName . '-' . $lastName;
 
+    // Convert to lowercase and remove special characters
+    return Str::slug($slug);
+}
 
     
 

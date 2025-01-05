@@ -19,6 +19,8 @@ return new class extends Migration
             $table->bigInteger('quantity')->nullable();
             $table->double('price')->nullable();
             $table->enum('status', ['Available', 'Sold', 'Pending'])->default('Available');
+            $table->string('code')->unique()->nullable();
+            $table->boolean('is_published')->default(false);
             $table->timestamps();
         });
     }

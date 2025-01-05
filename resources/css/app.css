@@ -5,3 +5,7 @@
 [x-cloak] {
     display: none;
 }
+
+.prose .span {
+    @apply text-sm text-gray-500;
+}

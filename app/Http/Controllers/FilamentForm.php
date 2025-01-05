@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Product;
 use Filament\Forms\Get;
 use Illuminate\Http\Request;
 use Filament\Forms\Components\Tabs;
@@ -10,6 +11,7 @@ use Filament\Forms\Components\Group;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
@@ -17,7 +19,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Components\Wizard;
+
 class FilamentForm extends Controller
 {
     public static function userForm()
@@ -73,7 +75,8 @@ class FilamentForm extends Controller
                                             ])
                                             ->searchable()
                                             ->live()
-                                            ->hidden(fn(string $operation): bool => $operation === 'edit'),
+                                            
+                                            ->disabled(fn(string $operation): bool => $operation === 'edit'),
                     
                                         TextInput::make('password')
                                             ->password()
@@ -424,6 +427,89 @@ class FilamentForm extends Controller
 
 
             
+        ];
+    }
+
+    public static function productForm()
+    {
+        return [
+            Section::make('Product Details')
+            //description
+            ->description('Provide the necessary product details. Ensure all required fields are filled out correctly.')
+            ->columns([
+                'sm' => 2,
+                'md' => 4,
+                'lg' => 6,
+                'xl' => 8,
+                '2xl' => 12,
+            ])
+            ->columnSpanFull()
+            
+            ->schema([
+                TextInput::make('product_name')
+                    ->required()
+                    ->columnSpan([
+                        'sm' => 2,
+                        'md' => 4,
+                        'lg' => 4,
+                    ]),
+                TextInput::make('quantity')
+                    ->required()
+                    //number only
+                    ->numeric()
+                    ->default(1)
+                    ->columnSpan([
+                        'sm' => 2,
+                        'md' => 4,
+                        'lg' => 4,
+                    ]),
+                TextInput::make('price')
+                    ->required()
+                    //number only
+                    ->numeric()
+
+                    ->columnSpan([
+                        'sm' => 2,
+                        'md' => 4,
+                        'lg' => 4,
+                    ]),
+                RichEditor::make('description')
+                    ->required()
+                    ->columnSpanFull()
+                    ->toolbarButtons([
+                        'attachFiles',
+                        'blockquote',
+                        'bold',
+                        'bulletList',
+                        'codeBlock',
+                        'h2',
+                        'h3',
+                        'italic',
+                        'link',
+                        'orderedList',
+                        'redo',
+                        'strike',
+                        'underline',
+                        'undo',
+                    ]),
+// status 
+
+                Select::make('status')
+                    ->options(Product::STATUS_OPTIONS)
+                    ->default('Available')
+                    ->required()
+                    //columnspan 
+                    ->columnSpan([
+                        'sm' => 2,
+                        'md' => 4,
+                        'lg' => 4,
+                    ]),
+                    
+                    SpatieMediaLibraryFileUpload::make('image')->columnSpanFull() ->image()
+                    ->imageEditor()
+                    // ->required()
+                    ,
+            ]),
         ];
     }
 }
