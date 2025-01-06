@@ -7,10 +7,10 @@ const colors = require('tailwindcss/colors')
 /** @type {import('tailwindcss').Config} */
 export default {
     presets: [
-        preset,
         require("./vendor/wireui/wireui/tailwind.config.js"),
-       
-    
+        preset,
+
+
     ],
     content: [
 
@@ -42,6 +42,21 @@ export default {
                 negative: colors.red,
                 warning: colors.amber,
                 info: colors.blue,
+
+                'eucalyptus': {
+                '50': '#ecfdf4',
+                '100': '#d1fae3',
+                '200': '#a7f3cc',
+                '300': '#6de8b1',
+                '400': '#33d491',
+                '500': '#0fba78',
+                '600': '#048e5c',
+                '700': '#037951',
+                '800': '#065f41',
+                '900': '#064e37',
+                '950': '#022c20',
+                    },
+
             }
         },
     },

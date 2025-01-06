@@ -12,10 +12,10 @@ class ProductObserver
      */
     public function created(Product $product): void
     {
-        $regionCode = 'REG123'; // Example static region code
+        $regionCode = 'REG'; // Example static region code
         $farmerId = str_pad($product->farmer_id, 3, '0', STR_PAD_LEFT);
         $randomPart = strtoupper(Str::random(6)); // 6-character random string
-        
+
         $product->code = "prod-{$regionCode}-{$farmerId}-{$randomPart}";
         $product->save();
     }

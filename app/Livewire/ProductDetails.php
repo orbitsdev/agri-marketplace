@@ -5,36 +5,41 @@ namespace App\Livewire;
 use App\Models\Cart;
 use App\Models\Product;
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Filament\Actions\Action;
-use Livewire\WithPagination;
+use WireUi\Traits\WireUiActions;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\TextInput;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Actions\Concerns\InteractsWithActions;
-use WireUi\Traits\WireUiActions;
-class BuyerDashboard extends Component implements  HasForms, HasActions
+
+class ProductDetails extends Component implements  HasForms, HasActions
 {
     use InteractsWithActions;
     use InteractsWithForms;
     use WireUiActions;
-    use WithPagination;
 
+    public $product;
+
+    public function mount($code, $slug)
+    {
+
+        $this->product = Product::withRelations()->where('code', $code)->firstOrFail();
+
+    }
     public function render()
     {
-        $products = Product::hasQuantity()->withRelations()->paginate(5);
-
-        return view('livewire.buyer-dashboard', ['products' => $products]);
+        return view('livewire.product-details',['product' => $this->product]);
     }
 
     public function addToCartAction(): Action
     {
         return Action::make('addToCart')
-            // ->color('primary')
-
-            // ->requiresConfirmation()
+        ->label('Add To cart')
+        ->icon('heroicon-o-shopping-cart')
+            ->size('xl')
             ->form([
 
 
@@ -81,9 +86,8 @@ class BuyerDashboard extends Component implements  HasForms, HasActions
                     }
 
                     DB::commit();
-                    $this->dispatch('cart.updated');
 
-                    // FilamentForm::notification('Product added to cart successfully!');
+                    $this->dispatch('cart.updated');
                     $this->dialog()->show([
                         'icon' => 'success',
                         'title' => 'Success',
@@ -102,5 +106,5 @@ class BuyerDashboard extends Component implements  HasForms, HasActions
 
                 }
             });
-    }
+        }
 }

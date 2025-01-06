@@ -36,5 +36,10 @@ class AppServiceProvider extends ServiceProvider
         FilamentAsset::register([
             Css::make('custom-stylesheet', __DIR__ . '/../../resources/css/custom.css'),
         ]);
+
+        FilamentColor::register([
+            'primary' => "#048E5C",
+
+        ]);
     }
 }

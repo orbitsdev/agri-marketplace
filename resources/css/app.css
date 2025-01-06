@@ -1,11 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@tailwind variants;
 [x-cloak] {
     display: none;
 }
 
-.prose .span {
+
+
+.product .prose p{
+    @apply text-base text-gray-500;
+}
+
+
+.custom-prose p {
+    @apply text-base text-gray-500;
+}
+.product-prose p {
     @apply text-sm text-gray-500;
 }

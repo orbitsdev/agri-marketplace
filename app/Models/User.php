@@ -115,7 +115,7 @@ class User extends Authenticatable implements FilamentUser, HasName , HasMedia {
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('image')->singleFile();
-        
+
     }
 
     public function getFullNameAttribute()
@@ -123,12 +123,12 @@ class User extends Authenticatable implements FilamentUser, HasName , HasMedia {
         $firstName = $this->first_name ?? '';
         $lastName = $this->last_name ?? '';
         $middleName = $this->middle_name ?? '';
-    
-        return $lastName . ',' . $firstName.' '.$middleName;
+
+        return $lastName . ', ' . $firstName.' '.$middleName;
     }
-    // make function to get fullname  lower case slug 
-    
-    
+    // make function to get fullname  lower case slug
+
+
 public function fullNameSlug()
 {
     $firstName = $this->first_name ?? '';
@@ -141,7 +141,7 @@ public function fullNameSlug()
     return Str::slug($slug);
 }
 
-    
+
 
 public function getImage()
 {
@@ -174,7 +174,7 @@ public function orders()
 // has many carts
 public function carts()
 {
-    return $this->hasMany(Cart::class);
+    return $this->hasMany(Cart::class, 'buyer_id',);
 }
 
 // has many notifications
@@ -182,5 +182,22 @@ public function notifications()
 {
     return $this->hasMany(Notification::class);
 }
+// scope with media
+public function scopeWithMedia($query)
+{
+    return $query->with(['media']);
+}
+
+
+public function getTotalCartItems()
+{
+    return $this->carts()->count();
+}
+public function getSelectedCartCount()
+{
+    return $this->carts()->where('is_selected', true)->count();
+}
+
+
 
 }

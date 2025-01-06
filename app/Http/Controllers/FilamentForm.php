@@ -15,6 +15,7 @@ use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
@@ -25,8 +26,8 @@ class FilamentForm extends Controller
     public static function userForm()
     {
         return [
-          
- 
+
+
             Wizard::make([
                 Wizard\Step::make('User Details')
                     ->schema([
@@ -54,7 +55,7 @@ class FilamentForm extends Controller
                                                 'lg' => 4,
                                             ]
                                         ),
-                    
+
                                         TextInput::make('email')
                                             ->required()
                                             ->unique(ignoreRecord: true)
@@ -63,7 +64,7 @@ class FilamentForm extends Controller
                                                 'md' => 4,
                                                 'lg' => 4,
                                             ]),
-                    
+
                                         Select::make('role')
                                             ->default(User::FARMER)
                                             ->required()
@@ -75,9 +76,9 @@ class FilamentForm extends Controller
                                             ])
                                             ->searchable()
                                             ->live()
-                                            
+
                                             ->disabled(fn(string $operation): bool => $operation === 'edit'),
-                    
+
                                         TextInput::make('password')
                                             ->password()
                                             ->revealable()
@@ -90,7 +91,7 @@ class FilamentForm extends Controller
                                             ->dehydrated(fn(?string $state): bool => filled($state))
                                             ->required(fn(string $operation): bool => $operation === 'create')
                                             ->label(fn(string $operation) => $operation == 'create' ? 'Password' : 'New Password'),
-                    
+
                                         FileUpload::make('profile_photo_path')
                                             ->disk('public')
                                             ->directory('accounts')
@@ -204,9 +205,9 @@ class FilamentForm extends Controller
     //                     ->columnSpanFull()
     //                     ->label('Profile'),
 
-                       
 
-                        
+
+
     //             ]),
 
     //         ]),
@@ -223,7 +224,7 @@ class FilamentForm extends Controller
     //             return $get('role') !== User::FARMER;
     //         }),
     //     ]),
-           
+
 
         ];
     }
@@ -241,16 +242,16 @@ class FilamentForm extends Controller
     ])
     ->columnSpanFull()
     ->relationship('farmer')
-  
+
     ->schema([
         TextInput::make('farm_name')
-        
+
         ->required()
         ->columnSpan([
             'sm' => 2,
             'md' => 4,
             'lg' => 4,
-            
+
         ]),
     // text input location
     TextInput::make('location')
@@ -259,7 +260,7 @@ class FilamentForm extends Controller
             'sm' => 2,
             'md' => 4,
             'lg' => 4,
-            
+
         ]),
     // text input farm size
     TextInput::make('farm_size')
@@ -268,7 +269,7 @@ class FilamentForm extends Controller
             'sm' => 2,
             'md' => 4,
             'lg' => 4,
-            
+
         ]),
     // text input description
     RichEditor::make('description')
@@ -292,7 +293,7 @@ class FilamentForm extends Controller
     ]),
     ]),
 
-          
+
 
             // Group::make()
             // ->hidden(function (Get $get) {
@@ -308,7 +309,7 @@ class FilamentForm extends Controller
             // ])
             // ->columnSpanFull()
             // ->relationship('farmer')
-          
+
             // ->schema([
 
             //     Tabs::make('Farmer Details')
@@ -323,11 +324,11 @@ class FilamentForm extends Controller
             //     ->tabs([
             //         Tab::make('Farmer Details')
             //             ->schema([
-                           
+
             //             ]),
             //         Tab::make('Documents')
             //             ->schema([
-                            
+
             //     // table repeater documents
 
 
@@ -339,10 +340,10 @@ class FilamentForm extends Controller
             //         'name' => '200px',
             //     ])
             //     ->maxItems(3)
-                
+
             //     ->withoutheader()
             //     ->schema([
-                   
+
             //         // text input name
             //         TextInput::make('name')
             //             ->required()
@@ -360,20 +361,20 @@ class FilamentForm extends Controller
             //             ->reorderable()->maxFiles(3)
 
             //     ]),
-                
+
             //             ]),
-                    
+
             //         ]) ->columnSpanFull(),
 
 
 
-         
 
-            
+
+
 
             // ])
 
-            
+
 
         ];
     }
@@ -391,7 +392,7 @@ class FilamentForm extends Controller
     ])
     ->columnSpanFull()
     ->relationship('farmer')
-  
+
     ->schema([
         TableRepeater::make('farmer_documents')
                 ->relationship('documents')
@@ -401,10 +402,10 @@ class FilamentForm extends Controller
                     'name' => '200px',
                 ])
                 ->maxItems(6)
-                
+
                 ->withoutheader()
                 ->schema([
-                   
+
                     // text input name
                     TextInput::make('name')
                         ->required()
@@ -422,11 +423,11 @@ class FilamentForm extends Controller
                         // ->reorderable()->maxFiles(3)
 
                 ]),
-                
+
                         ])->columnSpanFull(),
 
 
-            
+
         ];
     }
 
@@ -444,7 +445,7 @@ class FilamentForm extends Controller
                 '2xl' => 12,
             ])
             ->columnSpanFull()
-            
+
             ->schema([
                 TextInput::make('product_name')
                     ->required()
@@ -492,24 +493,41 @@ class FilamentForm extends Controller
                         'underline',
                         'undo',
                     ]),
-// status 
+// status
 
                 Select::make('status')
                     ->options(Product::STATUS_OPTIONS)
                     ->default('Available')
                     ->required()
-                    //columnspan 
+                    //columnspan
                     ->columnSpan([
                         'sm' => 2,
                         'md' => 4,
                         'lg' => 4,
                     ]),
-                    
+
                     SpatieMediaLibraryFileUpload::make('image')->columnSpanFull() ->image()
                     ->imageEditor()
                     // ->required()
                     ,
             ]),
         ];
+    }
+
+    public static function success(String $title = 'Success', String $body = null)
+    {
+        Notification::make()
+            ->title($title)
+            ->body($body)
+            ->success()
+            ->send();
+    }
+    public static function danger(String $title = 'Success', String $body = null)
+    {
+        Notification::make()
+            ->title($title)
+            ->body($body)
+            ->danger()
+            ->send();
     }
 }

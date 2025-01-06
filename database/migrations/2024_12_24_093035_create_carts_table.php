@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('buyer_id')->constrained('users')->onDelete('cascade'); // References buyer
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade'); // References product
-            $table->integer('quantity'); 
-            $table->double('price_per_unit'); 
+            $table->integer('quantity');
+            $table->double('price_per_unit');
+            $table->boolean('is_selected')->default(false);
             $table->timestamps();
         });
     }

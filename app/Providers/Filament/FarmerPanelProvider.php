@@ -37,7 +37,7 @@ class FarmerPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Farmer/Widgets'), for: 'App\\Filament\\Farmer\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

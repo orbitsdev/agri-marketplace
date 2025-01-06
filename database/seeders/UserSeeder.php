@@ -23,10 +23,26 @@ class UserSeeder extends Seeder
             'role'=> User::ADMIN,
          ]);
         User::create([
+            'first_name'=> 'Admin',
+            'middle_name'=> 'K',
+            'last_name'=> 'Marketplace',
+            'email'=> 'admin@gmail.com',
+            'password'=> Hash::make('password'),
+            'role'=> User::ADMIN,
+         ]);
+        User::create([
            'first_name'=> 'Buyer',
            'middle_name'=> 'K',
            'last_name'=> 'Marketplace',
             'email'=> 'buyer@agrimarketplace.com',
+            'password'=> Hash::make('password'),
+            'role'=> User::BUYER,
+         ]);
+        User::create([
+           'first_name'=> 'Buyer',
+           'middle_name'=> 'K',
+           'last_name'=> 'Marketplace',
+            'email'=> 'buyer@gmail.com',
             'password'=> Hash::make('password'),
             'role'=> User::BUYER,
          ]);
@@ -40,7 +56,7 @@ class UserSeeder extends Seeder
          ]);
 
 
-        
+
             $farmer->farmer()->create([
                 'farm_name'=> 'K Farm',
                 'location'=> 'Kathmandu',
@@ -48,7 +64,7 @@ class UserSeeder extends Seeder
                 'description'=> 'This is a test farm',
             ]);
 
-         
+
 
 
     }
