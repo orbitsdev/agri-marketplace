@@ -7,8 +7,8 @@ const colors = require('tailwindcss/colors')
 /** @type {import('tailwindcss').Config} */
 export default {
     presets: [
-        require("./vendor/wireui/wireui/tailwind.config.js"),
         preset,
+        require("./vendor/wireui/wireui/tailwind.config.js"),
 
 
     ],
@@ -35,27 +35,32 @@ export default {
                  sans: ['Poppins', ...defaultTheme.fontFamily.sans],
             },
             colors: {
+              
 
-                gray: colors.neutral,
-                secondary: colors.gray,
-                positive: colors.emerald,
-                negative: colors.red,
-                warning: colors.amber,
-                info: colors.blue,
-
-                'eucalyptus': {
-                '50': '#ecfdf4',
-                '100': '#d1fae3',
-                '200': '#a7f3cc',
-                '300': '#6de8b1',
-                '400': '#33d491',
-                '500': '#0fba78',
-                '600': '#048e5c',
-                '700': '#037951',
-                '800': '#065f41',
-                '900': '#064e37',
-                '950': '#022c20',
-                    },
+              // Reapply Tailwind's default colors to avoid being overridden
+              green: colors.green, // Default green palette
+              indigo: colors.indigo, // Default indigo palette
+              gray: colors.gray, // Default gray palette
+              secondary: colors.gray,
+              positive: colors.emerald,
+              negative: colors.red,
+              warning: colors.amber,
+              info: colors.blue,
+                
+              // Add custom WireUI or Filament-specific colors explicitly
+              eucalyptus: {
+                  '50': '#ecfdf4',
+                  '100': '#d1fae3',
+                  '200': '#a7f3cc',
+                  '300': '#6de8b1',
+                  '400': '#33d491',
+                  '500': '#0fba78',
+                  '600': '#048e5c',
+                  '700': '#037951',
+                  '800': '#065f41',
+                  '900': '#064e37',
+                  '950': '#022c20',
+              },
 
             }
         },

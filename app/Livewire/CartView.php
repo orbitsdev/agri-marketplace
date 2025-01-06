@@ -3,16 +3,18 @@
 namespace App\Livewire;
 
 use App\Models\Cart;
+use App\Models\Order;
 use Livewire\Component;
+use Filament\Actions\Action;
+use WireUi\Traits\WireUiActions;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\TextInput;
 use Filament\Actions\Contracts\HasActions;
-use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Actions\Concerns\InteractsWithActions;
-use Filament\Actions\Action;
-use Illuminate\Support\Facades\DB;
-use WireUi\Traits\WireUiActions;
+
 class CartView extends Component  implements HasForms, HasActions
 {
     use InteractsWithActions;
@@ -147,19 +149,53 @@ public function toggleSelect($cartId)
 
                 try {
                     DB::beginTransaction();
-
-
-
+    
+                    // Get selected cart items grouped by farmer
+                    $cartItemsGroupedByFarmer = Cart::isSelected()->groupedByFarmer(Auth::id());
+                    // dd($cartItemsGroupedByFarmer)   ;
+    
+                    foreach ($cartItemsGroupedByFarmer as $farmerName => $cartItems) {
+                        // Create a new order for the farmer
+                        $order = new Order();
+                        $order->buyer_id = Auth::id();
+                        $order->status = Order::PENDING;
+                        $order->total = $cartItems->sum(function ($item) {
+                            return $item->quantity * $item->price_per_unit;
+                        });
+                        $order->save();
+    
+                        // Add order items for this order
+                        foreach ($cartItems as $cartItem) {
+                            $order->items()->create([
+                                'product_id' => $cartItem->product_id,
+                                'quantity' => $cartItem->quantity,
+                                'price_per_unit' => $cartItem->price_per_unit,
+                                'subtotal' => $cartItem->quantity * $cartItem->price_per_unit,
+                            ]);
+    
+                            // Remove the item from the cart
+                            $cartItem->delete(); // This removes the cart item after it is processed
+                        }
+                    }
+    
                     DB::commit();
-
-
-
-                    return redirect()->back()->with('success', 'Product added to cart successfully!');
+    
+                    // Refresh the cart to reflect changes
+                    $this->refreshCart();
+    
+                    $this->dialog()->success(
+                        title: 'Checkout Successful',
+                        description: 'Your orders have been created successfully, and the cart has been updated!'
+                    );
+    
+                    return redirect()->route('orders.index'); // Redirect to the orders page
                 } catch (\Exception $e) {
                     DB::rollBack();
-
-
-
+    
+                    $this->dialog()->error(
+                        title: 'Error',
+                        description: 'An error occurred during checkout. Please try again.'.$e->getMessage()
+                    );
                 }
             });
         }

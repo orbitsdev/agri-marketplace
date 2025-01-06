@@ -50,7 +50,7 @@ class UserSeeder extends Seeder
             'first_name'=> 'Farmer',
             'middle_name'=> 'K',
             'last_name'=> 'Marketplace',
-            'email'=> 'farmer@agrimarketplace.com',
+            'email'=> 'farmer@gmail.com',
             'password'=> Hash::make('password'),
             'role'=> User::FARMER,
          ]);
@@ -62,6 +62,23 @@ class UserSeeder extends Seeder
                 'location'=> 'Kathmandu',
                 'farm_size'=> '10',
                 'description'=> 'This is a test farm',
+            ]);
+        $farmer2 = User::create([
+            'first_name'=> 'Farmer2',
+            'middle_name'=> 'K',
+            'last_name'=> 'Marketplace',
+            'email'=> 'farmer2@gmail.com',
+            'password'=> Hash::make('password'),
+            'role'=> User::FARMER,
+         ]);
+
+
+
+            $farmer2->farmer()->create([
+                'farm_name'=> 'K Farm',
+                'location'=> 'Kathmandu',
+                'farm_size'=> '10 Hectars',
+                'description'=> 'Farmer 2',
             ]);
 
 

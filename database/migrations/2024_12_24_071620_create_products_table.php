@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('farmer_id')->constrained('farmers')->onDelete('cascade');
-            $table->string('')->nullable();
+            $table->string('product_name')->nullable();
 
             $table->text('description')->nullable();
             $table->bigInteger('quantity')->nullable();

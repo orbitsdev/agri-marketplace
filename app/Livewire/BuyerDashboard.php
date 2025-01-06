@@ -24,7 +24,7 @@ class BuyerDashboard extends Component implements  HasForms, HasActions
 
     public function render()
     {
-        $products = Product::hasQuantity()->withRelations()->paginate(5);
+        $products = Product::hasQuantity()->withRelations()->paginate(perPage: 10);
 
         return view('livewire.buyer-dashboard', ['products' => $products]);
     }

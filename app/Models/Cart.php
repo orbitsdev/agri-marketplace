@@ -42,6 +42,10 @@ public function scopeTotalValue($query, $buyerId)
 
 
 
+ public function scopeIsSelected($query)
+ {
+     return $query->where('is_selected', true);
+ }
  public function scopeSelected($query)
  {
      return $query->where('is_selected', true);

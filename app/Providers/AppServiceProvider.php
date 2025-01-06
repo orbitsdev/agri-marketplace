@@ -9,7 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentColor;
 use Filament\Support\View\Components\Modal;
-
+use Filament\Support\Colors\Color;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -30,6 +30,13 @@ class AppServiceProvider extends ServiceProvider
 
         FilamentColor::register([
             'primary' => "#00993c",
+
+            'danger' => Color::Red,
+            'gray' => Color::Zinc,
+            'info' => Color::Blue,
+            // 'primary' => Color::Amber,
+            'success' => Color::Green,
+            'warning' => Color::Amber,
 
         ]);
         Modal::closedByClickingAway(false);

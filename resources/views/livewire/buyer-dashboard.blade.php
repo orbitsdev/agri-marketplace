@@ -17,12 +17,15 @@
                                 alt="{{ $product->product_name }}"
                                 class="aspect-[3/4] bg-gray-200 object-cover group-hover:opacity-75 sm:h-96">
                             <div class="flex flex-1 flex-col space-y-2 p-4">
-                                <h3 class="text-sm font-medium text-gray-900">
+                                <h3 class="text-xl font-medium text-gray-900">
                                     <a href="{{ route('product.details', ['code'=> $product->code,'slug' => $product->slug]) }}">
                                         <span aria-hidden="true" class="absolute inset-0"></span>
                                         {{ $product->product_name }}
                                     </a>
                                 </h3>
+                                <p>
+                                    {{$product->farmer->farm_name}}
+                                </p>
                                 <div class="product product-prose">
                                     <p>
                                         @markdown(Str::limit($product->description, 100, '...'))
