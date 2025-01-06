@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Tables\Grouping\Group;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FilamentForm;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
@@ -35,7 +36,7 @@ class ProductResource extends Resource
         return $table
             ->columns([
 
-               
+
                 // Tables\Columns\TextColumn::make('farmer_id')
                 //     ->numeric()
                 //     ->sortable(),
@@ -59,7 +60,7 @@ class ProductResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                   
+
             ])
             ->filters([
                 SelectFilter::make('status')
@@ -71,14 +72,16 @@ class ProductResource extends Resource
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make()->color('gray'),
-                    
+
                 ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])->defaultGroup('status');
+            ])->defaultGroup('status')
+            ->modifyQueryUsing(fn (Builder $query) => $query->myProduct(Auth::user()->farmer->id))
+            ;
     }
 
     public static function getRelations(): array

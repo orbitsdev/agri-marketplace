@@ -83,4 +83,10 @@ public function getSlugAttribute()
 
 
 
+public function scopeMyProduct($query, $farmerId)
+{
+    return $query->where('farmer_id', $farmerId);
+}
+
+
 }

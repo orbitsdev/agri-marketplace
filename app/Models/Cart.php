@@ -85,7 +85,7 @@ public function scopeTotalValue($query, $buyerId)
 
  public function scopeWithProductDetails($query)
  {
-     return $query->with('product');
+     return $query->with('product.farmer');
  }
 
  public function scopeTotalCartItems($query, $buyerId)
@@ -114,5 +114,15 @@ public function scopeSelectedCartItems($query, $buyerId)
     return $query->where('buyer_id', $buyerId)->where('is_selected', true);
 }
 
-//scope total selected cart items
+
+
+public function scopeGroupedByFarmer($query, $buyerId)
+{
+    return $query->where('buyer_id', $buyerId)
+        ->with('product.farmer') // Eager load relationships
+        ->get()
+        ->groupBy(fn ($cartItem) => $cartItem->product->farmer->farm_name ?? 'Unknown Farmer')->all();
+}
+
+
 }

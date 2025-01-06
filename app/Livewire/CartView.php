@@ -32,8 +32,10 @@ class CartView extends Component  implements HasForms, HasActions
 
     public function refreshCart()
     {
-        $this->cartItems = Cart::cartItemsWithDetails(Auth::id())->get();
-        $this->updateSummary();
+
+        $this->cartItems = Cart::groupedByFarmer(Auth::id());
+
+         $this->updateSummary();
     }
 
     public function updateSummary()
@@ -121,6 +123,7 @@ public function toggleSelect($cartId)
 
     public function render()
     {
+
         return view('livewire.cart-view', [
             'cartItems' => $this->cartItems,
             'totalSelectedItems' => $this->totalSelectedItems,
