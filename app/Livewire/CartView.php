@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Cart;
 use App\Models\Order;
 use Livewire\Component;
+use App\Models\OrderItem;
 use Filament\Actions\Action;
 use WireUi\Traits\WireUiActions;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +38,9 @@ class CartView extends Component  implements HasForms, HasActions
 
         $this->cartItems = Cart::groupedByFarmer(Auth::id());
 
-         $this->updateSummary();
+
+
+        $this->updateSummary();
     }
 
     public function updateSummary()
@@ -103,24 +106,24 @@ class CartView extends Component  implements HasForms, HasActions
     }
 
 
-public function toggleSelect($cartId)
-{
-    $this->loadingItem = $cartId;
-    try {
-        $cartItem = Cart::findOrFail($cartId);
-        $cartItem->is_selected = !$cartItem->is_selected;
-        $cartItem->save();
+    public function toggleSelect($cartId)
+    {
+        $this->loadingItem = $cartId;
+        try {
+            $cartItem = Cart::findOrFail($cartId);
+            $cartItem->is_selected = !$cartItem->is_selected;
+            $cartItem->save();
 
-        $this->refreshCart();
-    } catch (\Exception $e) {
-        $this->dialog()->error(
-            title: 'Error',
-            description: 'Failed to update the item selection. Please try again.'
-        );
-    } finally {
-        $this->loadingItem = null;
+            $this->refreshCart();
+        } catch (\Exception $e) {
+            $this->dialog()->error(
+                title: 'Error',
+                description: 'Failed to update the item selection. Please try again.'
+            );
+        } finally {
+            $this->loadingItem = null;
+        }
     }
-}
 
 
     public function render()
@@ -138,108 +141,107 @@ public function toggleSelect($cartId)
     public function checkoutCartAction(): Action
     {
         return Action::make('checkoutCart')
-        ->label('Checkout')
+            ->label('Checkout')
             ->size('xl')
             ->requiresConfirmation()
             ->modalHeading('Checkout Cart')
             ->modalDescription('')
-            ->action(function (array $data, ) {
-
-
+            ->action(function () {
 
                 try {
                     DB::beginTransaction();
-    
-                    // Get selected cart items grouped by farmer
-                    $cartItemsGroupedByFarmer = Cart::isSelected()->groupedByFarmer(Auth::id());
-                    // dd($cartItemsGroupedByFarmer)   ;
-    
-                    foreach ($cartItemsGroupedByFarmer as $farmerName => $cartItems) {
-                        // Create a new order for the farmer
-                        $order = new Order();
-                        $order->buyer_id = Auth::id();
-                        $order->status = Order::PENDING;
-                        $order->total = $cartItems->sum(function ($item) {
-                            return $item->quantity * $item->price_per_unit;
-                        });
-                        $order->save();
-    
-                        // Add order items for this order
+
+
+                    $cartItemsGroupedByFarmer = Cart::isSelected()->groupedByFarmerId(Auth::id());
+                    $buyerId = Auth::id();
+                    foreach ($cartItemsGroupedByFarmer as $farmerId => $cartItems) {
+
+                        $orderTotal = $cartItems->sum(fn($item) => $item->quantity * $item->price_per_unit);
+
+
+                        $order = Order::create([
+                            'buyer_id' => $buyerId,
+                            'farmer_id' => $farmerId,
+                            'total' => $orderTotal,
+                            'status' => Order::PENDING,
+                        ]);
+
+
                         foreach ($cartItems as $cartItem) {
-                            $order->items()->create([
+                            OrderItem::create([
+                                'order_id' => $order->id,
                                 'product_id' => $cartItem->product_id,
                                 'quantity' => $cartItem->quantity,
                                 'price_per_unit' => $cartItem->price_per_unit,
                                 'subtotal' => $cartItem->quantity * $cartItem->price_per_unit,
                             ]);
-    
-                            // Remove the item from the cart
-                            $cartItem->delete(); // This removes the cart item after it is processed
                         }
+
+
+                        Cart::whereIn('id', $cartItems->pluck('id'))->delete();
                     }
-    
+
                     DB::commit();
-    
-                    // Refresh the cart to reflect changes
                     $this->refreshCart();
-    
+                    $this->dispatch('cart.updated');
+
                     $this->dialog()->success(
                         title: 'Checkout Successful',
                         description: 'Your orders have been created successfully, and the cart has been updated!'
                     );
-    
-                    return redirect()->route('orders.index'); // Redirect to the orders page
+
+                    return redirect()->route('cart.view', ['name'=> Auth::user()->full_name]); // Redirect to the orders page
                 } catch (\Exception $e) {
                     DB::rollBack();
-    
+
                     $this->dialog()->error(
                         title: 'Error',
-                        description: 'An error occurred during checkout. Please try again.'.$e->getMessage()
+                        description: 'An error occurred during checkout. Please try again. ' . $e->getMessage()
                     );
                 }
             });
-        }
+    }
     public function removeItemAction(): Action
     {
         return Action::make('removeItem')
-        ->label('Remove Item')
-        ->iconButton()
-        ->color('danger')
-        ->icon('heroicon-o-x-mark')
-        ->requiresConfirmation()
-        ->requiresConfirmation()
-        ->modalHeading('Confirm Removal')
-        ->modalDescription('Are you sure you want to remove this item from the cart? This action cannot be undone.')
-        ->action(function (array $arguments) {
+            ->label('Remove Item')
+            ->iconButton()
+            ->color('danger')
+            ->icon('heroicon-o-x-mark')
+            ->requiresConfirmation()
+            ->requiresConfirmation()
+            ->modalHeading('Confirm Removal')
+            ->modalDescription('Are you sure you want to remove this item from the cart? This action cannot be undone.')
+            ->action(function (array $arguments) {
 
-            try {
-                $cartId = $arguments['record'];
+                try {
+                    $cartId = $arguments['record'];
 
-                DB::beginTransaction();
-
-
-                $cartItem = Cart::findOrFail($cartId);
+                    DB::beginTransaction();
 
 
-                $cartItem->delete();
+                    $cartItem = Cart::findOrFail($cartId);
 
 
-                $this->refreshCart();
+                    $cartItem->delete();
 
-                DB::commit();
-                $this->dispatch('cart.updated');
-                $this->dialog()->success(
-                    title: 'Item Removed',
-                    description: 'The item has been successfully removed from your cart.'
-                );
-            } catch (\Exception $e) {
-                DB::rollBack();
 
-                $this->dialog()->error(
-                    title: 'Error',
-                    description: 'Failed to remove the item. Please try again.'
-                );
-            }
+                    $this->refreshCart();
+
+                    DB::commit();
+                    $this->dispatch('cart.updated');
+                    $this->dialog()->success(
+                        title: 'Item Removed',
+                        description: 'The item has been successfully removed from your cart.'
+                    );
+                } catch (\Exception $e) {
+                    DB::rollBack();
+
+                    $this->dialog()->error(
+                        title: 'Error',
+                        description: 'Failed to remove the item. Please try again.'
+                    );
+                }
             });
-        }
+    }
 }

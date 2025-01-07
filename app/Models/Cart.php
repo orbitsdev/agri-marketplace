@@ -123,9 +123,18 @@ public function scopeSelectedCartItems($query, $buyerId)
 public function scopeGroupedByFarmer($query, $buyerId)
 {
     return $query->where('buyer_id', $buyerId)
+    ->whereHas('product.farmer')
         ->with('product.farmer') // Eager load relationships
         ->get()
-        ->groupBy(fn ($cartItem) => $cartItem->product->farmer->farm_name ?? 'Unknown Farmer')->all();
+        ->groupBy(fn ($cartItem) => $cartItem->product->farmer->id)->all();
+}
+public function scopeGroupedByFarmerId($query, $buyerId)
+{
+    return $query->where('buyer_id', $buyerId)
+
+        ->with('product.farmer') // Eager load relationships
+        ->get()
+        ->groupBy(fn ($cartItem) => $cartItem->product->farmer->id)->all();
 }
 
 

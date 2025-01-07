@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Farmer;
 use App\Models\OrderItem;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,10 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'buyer_id');
     }
+    public function farmer()
+    {
+        return $this->belongsTo(Farmer::class);
+    }
 
     // order items
     public function items()
@@ -55,7 +60,7 @@ class Order extends Model
     {
         return $query->where('status', 'Confirm');
     }
-    
+
     // scope for cancel
     public function scopeCancel($query)
     {
@@ -80,11 +85,11 @@ class Order extends Model
         return '₱' . number_format($this->total, 2);
     }
 
-    // price times quantity 
+    // price times quantity
     public function getTotalAttribute()
     {
         return $this->items->sum('subtotal');
     }
 
-    
+
 }

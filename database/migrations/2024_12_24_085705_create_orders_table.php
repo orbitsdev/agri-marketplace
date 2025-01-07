@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('buyer_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('farmer_id')
+            ->nullable() // Make the column nullable
+            ->constrained('farmers') // Foreign key constraint
+            ->onDelete('set null'); // Set to null if the farmer is deleted
             $table->double('price')->nullable();
             $table->enum('status', ['Pending', 'Confirm', 'Cancelled','Completed'])->default('Pending');
             $table->double('total', 10, 2)->nullable(); // Total price for the order

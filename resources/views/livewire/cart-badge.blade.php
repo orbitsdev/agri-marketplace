@@ -6,9 +6,12 @@
           </svg>
 
         <!-- Badge -->
+        @if ($itemCount > 0)
+
         <span
-            class="absolute top-[-4px] right-0 translate-x-2 -translate-y-2 bg-eucalyptus-700 text-white text-xs font-medium rounded-full p-[4px] px-[4px]">
-            {{ $itemCount }}
-        </span>
+        class="absolute top-[-4px] right-0 translate-x-2 -translate-y-2 bg-eucalyptus-700 text-white text-xs font-medium rounded-full p-[4px] px-[4px]">
+        {{ $itemCount }}
+    </span>
+    @endif
     </a>
 </div>

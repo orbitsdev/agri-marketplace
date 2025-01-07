@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Document;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +27,10 @@ class Farmer extends Model
     public function documents(){
         return $this->hasMany(Document::class,
             'farmer_id');
+    }
+
+    public function orders() {
+        return $this->hasMany(Order::class);
     }
 
 }

@@ -65,7 +65,7 @@ class UserSeeder extends Seeder
             ]);
         $farmer2 = User::create([
             'first_name'=> 'Farmer2',
-            'middle_name'=> 'K',
+            'middle_name'=> 'K2',
             'last_name'=> 'Marketplace',
             'email'=> 'farmer2@gmail.com',
             'password'=> Hash::make('password'),
@@ -75,7 +75,7 @@ class UserSeeder extends Seeder
 
 
             $farmer2->farmer()->create([
-                'farm_name'=> 'K Farm',
+                'farm_name'=> 'K2 Farm',
                 'location'=> 'Kathmandu',
                 'farm_size'=> '10 Hectars',
                 'description'=> 'Farmer 2',
