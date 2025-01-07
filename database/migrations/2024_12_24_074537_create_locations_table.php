@@ -15,9 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('region')->nullable();
+            $table->string('region_code')->nullable(); // Add region code
             $table->string('province')->nullable();
+            $table->string('province_code')->nullable(); // Add province code
             $table->string('city_municipality')->nullable();
+            $table->string('city_code')->nullable(); // Add city/municipality code
             $table->string('barangay')->nullable();
+            $table->string('barangay_code')->nullable(); // Add barangay code
             $table->string('street')->nullable();
             $table->string('zip_code')->nullable();
             $table->boolean('is_default')->default(false);

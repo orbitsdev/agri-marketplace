@@ -10,6 +10,7 @@ use App\Services\PSGCService;
 use WireUi\Traits\WireUiActions;
 use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\TextInput;
@@ -66,7 +67,11 @@ class MyAddress extends Component implements HasForms, HasActions
                     ->live()
                     ->searchable()
                     ->preload()
-                    ->afterStateUpdated(fn ($state) => $this->updateProvinces($state)),
+                    ->afterStateUpdated(function ($state, $get) {
+                        $region = collect($this->regions)->firstWhere('code', $state);
+                        $this->selectedRegion = $region ? ['code' => $region['code'], 'name' => $region['name']] : null;
+                        $this->updateProvinces($state);
+                    }),
 
                 Select::make('province')
                     ->label('Province')
@@ -75,10 +80,12 @@ class MyAddress extends Component implements HasForms, HasActions
                     ->live()
                     ->searchable()
                     ->preload()
-                    ->disabled(function(Get $get){
-                        return $get('region') === null;
-                    })
-                    ->afterStateUpdated(fn ($state) => $this->updateCities($state)),
+                    ->disabled(fn (Get $get) => !$get('region'))
+                    ->afterStateUpdated(function ($state) {
+                        $province = collect($this->provinces)->firstWhere('code', $state);
+                        $this->selectedProvince = $province ? ['code' => $province['code'], 'name' => $province['name']] : null;
+                        $this->updateCities($state);
+                    }),
 
                 Select::make('city')
                     ->label('City/Municipality')
@@ -87,20 +94,25 @@ class MyAddress extends Component implements HasForms, HasActions
                     ->live()
                     ->searchable()
                     ->preload()
-                    ->disabled(function(Get $get){
-                        return $get('province') === null;
-                    })
-                    ->afterStateUpdated(fn ($state) => $this->updateBarangays($state)),
+                    ->disabled(fn (Get $get) => !$get('province'))
+                    ->afterStateUpdated(function ($state) {
+                        $city = collect($this->cities)->firstWhere('code', $state);
+                        $this->selectedCity = $city ? ['code' => $city['code'], 'name' => $city['name']] : null;
+                        $this->updateBarangays($state);
+                    }),
 
                 Select::make('barangay')
                     ->label('Barangay')
-                    ->disabled(function(Get $get){
-                        return $get('province') === null;
-                    })
+                    ->options(fn () => collect($this->barangays)->pluck('name', 'code'))
+                    ->required()
+                    ->live()
                     ->searchable()
                     ->preload()
-                    ->options(fn () => collect($this->barangays)->pluck('name', 'name'))
-                    ->required(),
+                    ->disabled(fn (Get $get) => !$get('city'))
+                    ->afterStateUpdated(function ($state) {
+                        $barangay = collect($this->barangays)->firstWhere('code', $state);
+                        $this->selectedBarangay = $barangay ? ['code' => $barangay['code'], 'name' => $barangay['name']] : null;
+                    }),
 
                 TextInput::make('street')
                     ->label('Street')
@@ -111,19 +123,37 @@ class MyAddress extends Component implements HasForms, HasActions
                     ->required()
                     ->numeric()
                     ->mask(9999),
+
+                Toggle::make('is_default')->default(true)
             ])
             ->action(function (array $data) {
-                try {
-                    DB::beginTransaction();
+                DB::beginTransaction();
 
+                try {
+                    if ($data['is_default']) {
+                        Location::where('user_id', auth()->id())->where('is_default', true)->update(['is_default' => false]);
+                    }
+
+                    // Fetch the selected region, province, city, and barangay data
+                    $region = collect($this->regions)->firstWhere('code', $data['region']);
+                    $province = collect($this->provinces)->firstWhere('code', $data['province']);
+                    $city = collect($this->cities)->firstWhere('code', $data['city']);
+                    $barangay = collect($this->barangays)->firstWhere('code', $data['barangay']);
+
+                    // Create the new address
                     Location::create([
                         'user_id' => auth()->id(),
-                        'region' => $data['region'],
-                        'province' => $data['province'],
-                        'city_municipality' => $data['city'],
-                        'barangay' => $data['barangay'],
+                        'region' => $region['name'] ?? null,
+                        'region_code' => $region['code'] ?? null,
+                        'province' => $province['name'] ?? null,
+                        'province_code' => $province['code'] ?? null,
+                        'city_municipality' => $city['name'] ?? null,
+                        'city_code' => $city['code'] ?? null,
+                        'barangay' => $barangay['name'] ?? null,
+                        'barangay_code' => $barangay['code'] ?? null,
                         'street' => $data['street'],
                         'zip_code' => $data['zip_code'],
+                        'is_default' => $data['is_default'],
                     ]);
 
                     DB::commit();
@@ -140,6 +170,7 @@ class MyAddress extends Component implements HasForms, HasActions
                 }
             });
     }
+
 
     private function updateProvinces($regionCode)
     {
