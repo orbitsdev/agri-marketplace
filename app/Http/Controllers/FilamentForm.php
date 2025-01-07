@@ -11,6 +11,7 @@ use Filament\Forms\Components\Group;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Tabs\Tab;
@@ -513,6 +514,97 @@ class FilamentForm extends Controller
             ]),
         ];
     }
+    public static function locationForm() : array {
+        return [
+
+             // Select::make('region')
+                //     ->label('Region')
+                //     ->options(collect($this->regions)->pluck('name', 'code'))
+                //     ->required()
+                //     ->live()
+                //     ->searchable()
+                //     ->preload()
+                //     ->afterStateUpdated(function ($state, $get) {
+                //         $region = collect($this->regions)->firstWhere('code', $state);
+                //         $this->selectedRegion = $region ? ['code' => $region['code'], 'name' => $region['name']] : null;
+                //         $this->updateProvinces($state);
+                //     }),
+
+                // Select::make('province')
+                //     ->label('Province')
+                //     ->options(fn () => collect($this->provinces)->pluck('name', 'code'))
+                //     ->required()
+                //     ->live()
+                //     ->searchable()
+                //     ->preload()
+                //     ->disabled(fn (Get $get) => !$get('region'))
+                //     ->afterStateUpdated(function ($state) {
+                //         $province = collect($this->provinces)->firstWhere('code', $state);
+                //         $this->selectedProvince = $province ? ['code' => $province['code'], 'name' => $province['name']] : null;
+                //         $this->updateCities($state);
+                //     }),
+
+                // Select::make('city')
+                //     ->label('City/Municipality')
+                //     ->options(fn () => collect($this->cities)->pluck('name', 'code'))
+                //     ->required()
+                //     ->live()
+                //     ->searchable()
+                //     ->preload()
+                //     ->disabled(fn (Get $get) => !$get('province'))
+                //     ->afterStateUpdated(function ($state) {
+                //         $city = collect($this->cities)->firstWhere('code', $state);
+                //         $this->selectedCity = $city ? ['code' => $city['code'], 'name' => $city['name']] : null;
+                //         $this->updateBarangays($state);
+                //     }),
+
+                // Select::make('barangay')
+                //     ->label('Barangay')
+                //     ->options(fn () => collect($this->barangays)->pluck('name', 'code'))
+                //     ->required()
+                //     ->live()
+                //     ->searchable()
+                //     ->preload()
+                //     ->disabled(fn (Get $get) => !$get('city'))
+                //     ->afterStateUpdated(function ($state) {
+                //         $barangay = collect($this->barangays)->firstWhere('code', $state);
+                //         $this->selectedBarangay = $barangay ? ['code' => $barangay['code'], 'name' => $barangay['name']] : null;
+                //     }),
+            TextInput::make('region')
+            ->label('Region')
+            ->placeholder('Enter Region')
+            ->required(),
+        
+        TextInput::make('province')
+            ->label('Province')
+            ->placeholder('Enter Province')
+            ->required(),
+        
+        TextInput::make('city_municipality')
+            ->label('City/Municipality')
+            ->placeholder('Enter City/Municipality')
+            ->required(),
+        
+        TextInput::make('barangay')
+            ->label('Barangay')
+            ->placeholder('Enter Barangay')
+            ->required(),
+        
+        
+                        TextInput::make('street')
+                            ->label('Street')
+                            ->required(),
+        
+                        TextInput::make('zip_code')
+                            ->label('ZIP Code')
+                            ->required()
+                            ->numeric()
+                            ->mask(9999),
+        
+                        Toggle::make('is_default')->default(true)
+        ];
+    }
+    // {{ ($this->editAddress)(['record' => $address->id]) }}
 
     public static function success(String $title = 'Success', String $body = null)
     {

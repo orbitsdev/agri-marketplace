@@ -17,6 +17,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\EditAction;
 
 class MyAddress extends Component implements HasForms, HasActions
 {
@@ -59,73 +60,7 @@ class MyAddress extends Component implements HasForms, HasActions
             ->label('New Address')
             ->modalHeading('Add New Address')
             ->size('xl')
-            ->form([
-                Select::make('region')
-                    ->label('Region')
-                    ->options(collect($this->regions)->pluck('name', 'code'))
-                    ->required()
-                    ->live()
-                    ->searchable()
-                    ->preload()
-                    ->afterStateUpdated(function ($state, $get) {
-                        $region = collect($this->regions)->firstWhere('code', $state);
-                        $this->selectedRegion = $region ? ['code' => $region['code'], 'name' => $region['name']] : null;
-                        $this->updateProvinces($state);
-                    }),
-
-                Select::make('province')
-                    ->label('Province')
-                    ->options(fn () => collect($this->provinces)->pluck('name', 'code'))
-                    ->required()
-                    ->live()
-                    ->searchable()
-                    ->preload()
-                    ->disabled(fn (Get $get) => !$get('region'))
-                    ->afterStateUpdated(function ($state) {
-                        $province = collect($this->provinces)->firstWhere('code', $state);
-                        $this->selectedProvince = $province ? ['code' => $province['code'], 'name' => $province['name']] : null;
-                        $this->updateCities($state);
-                    }),
-
-                Select::make('city')
-                    ->label('City/Municipality')
-                    ->options(fn () => collect($this->cities)->pluck('name', 'code'))
-                    ->required()
-                    ->live()
-                    ->searchable()
-                    ->preload()
-                    ->disabled(fn (Get $get) => !$get('province'))
-                    ->afterStateUpdated(function ($state) {
-                        $city = collect($this->cities)->firstWhere('code', $state);
-                        $this->selectedCity = $city ? ['code' => $city['code'], 'name' => $city['name']] : null;
-                        $this->updateBarangays($state);
-                    }),
-
-                Select::make('barangay')
-                    ->label('Barangay')
-                    ->options(fn () => collect($this->barangays)->pluck('name', 'code'))
-                    ->required()
-                    ->live()
-                    ->searchable()
-                    ->preload()
-                    ->disabled(fn (Get $get) => !$get('city'))
-                    ->afterStateUpdated(function ($state) {
-                        $barangay = collect($this->barangays)->firstWhere('code', $state);
-                        $this->selectedBarangay = $barangay ? ['code' => $barangay['code'], 'name' => $barangay['name']] : null;
-                    }),
-
-                TextInput::make('street')
-                    ->label('Street')
-                    ->required(),
-
-                TextInput::make('zip_code')
-                    ->label('ZIP Code')
-                    ->required()
-                    ->numeric()
-                    ->mask(9999),
-
-                Toggle::make('is_default')->default(true)
-            ])
+            ->form(FilamentForm::locationForm())
             ->action(function (array $data) {
                 DB::beginTransaction();
 
@@ -135,26 +70,40 @@ class MyAddress extends Component implements HasForms, HasActions
                     }
 
                     // Fetch the selected region, province, city, and barangay data
-                    $region = collect($this->regions)->firstWhere('code', $data['region']);
-                    $province = collect($this->provinces)->firstWhere('code', $data['province']);
-                    $city = collect($this->cities)->firstWhere('code', $data['city']);
-                    $barangay = collect($this->barangays)->firstWhere('code', $data['barangay']);
+                    // $region = collect($this->regions)->firstWhere('code', $data['region']);
+                    // $province = collect($this->provinces)->firstWhere('code', $data['province']);
+                    // $city = collect($this->cities)->firstWhere('code', $data['city']);
+                    // $barangay = collect($this->barangays)->firstWhere('code', $data['barangay']);
 
                     // Create the new address
                     Location::create([
                         'user_id' => auth()->id(),
-                        'region' => $region['name'] ?? null,
-                        'region_code' => $region['code'] ?? null,
-                        'province' => $province['name'] ?? null,
-                        'province_code' => $province['code'] ?? null,
-                        'city_municipality' => $city['name'] ?? null,
-                        'city_code' => $city['code'] ?? null,
-                        'barangay' => $barangay['name'] ?? null,
-                        'barangay_code' => $barangay['code'] ?? null,
+                        'region' => $data['region'] ?? null,
+                        // 'region_code' => $region['code'] ?? null,
+                        'province' => $data['province'] ?? null,
+                        // 'province_code' => $province['code'] ?? null,
+                        'city_municipality' => $data['city_municipality'] ?? null,
+                        // 'city_code' => $city['code'] ?? null,
+                        'barangay' => $data['barangay'] ?? null,
+                        // 'barangay_code' => $barangay['code'] ?? null,
                         'street' => $data['street'],
                         'zip_code' => $data['zip_code'],
                         'is_default' => $data['is_default'],
                     ]);
+                    // Location::create([
+                    //     'user_id' => auth()->id(),
+                    //     'region' => $region['name'] ?? null,
+                    //     'region_code' => $region['code'] ?? null,
+                    //     'province' => $province['name'] ?? null,
+                    //     'province_code' => $province['code'] ?? null,
+                    //     'city_municipality' => $city['name'] ?? null,
+                    //     'city_code' => $city['code'] ?? null,
+                    //     'barangay' => $barangay['name'] ?? null,
+                    //     'barangay_code' => $barangay['code'] ?? null,
+                    //     'street' => $data['street'],
+                    //     'zip_code' => $data['zip_code'],
+                    //     'is_default' => $data['is_default'],
+                    // ]);
 
                     DB::commit();
 
@@ -167,6 +116,77 @@ class MyAddress extends Component implements HasForms, HasActions
                 } catch (\Exception $e) {
                     DB::rollBack();
                     $this->handleError('Error adding address', $e);
+                }
+            });
+    }
+    public function editAddressAction(): EditAction
+    {
+        return EditAction::make('editAddress')
+            ->record(function (array $arguments) {
+               return Location::findOrFail($arguments['record']);
+            })
+            ->fillForm(function(array $arguments){
+                $record = Location::find($arguments['record']);
+                return [
+                    'region'=> $record->region,
+                    'province'=> $record->province,
+                    'city_municipality'=> $record->city_municipality,
+                    'barangay'=> $record->barangay,
+                    'street'=> $record->street,
+                    'zip_code'=> $record->zip_code,
+                    'is_default'=> $record->is_default,
+                ];
+            })
+            ->icon('heroicon-m-pencil-square')
+             ->iconButton()
+            ->form(FilamentForm::locationForm())
+            ->label('New Address')
+            ->modalHeading('Add New Address')
+            ->size('xl')
+           
+            
+              ;
+    }
+
+    public function deleteLocationAction(): Action
+    {
+        return Action::make('deleteLocation')
+            // ->size(ActionSize::Small)
+            ->iconButton()
+            ->icon('heroicon-m-x-mark')
+            ->color('danger')
+            ->requiresConfirmation()
+            ->action(function (array $arguments) {
+                DB::beginTransaction();
+
+                try {
+                    $location = Location::findOrFail($arguments['record']);
+    
+                    // Check the total number of locations for the user
+                    $totalLocations = Location::where('user_id', auth()->id())->count();
+    
+                    if ($totalLocations > 1) {
+                        $location->delete();
+    
+                        // Check if there is only one location left after deletion
+                        $remainingLocations = Location::where('user_id', auth()->id())->get();
+    
+                        if ($remainingLocations->count() === 1) {
+                            $remainingLocations->first()->update(['is_default' => true]);
+                        }
+    
+                        FilamentForm::success('Location deleted successfully.');
+                    } else {
+                        FilamentForm::error('Cannot delete the only remaining location.');
+                    }
+    
+                    DB::commit();
+    
+                    // Refresh the addresses
+                    $this->addresses = auth()->user()->getAddresses();
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    $this->handleError('Error deleting location', $e);
                 }
             });
     }

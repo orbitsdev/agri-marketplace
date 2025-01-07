@@ -4,6 +4,7 @@ import typography from '@tailwindcss/typography';
 import preset from './vendor/filament/support/tailwind.config.preset'
 const colors = require('tailwindcss/colors')
 
+
 /** @type {import('tailwindcss').Config} */
 export default {
     presets: [
@@ -38,7 +39,23 @@ export default {
               
 
               // Reapply Tailwind's default colors to avoid being overridden
-              green: colors.green, // Default green palette
+              
+
+              primary: {
+                '50': '#eefbf2',
+                '100': '#d5f6dd',
+                '200': '#afebc0',
+                '300': '#7bda9c',
+                '400': '#45c274',
+                '500': '#22a759',
+                '600': '#148746',
+                '700': '#106c3b',
+                '800': '#0f5630',
+                '900': '#0d4327',
+                '950': '#062817',
+                        },
+
+                        green: colors.green, // Default green palette
               indigo: colors.indigo, // Default indigo palette
               gray: colors.gray, // Default gray palette
               secondary: colors.gray,
@@ -48,7 +65,7 @@ export default {
               info: colors.blue,
                 
               // Add custom WireUI or Filament-specific colors explicitly
-              eucalyptus: {
+              'eucalyptus': {
                   '50': '#ecfdf4',
                   '100': '#d1fae3',
                   '200': '#a7f3cc',
@@ -61,6 +78,8 @@ export default {
                   '900': '#064e37',
                   '950': '#022c20',
               },
+
+              
 
             }
         },
