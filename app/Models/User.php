@@ -171,6 +171,7 @@ public function orders()
 }
 
 
+
 // has many carts
 public function carts()
 {
@@ -198,6 +199,25 @@ public function getSelectedCartCount()
     return $this->carts()->where('is_selected', true)->count();
 }
 
+// get default location
 
+public function scopeDefault($query)
+{
+    return $query->where('is_default', true);
+}
+
+public function getDefaultLocation()
+{
+    return $this->locations()->default()->first();
+}
+
+
+
+
+
+public function getAddresses()
+{
+    return $this->locations()->get();
+}
 
 }

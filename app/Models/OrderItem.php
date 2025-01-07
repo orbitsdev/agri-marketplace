@@ -10,23 +10,25 @@ class OrderItem extends Model
 {
     use HasFactory;
 
+
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
 
+    public function calculateSubtotal()
+    {
+        return $this->quantity * $this->price_per_unit;
+    }
+
+    public function getSubtotalAttribute()
+    {
+        return $this->calculateSubtotal();
+    }
 
     public function getFormattedSubtotalAttribute()
     {
-        return '₱' . number_format($this->subtotal, 2);
+        return '₱' . number_format($this->calculateSubtotal(), 2);
     }
 
-
-
-    //price time quantity
-
-    public function getFormattedPriceAttribute()
-    {
-        return '₱' . number_format($this->price, 2);
-    }
 }

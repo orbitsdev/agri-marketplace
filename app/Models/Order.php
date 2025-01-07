@@ -14,81 +14,116 @@ class Order extends Model
     use HasFactory;
 
     // make a static for statue
-    public const PENDING = 'Pending';
-    public const CONFIRM = 'Confirm';
-    public const CANCEL = 'Cancel';
-    public const COMPLETE = 'Complete';
+    use HasFactory;
 
-    // make a static for status options
+    // Order Status Constants
+    public const PENDING = 'Pending';
+    public const PROCESSING = 'Processing';
+    public const CONFIRMED = 'Confirmed';
+    public const SHIPPED = 'Shipped';
+    public const OUT_FOR_DELIVERY = 'Out for Delivery';
+    public const COMPLETED = 'Completed';
+    public const CANCELLED = 'Cancelled';
+    public const RETURNED = 'Returned';
+
+    // Status Options
     public const STATUS_OPTIONS = [
-        self::PENDING => self::PENDING,
-        self::CONFIRM => self::CONFIRM,
-        self::CANCEL => self::CANCEL,
-        self::COMPLETE => self::COMPLETE,
+        self::PENDING,
+        self::PROCESSING,
+        self::CONFIRMED,
+        self::SHIPPED,
+        self::OUT_FOR_DELIVERY,
+        self::COMPLETED,
+        self::CANCELLED,
+        self::RETURNED,
     ];
 
+    // Payment Method Constants
+    public const PAYMENT_COD = 'Cash on Delivery';
+    public const PAYMENT_ONLINE = 'Online Payment';
+    public const PAYMENT_METHOD_OPTIONS = [
+        self::PAYMENT_COD,
+        self::PAYMENT_ONLINE,
+    ];
 
+    // Relationships
     public function buyer()
     {
         return $this->belongsTo(User::class, 'buyer_id');
     }
+
     public function farmer()
     {
         return $this->belongsTo(Farmer::class);
     }
 
-    // order items
     public function items()
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    // transaction
-    public function transaction()
+    // Scopes
+    public function scopeForBuyer($query, $buyerId)
     {
-        return $this->hasOne(Transaction::class);
+        return $query->where('buyer_id', $buyerId);
     }
 
-    // scope for pending
-    public function scopePending($query)
+    public function scopeForFarmer($query, $farmerId)
     {
-        return $query->where('status', 'Pending');
+        return $query->where('farmer_id', $farmerId);
     }
 
-    //scope for confirm
-    public function scopeConfirm($query)
+    public function scopeByStatus($query, $status)
     {
-        return $query->where('status', 'Confirm');
+        return $query->where('status', $status);
     }
 
-    // scope for cancel
-    public function scopeCancel($query)
+    public function scopePendingOrProcessing($query)
     {
-        return $query->where('status', 'Cancel');
+        return $query->whereIn('status', [self::PENDING, self::PROCESSING]);
     }
 
-    // scope for complete
-    public function scopeComplete($query)
+    // Helper Methods
+    public function hasCompleteLocation()
     {
-        return $query->where('status', 'Complete');
+        return $this->region && $this->province && $this->city_municipality &&
+            $this->barangay && $this->street && $this->zip_code;
     }
 
-    // sum of order items
-    public function getFormattedSubtotalAttribute()
+    public function isReadyToPlace()
     {
-        return '₱' . number_format($this->items->sum('subtotal'), 2);
+        return $this->hasCompleteLocation() && $this->calculateTotal() > 0;
     }
 
-    //get formatted subtotal
-    public function getFormattedTotalAttribute()
+    public function getFormattedAddressAttribute()
     {
-        return '₱' . number_format($this->total, 2);
+        return "{$this->street}, {$this->barangay}, {$this->city_municipality}, {$this->province}, {$this->region}, {$this->zip_code}";
     }
 
-    // price times quantity
-    public function getTotalAttribute()
+    public function updateStatus($status)
+    {
+        if (in_array($status, self::STATUS_OPTIONS)) {
+            $this->status = $status;
+            $this->save();
+        } else {
+            throw new \Exception("Invalid status: {$status}");
+        }
+    }
+
+    // Total Calculation
+    public function calculateTotal()
     {
         return $this->items->sum('subtotal');
+    }
+
+    public function getTotalAttribute()
+    {
+        return $this->calculateTotal();
+    }
+
+    public function getFormattedTotalAttribute()
+    {
+        return '₱' . number_format($this->calculateTotal(), 2);
     }
 
 

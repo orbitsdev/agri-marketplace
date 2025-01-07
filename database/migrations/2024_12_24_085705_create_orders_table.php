@@ -14,15 +14,31 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('buyer_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('farmer_id')
-            ->nullable() // Make the column nullable
-            ->constrained('farmers') // Foreign key constraint
-            ->onDelete('set null'); // Set to null if the farmer is deleted
-            $table->double('price')->nullable();
-            $table->enum('status', ['Pending', 'Confirm', 'Cancelled','Completed'])->default('Pending');
-            $table->double('total', 10, 2)->nullable(); // Total price for the order
-
+            $table->foreignId('farmer_id')->nullable()->constrained('farmers')->onDelete('set null');
+            $table->string('region')->nullable();
+            $table->string('province')->nullable();
+            $table->string('city_municipality')->nullable();
+            $table->string('barangay')->nullable();
+            $table->string('street')->nullable();
+            $table->string('zip_code')->nullable();
+            $table->string('payment_method')->nullable();
+            $table->string('payment_reference')->nullable();
+            $table->enum('status', [
+                'Pending',
+                'Processing',
+                'Confirmed',
+                'Shipped',
+                'Out for Delivery',
+                'Completed',
+                'Cancelled',
+                'Returned'
+            ])->default('Pending');
+            $table->timestamp('order_date')->useCurrent();
+            $table->timestamp('shipped_date')->nullable();
+            $table->timestamp('delivery_date')->nullable();
+            $table->boolean('is_received')->default(false);
             $table->timestamps();
+
         });
     }
 

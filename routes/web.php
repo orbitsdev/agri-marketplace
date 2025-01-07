@@ -2,6 +2,7 @@
 
 use App\Livewire\BuyerDashboard;
 use App\Livewire\CartView;
+use App\Livewire\MyAddress;
 use App\Livewire\ProductDetails;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -58,5 +59,6 @@ Route::middleware([
     });
     Route::get('/products/{code}/{slug}', ProductDetails::class)->name('product.details');
     Route::get('/{name}/cart', CartView::class)->name('cart.view');
+    Route::get('/{name}/address', MyAddress::class)->name('address.index');
 
 });

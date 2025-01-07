@@ -530,4 +530,12 @@ class FilamentForm extends Controller
             ->danger()
             ->send();
     }
+    public static function error(String $title = 'Success', String $body = null)
+    {
+        Notification::make()
+            ->title($title)
+            ->body($body)
+            ->danger()
+            ->send();
+    }
 }
