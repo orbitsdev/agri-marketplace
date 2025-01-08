@@ -1,18 +1,18 @@
-<div>
+<div class="">
     <x-buyer-layout>
         <div class="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
             <div class="flex ">
 
-                <div class="border-b border-gray-200 pb-10 pt-24 ">
+                <div class="border-b border-white pb-10 pt-24 ">
                     <h1 class="text-4xl font-bold tracking-tight text-gray-900">My Address</h1>
                     <p class="mt-4 text-base text-gray-500">Manage your saved addresses for faster checkouts and seamless order deliveries. Add, update, or remove your addresses with ease.</p>
-                    
+
                     <!-- Add Button -->
-                    
+
                 </div>
                 <div class="mt-6">
                     {{ $this->addAddressAction }}
-                    
+
                 </div>
             </div>
 
@@ -20,12 +20,12 @@
 
                 @forelse ($addresses as  $key=> $address)
                 <li>
-                    <div class="relative pb-8">
+                    <div class="relative py-4 {{ $loop->last ? '' : 'border-b' }}">
                         <div class="relative flex items-start space-x-3">
                             <!-- Icon or Avatar -->
                             <div class="flex-shrink-0">
                                 <div class="relative h-10 w-10">
-                                    <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-gray-100 text-gray-500">
+                                    <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-white shadow-sm text-gray-500">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -34,7 +34,7 @@
                                     </span>
                                 </div>
                             </div>
-            
+
                             <!-- Address Details -->
                             <div class="min-w-0 flex-1">
                                 <div class="flex items-center justify-between">
@@ -53,7 +53,7 @@
                                 </div>
                                 <p class="mt-1 text-sm text-gray-500">ZIP Code: {{ $address->zip_code }}</p>
                             </div>
-            
+
                             <!-- Edit Button -->
                             <div>
                                 {{ ($this->editAddress)(['record' => $address->id]) }}

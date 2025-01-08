@@ -7,17 +7,18 @@ use Livewire\Component;
 use App\Models\Location;
 use Filament\Actions\Action;
 use App\Services\PSGCService;
+use Filament\Actions\EditAction;
 use WireUi\Traits\WireUiActions;
 use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Actions\Concerns\InteractsWithActions;
-use Filament\Actions\EditAction;
 
 class MyAddress extends Component implements HasForms, HasActions
 {
@@ -137,14 +138,26 @@ class MyAddress extends Component implements HasForms, HasActions
                     'is_default'=> $record->is_default,
                 ];
             })
+            ->using(function (Model $record, array $data): Model {
+                if ($data['is_default']) {
+                    // Update existing default address for the user
+                    Location::where('user_id', auth()->id())
+                        ->where('is_default', true)
+                        ->where('id', '!=', $record->id)
+                        ->update(['is_default' => false]);
+                }
+                $record->update($data);
+
+                return $record;
+            })
             ->icon('heroicon-m-pencil-square')
              ->iconButton()
             ->form(FilamentForm::locationForm())
             ->label('New Address')
             ->modalHeading('Add New Address')
             ->size('xl')
-           
-            
+
+
               ;
     }
 
@@ -161,27 +174,27 @@ class MyAddress extends Component implements HasForms, HasActions
 
                 try {
                     $location = Location::findOrFail($arguments['record']);
-    
+
                     // Check the total number of locations for the user
                     $totalLocations = Location::where('user_id', auth()->id())->count();
-    
+
                     if ($totalLocations > 1) {
                         $location->delete();
-    
+
                         // Check if there is only one location left after deletion
                         $remainingLocations = Location::where('user_id', auth()->id())->get();
-    
+
                         if ($remainingLocations->count() === 1) {
                             $remainingLocations->first()->update(['is_default' => true]);
                         }
-    
+
                         FilamentForm::success('Location deleted successfully.');
                     } else {
                         FilamentForm::error('Cannot delete the only remaining location.');
                     }
-    
+
                     DB::commit();
-    
+
                     // Refresh the addresses
                     $this->addresses = auth()->user()->getAddresses();
                 } catch (\Exception $e) {

@@ -156,13 +156,13 @@ class CartView extends Component  implements HasForms, HasActions
                     $buyerId = Auth::id();
                     foreach ($cartItemsGroupedByFarmer as $farmerId => $cartItems) {
 
-                        $orderTotal = $cartItems->sum(fn($item) => $item->quantity * $item->price_per_unit);
+                        // $orderTotal = $cartItems->sum(fn($item) => $item->quantity * $item->price_per_unit);
 
 
                         $order = Order::create([
                             'buyer_id' => $buyerId,
                             'farmer_id' => $farmerId,
-                            'total' => $orderTotal,
+                            // 'total' => $orderTotal,
                             'status' => Order::PENDING,
                         ]);
 
@@ -190,7 +190,7 @@ class CartView extends Component  implements HasForms, HasActions
                         description: 'Your orders have been created successfully, and the cart has been updated!'
                     );
 
-                    return redirect()->route('cart.view', ['name'=> Auth::user()->full_name]); // Redirect to the orders page
+                    return redirect()->route('place.order', ['name'=> Auth::user()->full_name]); // Redirect to the orders page
                 } catch (\Exception $e) {
                     DB::rollBack();
 

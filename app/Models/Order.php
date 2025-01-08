@@ -127,4 +127,14 @@ class Order extends Model
     }
 
 
+    public function scopeGroupedByFarmer($query, $buyerId)
+{
+    return $query->where('buyer_id', $buyerId)
+        ->with('farmer.user')
+        ->get()
+        ->groupBy(fn($order) => $order->farmer->id);
+}
+
+
+
 }
