@@ -30,22 +30,26 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('first_name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('middle_name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('last_name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('two_factor_confirmed_at')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('current_team_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('profile_photo_path')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('role'),
+               
+                // Tables\Columns\TextColumn::make('role'),
+
+                Tables\Columns\TextColumn::make('role')
+                ->badge()
+                ->color(fn(string $state): string => match ($state) {
+                    User::FARMER => 'success',
+                    User::BUYER => 'info',
+                    User::ADMIN=> 'warning',
+                  
+                    default => 'gray'
+                }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

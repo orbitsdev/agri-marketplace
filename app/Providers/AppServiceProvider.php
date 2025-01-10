@@ -40,9 +40,9 @@ class AppServiceProvider extends ServiceProvider
 
         ]);
         Modal::closedByClickingAway(false);
-        FilamentAsset::register([
-            Css::make('custom-stylesheet', __DIR__ . '/../../resources/css/custom.css'),
-        ]);
+        // FilamentAsset::register([
+        //     Css::make('custom-stylesheet', __DIR__ . '/../../resources/css/custom.css'),
+        // ]);
 
         FilamentColor::register([
             'primary' => "#048E5C",

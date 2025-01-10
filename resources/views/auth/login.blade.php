@@ -1,9 +1,12 @@
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+            {{-- <x-authentication-card-logo /> --}}
+            {{-- AGRI market --}}
+            {{-- <img src="{{asset('images/agri-market.png')}}" alt="agir" class="bg-red-400 h-[200px]"> --}}
 
+        </x-slot>
+       
         <x-validation-errors class="mb-4" />
 
         @if (session('status'))
@@ -11,7 +14,9 @@
                 {{ session('status') }}
             </div>
         @endif
-
+        <div class="flex flex-col justify-center items-center  mt-4 mb-8">
+            <p class="text-3xl text-eucalyptus-700 font-bold"> AGRI-MARKET</p>
+        </div>
         <form method="POST" action="{{ route('login') }}">
             @csrf
 

@@ -41,7 +41,7 @@ export default {
               // Reapply Tailwind's default colors to avoid being overridden
               
 
-              primary: {
+              'primary': {
                 '50': '#eefbf2',
                 '100': '#d5f6dd',
                 '200': '#afebc0',
