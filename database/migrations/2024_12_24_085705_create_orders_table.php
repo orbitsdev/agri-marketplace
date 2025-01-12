@@ -37,6 +37,8 @@ return new class extends Migration
             $table->timestamp('order_date')->useCurrent();
             $table->timestamp('shipped_date')->nullable();
             $table->timestamp('delivery_date')->nullable();
+            $table->double('total', 10, 2)->nullable();
+
             $table->boolean('is_received')->default(false);
             $table->timestamps();
 

@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
+use App\Observers\OrderItemObserver;
 use App\Observers\OrderObserver;
 use App\Observers\ProductObserver;
 use Illuminate\Support\Facades\Event;
@@ -31,6 +33,7 @@ class EventServiceProvider extends ServiceProvider
     {
         Product::observe(ProductObserver::class);
         Order::observe(OrderObserver::class);
+        OrderItem::observe(OrderItemObserver::class);
     }
 
     /**

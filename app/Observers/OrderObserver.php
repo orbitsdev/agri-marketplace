@@ -11,14 +11,6 @@ class OrderObserver
      */
     public function created(Order $order): void
     {
-        //
-    }
-
-    /**
-     * Handle the Order "updated" event.
-     */
-    public function updated(Order $order): void
-    {
         $regionCode = 'PH'; // Example: Static region code
         $datePart = now()->format('Ymd'); // Current date (e.g., 20250107)
         $farmerId = str_pad($order->farmer_id, 3, '0', STR_PAD_LEFT); // Farmer ID padded to 3 digits
@@ -27,6 +19,16 @@ class OrderObserver
             ->count() + 1; // Count today's orders for this farmer + 1
 
         $order->order_number = "{$regionCode}-{$datePart}-F{$farmerId}-" . str_pad($sequential, 3, '0', STR_PAD_LEFT);
+        $order->save();
+    }
+
+    /**
+     * Handle the Order "updated" event.
+     */
+    public function updated(Order $order): void
+    {
+       
+
     }
 
     /**

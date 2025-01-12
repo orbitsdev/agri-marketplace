@@ -8,7 +8,7 @@ use App\Models\OrderItem;
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use Illuminate\Database\Eloquent\Casts\Attribute;
 class Order extends Model
 {
     use HasFactory;
@@ -134,7 +134,34 @@ class Order extends Model
         ->get()
         ->groupBy(fn($order) => $order->farmer->id);
 }
+protected function orderDate(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => \Carbon\Carbon::parse($value)->format('F j, Y g:i a'),
+            // get: fn ($value) => \Carbon\Carbon::parse($value)->format('F j, Y g:i a'),
+        );
+    }
 
+    // Accessor for shipped_date
+    protected function shippedDate(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? \Carbon\Carbon::parse($value)->format('F j, Y g:i a') : '',
+        );
+    }
 
+    // Accessor for delivery_date
+    protected function deliveryDate(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? \Carbon\Carbon::parse($value)->format('F j, Y g:i a') : '',
+        );
+    }
+    public function updateTotal()
+{
+    $this->total = $this->items->sum('subtotal'); // Sum of all OrderItem subtotals
+    $this->save();
+}
 
+    
 }

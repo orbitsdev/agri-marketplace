@@ -143,9 +143,9 @@ class CartView extends Component  implements HasForms, HasActions
         return Action::make('checkoutCart')
             ->label('Checkout')
             ->size('xl')
-            ->requiresConfirmation()
-            ->modalHeading('Checkout Cart')
-            ->modalDescription('')
+            // ->requiresConfirmation()
+            // ->modalHeading('Checkout Cart')
+            // ->modalDescription('')
             ->action(function () {
 
                 try {
@@ -177,7 +177,7 @@ class CartView extends Component  implements HasForms, HasActions
                             ]);
                         }
 
-
+                        $order->updateTotal();
                         Cart::whereIn('id', $cartItems->pluck('id'))->delete();
                     }
 
@@ -185,12 +185,12 @@ class CartView extends Component  implements HasForms, HasActions
                     $this->refreshCart();
                     $this->dispatch('cart.updated');
 
-                    $this->dialog()->success(
-                        title: 'Checkout Successful',
-                        description: 'Your orders have been created successfully, and the cart has been updated!'
-                    );
+                    // $this->dialog()->success(
+                    //     title: 'Checkout Successful',
+                    //     description: 'Your orders have been created successfully, and the cart has been updated!'
+                    // );
 
-                    return redirect()->route('place.order', ['name'=> Auth::user()->full_name]); // Redirect to the orders page
+                    return redirect()->route('place.order', ['name'=> Auth::user()->fullNameSlug()]); // Redirect to the orders page
                 } catch (\Exception $e) {
                     DB::rollBack();
 
