@@ -19,14 +19,18 @@
             <div class="mb-6 bg-white rounded">
                 <ul>
                     @forelse ($farmerOrders as $order)
-                    {{ ($this->removeOrderAction)(['record' => $order->id]) }}
+                 
                         @php
                             $orderTotal = $order->items->sum(function ($item) {
                                 return $item->product->price * $item->quantity;
                             });
                         @endphp
-                        <div class="mx-auto bg-white shadow-md rounded-lg p-6 mb-8">
-                            <div class="flex justify-between items-center mb-6">
+                        <div class="mx-auto bg-white shadow-md rounded-lg p-6 mb-8 relative">
+                            <div class="flex justify-end absolute top-2 right-2">
+                                {{ ($this->removeOrderAction)(['record' => $order->id]) }}
+
+                            </div>
+                            <div class="flex justify-between items-center mb-6 mt-4">
                                 <div>
                                     <h2 class="text-xl font-semibold">Order ID: {{$order->order_number}}</h2>
                                     <p class="text-sm text-gray-600">Order date: {{$order->order_date}}</p>
@@ -94,5 +98,6 @@
         </div>
 
     </x-buyer-layout>
+    <x-filament-actions::modals />
     {{-- Because she competes with no one, no one can compete with her. --}}
 </div>

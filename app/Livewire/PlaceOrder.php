@@ -52,7 +52,7 @@ class PlaceOrder extends Component implements HasForms, HasActions
             ->label('Delete Order')
             ->iconButton()
             ->color('danger')
-            ->icon('heroicon-o-x-mark')
+            ->icon('heroicon-o-trash')
             ->requiresConfirmation()
            
             ->modalHeading('Confirm Delete')
