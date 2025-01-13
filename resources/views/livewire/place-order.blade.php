@@ -26,6 +26,34 @@
                             });
                         @endphp
                         <div class="mx-auto bg-white shadow-md rounded-lg p-6 mb-8 relative">
+                            <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+                            @switch($order->status)
+                                @case('Pending')
+                                    bg-yellow-100 text-yellow-800
+                                    @break
+                                @case('Processing')
+                                    bg-blue-100 text-blue-700
+                                    @break
+                                @case('Confirmed')
+                                    bg-green-100 text-green-700
+                                    @break
+                                @case('Shipped')
+                                    bg-indigo-100 text-indigo-700
+                                    @break
+                                @case('Out for delivery')
+                                    bg-purple-100 text-purple-700
+                                    @break
+                                @case('Completed')
+                                    bg-gray-100 text-gray-600
+                                    @break
+                                @case('Cancelled')
+                                    bg-red-100 text-red-700
+                                    @break
+                                @default
+                                    bg-gray-100 text-gray-600
+                            @endswitch">
+                            {{ $order->status }}
+                        </span>
                             <div class="flex justify-end absolute top-2 right-2">
                                 {{ ($this->removeOrderAction)(['record' => $order->id]) }}
 

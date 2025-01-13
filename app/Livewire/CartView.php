@@ -163,7 +163,7 @@ class CartView extends Component  implements HasForms, HasActions
                             'buyer_id' => $buyerId,
                             'farmer_id' => $farmerId,
                             // 'total' => $orderTotal,
-                            'status' => Order::PENDING,
+                            'status' => Order::PROCESSING,
                         ]);
 
 

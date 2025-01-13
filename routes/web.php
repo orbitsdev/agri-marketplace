@@ -61,8 +61,8 @@ Route::middleware([
     Route::get('/products/{code}/{slug}', ProductDetails::class)->name('product.details');
 
     //buyer
-    Route::get('/{name}/cart', CartView::class)->name('cart.view')->middleware(['noPendingOrder']);
+    Route::get('/{name}/cart', CartView::class)->name('cart.view')->middleware(['ensureNoPendingOrder',]);
     Route::get('/{name}/address', MyAddress::class)->name('address.index');
-    Route::get('/{name}/place-order', PlaceOrder::class)->name('place.order');
+    Route::get('/{name}/place-order', PlaceOrder::class)->name('place.order')->middleware(['ensureHasDefaultLocation']);
 
 });

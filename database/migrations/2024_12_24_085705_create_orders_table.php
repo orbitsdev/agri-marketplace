@@ -33,7 +33,7 @@ return new class extends Migration
                 'Completed',
                 'Cancelled',
                 'Returned'
-            ])->default('Pending');
+            ])->default('Processing');
             $table->timestamp('order_date')->useCurrent();
             $table->timestamp('shipped_date')->nullable();
             $table->timestamp('delivery_date')->nullable();

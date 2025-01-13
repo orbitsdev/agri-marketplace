@@ -63,6 +63,7 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'noPendingOrder' => \App\Http\Middleware\EnsureNoOrderPending::class,
+        'ensureNoPendingOrder' => \App\Http\Middleware\EnsureNoOrderPending::class,
+        'ensureHasDefaultLocation' => \App\Http\Middleware\EnsureHasDefaultLocation::class,
     ];
 }

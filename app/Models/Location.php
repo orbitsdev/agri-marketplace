@@ -30,6 +30,10 @@ class Location extends Model
     {
         return $query->where('is_default', true);
     }
+    public function scopeHasDefault($query)
+    {
+        return $query->where('is_default', true);
+    }
 
    
     public static function getDefaultLocation()
