@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Product;
 use Filament\Forms\Get;
 use Illuminate\Http\Request;
@@ -507,7 +508,11 @@ class FilamentForm extends Controller
                             ->numeric()
                             ->mask(9999),
         
-                        Toggle::make('is_default')->default(true)
+            // Select
+         
+Select::make('payment_method')
+    ->options(Order::PAYMENT_METHOD_OPTIONS)
+
         ];
     }
 

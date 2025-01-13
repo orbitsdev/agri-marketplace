@@ -97,6 +97,8 @@ class PlaceOrder extends Component implements HasForms, HasActions
     public function editAddressAction(): EditAction
     {
         return EditAction::make('editAddress')
+        ->iconButton()
+            ->color('gray')
             ->record(function (array $arguments) {
                return Order::findOrFail($arguments['record']);
             })
@@ -109,27 +111,48 @@ class PlaceOrder extends Component implements HasForms, HasActions
                     'barangay'=> $record->barangay,
                     'street'=> $record->street,
                     'zip_code'=> $record->zip_code,
-                    'is_default'=> $record->is_default,
+                    'payment_method'=> $record->payment_method,
                 ];
             })
-            ->using(function (Model $record, array $data): Model {
-                if ($data['is_default']) {
-                    // Update existing default address for the user
-                    Location::where('user_id', auth()->id())
-                        ->where('is_default', true)
-                        ->where('id', '!=', $record->id)
-                        ->update(['is_default' => false]);
-                }
-                $record->update($data);
+            ->using(function (array $arguments, array $data): Model {
 
-                return $record;
+                try {
+                    $record = Order::findOrFail($arguments['record']); // It's better to use findOrFail to throw an exception if not found
+                
+                    DB::beginTransaction();
+                
+                    $record->update($data); // Ensure $data is properly sanitized and validated
+                
+                    DB::commit();
+                
+                    $this->dialog()->success(
+                        title: 'Order Updated',
+                        description: 'The item has been successfully updated in your cart.' // Change message to match the action (updated vs. deleted)
+                    );
+                
+                    return $record;
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                
+                    $this->dialog()->error(
+                        title: 'Error',
+                        description: 'Failed to update the item. Please try again.' // Adjusted message to reflect the actual action
+                    );
+                
+                   
+                    \Log::error('Order update failed', ['error' => $e->getMessage()]);
+                
+                  
+                    throw $e;
+                }
+                
+                   
             })
             ->icon('heroicon-m-pencil-square')
              ->iconButton()
-            ->form(FilamentForm::locationForm())
-            ->label('New Address')
-            ->modalHeading('Add New Address')
-            ->size('xl')
+            ->form(FilamentForm::orderForm())
+            ->label('Update Address')
+            ->modalHeading('Update Order Details')
 
 
               ;

@@ -39,8 +39,9 @@ class Order extends Model
     ];
 
     // Payment Method Constants
-    public const PAYMENT_COD = 'Cash on Delivery';
-    public const PAYMENT_ONLINE = 'Online Payment';
+    public const PAYMENT_COD = 'COD (Cash on Delivery)';
+public const PAYMENT_ONLINE = 'ONLINE (Online Payment)';
+
     public const PAYMENT_METHOD_OPTIONS = [
         self::PAYMENT_COD,
         self::PAYMENT_ONLINE,

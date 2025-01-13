@@ -96,20 +96,37 @@
                                 @empty
                                 @endforelse
                             </div>
-                            <div class="border-t pt-4 mt-6 flex justify-between">
-                                <div>
-                                    <h4 class="font-semibold text-gray-800">Payment</h4>
-                                    <p class="text-sm text-gray-600">{{$order->pament_method}} COD</p>
+                            <div class="relative border-t pt-4">
+                               
+                                <div class="flex justify-end ">
+                                    {{ ($this->editAddress)(['record' => $order->id]) }}
                                 </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-800">Delivery</h4>
+                            <div class=" flex justify-between relative ">
+                                
+                                 
+                                <div class="">
+                                    <h4 class="font-semibold text-gray-800">Payment</h4>
+                                    @if($order->pament_method)
+                                    <p class="text-sm text-gray-600">{{$order->pament_method }} </p>
+                                    @else
+                                    <p class="text-sm  text-red-700 "> None </p>
+                                    @endif
+                                </div>
+                                <div class="relative">
+                                    
+                                    <h4 class="font-semibold text-gray-800 ">Delivery Address</h4>
+                                    @if($order->hasCompleteLocation())
                                     <p class="text-sm text-gray-600">
-                                        847 Jewess Bridge Apt. 174<br>
-                                        London, UK<br>
-                                        474-769-3919
+                                        {{$order->getFormattedAddressAttribute()}}
                                     </p>
+                                    @else
+                                    <p class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium   text-red-700">
+                                       No Address was found
+                                    </p>
+                                    @endif
                                 </div>
                             </div>
+                        </div>
                             <div class="border-t pt-4 mt-6 flex justify-end">
                                 <h4 class="text-lg font-semibold text-gray-800">Total: Php{{ number_format($orderTotal, 2) }}</h4>
                             </div>
