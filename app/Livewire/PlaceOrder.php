@@ -25,12 +25,18 @@ class PlaceOrder extends Component implements HasForms, HasActions
 
     public function mount()
     {
-        $this->groupedPendingOrders = Order::where('buyer_id', Auth::id())
-            ->where('status', Order::PENDING)
-            ->with(['farmer','items.product']) // Eager load the farmer relationship
-            ->get()
-            ->groupBy(fn($order) => $order->farmer->id)->all(); // Group orders by farmer ID
+       $this->refreshOrder();
 
+    }
+
+    public function refreshOrder()
+    {
+
+        $this->groupedPendingOrders = Order::where('buyer_id', Auth::id())
+        ->where('status', Order::PENDING)
+        ->with(['farmer','items.product']) // Eager load the farmer relationship
+        ->get()
+        ->groupBy(fn($order) => $order->farmer->id)->all(); // Group orders by farmer ID
     }
 
     public function render()
@@ -38,5 +44,49 @@ class PlaceOrder extends Component implements HasForms, HasActions
         return view('livewire.place-order', [
             'groupedPendingOrders' => $this->groupedPendingOrders,
         ]);
+    }
+
+    public function removeOrderAction(): Action
+    {
+        return Action::make('removeOrder')
+            ->label('Delete Order')
+            ->iconButton()
+            ->color('danger')
+            ->icon('heroicon-o-x-mark')
+            ->requiresConfirmation()
+           
+            ->modalHeading('Confirm Delete')
+            ->modalDescription('Are you sure you want to delete this order including items ? This action cannot be undone.')
+            ->action(function (array $arguments) {
+
+                try {
+                    $cartId = $arguments['record'];
+
+                    DB::beginTransaction();
+
+
+                    $order = Order::findOrFail($cartId);
+
+
+                    $order->delete();
+
+
+                    $this->refreshOrder();
+
+                    DB::commit();
+                
+                    $this->dialog()->success(
+                        title: 'Order deleted',
+                        description: 'The item has been successfully removed from your cart.'
+                    );
+                } catch (\Exception $e) {
+                    DB::rollBack();
+
+                    $this->dialog()->error(
+                        title: 'Error',
+                        description: 'Failed to remove the item. Please try again.'
+                    );
+                }
+            });
     }
 }

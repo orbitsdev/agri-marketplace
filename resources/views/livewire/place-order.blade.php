@@ -19,6 +19,7 @@
             <div class="mb-6 bg-white rounded">
                 <ul>
                     @forelse ($farmerOrders as $order)
+                    {{ ($this->removeOrderAction)(['record' => $order->id]) }}
                         @php
                             $orderTotal = $order->items->sum(function ($item) {
                                 return $item->product->price * $item->quantity;

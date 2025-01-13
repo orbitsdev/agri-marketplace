@@ -209,7 +209,6 @@ class CartView extends Component  implements HasForms, HasActions
             ->color('danger')
             ->icon('heroicon-o-x-mark')
             ->requiresConfirmation()
-            ->requiresConfirmation()
             ->modalHeading('Confirm Removal')
             ->modalDescription('Are you sure you want to remove this item from the cart? This action cannot be undone.')
             ->action(function (array $arguments) {
