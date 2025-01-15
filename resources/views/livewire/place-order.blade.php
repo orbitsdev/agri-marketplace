@@ -11,7 +11,7 @@
             </div>
 
             <div class="mt-8"></div>
-            @forelse ($groupedPendingOrders as $farmerId => $farmerOrders)
+            @forelse ($groupedProcessing as $farmerId => $farmerOrders)
             @php
                 $farmerName = $farmerOrders->first()->farmer->farm_name ?? 'Unknown Farmer';
             @endphp

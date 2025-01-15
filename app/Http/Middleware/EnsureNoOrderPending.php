@@ -20,7 +20,7 @@ class EnsureNoOrderPending
     {   
         $user = Auth::user();
     
-        if($user->role == User::BUYER && $user->orders()->byStatus(Order::PENDING)->exists()){
+        if($user->role == User::BUYER && $user->orders()->byStatus(Order::PROCESSING)->exists()){
             return redirect()->route('place.order',['name'=> $user->fullNameSlug()]);
         }
         return $next($request);

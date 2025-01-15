@@ -25,7 +25,7 @@ class PlaceOrder extends Component implements HasForms, HasActions
     use WireUiActions;
 
 
-    public $groupedPendingOrders;
+    public $groupedProcessing;
 
     public function mount()
     {
@@ -36,8 +36,8 @@ class PlaceOrder extends Component implements HasForms, HasActions
     public function refreshOrder()
     {
 
-        $this->groupedPendingOrders = Order::where('buyer_id', Auth::id())
-        ->where('status', Order::PENDING)
+        $this->groupedProcessing = Order::where('buyer_id', Auth::id())
+        ->where('status', Order::PROCESSING)
         ->with(['farmer','items.product']) // Eager load the farmer relationship
         ->get()
         ->groupBy(fn($order) => $order->farmer->id)->all(); // Group orders by farmer ID
@@ -46,7 +46,7 @@ class PlaceOrder extends Component implements HasForms, HasActions
     public function render()
     {
         return view('livewire.place-order', [
-            'groupedPendingOrders' => $this->groupedPendingOrders,
+            'groupedProcessing' => $this->groupedProcessing,
         ]);
     }
 
