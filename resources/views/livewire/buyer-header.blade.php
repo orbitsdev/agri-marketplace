@@ -68,6 +68,9 @@
                         <a href="{{ route('address.index',['name'=> Auth::user()->fullNameSlug()]) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             {{ __('My Address') }}
                         </a>
+                        <a href="{{ route('order.history',['name'=> Auth::user()->fullNameSlug()]) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            {{ __('Order History') }}
+                        </a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">

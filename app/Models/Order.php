@@ -83,6 +83,10 @@ public const PAYMENT_ONLINE = 'ONLINE (Online Payment)';
     {
         return $query->whereIn('status', [self::PENDING, self::PROCESSING]);
     }
+    public function scopeNotProcessing($query)
+    {
+        return $query->where('status', '!=', self::PROCESSING);
+    }
 
     // Helper Methods
     public function hasCompleteLocation()
