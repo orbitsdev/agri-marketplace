@@ -330,6 +330,8 @@ class CartView extends Component  implements HasForms, HasActions
                     DB::commit();
 
                     $this->addresses = auth()->user()->getAddresses();
+                    $this->refreshCart();
+                    // $this->dispatch('cart.updated');
 
                     $this->dialog()->success(
                         title: 'Address Added',

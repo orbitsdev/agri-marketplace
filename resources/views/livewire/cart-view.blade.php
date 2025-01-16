@@ -151,7 +151,7 @@
                   </div>
 
                    @else
-                   <div class="">
+                   <div class="mt-4">
                     <div class="">
                         {{ $this->addAddressAction }}
 
@@ -180,6 +180,8 @@
                    @endif
 
                     @if ($totalSelectedItems > 0)
+
+
                         <div class="mt-8 flex flex-1 flex-col justify-end">
 
                             {{ $this->checkoutCartAction }}
