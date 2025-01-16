@@ -20,7 +20,6 @@ class EnsureIsFarmer
         $user = Auth::user();
 
       
-
        
         if (!$user->farmer()->exists()) {
             abort(Response::HTTP_FORBIDDEN, 'You are not authorized to access this page.');
