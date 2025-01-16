@@ -13,11 +13,17 @@ class OrderHistory extends Component
 
     public $search = '';
     public $status = '';
+    public $statusCounts = [];
 
     protected $queryString = [
         'search' => ['except' => ''],
         'status' => ['except' => '']
     ];
+
+    public function mount()
+    {
+        $this->calculateStatusCounts();
+    }
 
     public function updatingSearch()
     {
@@ -27,6 +33,16 @@ class OrderHistory extends Component
     public function updatingStatus()
     {
         $this->resetPage();
+    }
+
+    public function calculateStatusCounts()
+    {
+        $this->statusCounts = Order::query()
+            ->where('buyer_id', Auth::user()->id)
+            ->selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
     }
 
     public function render()
@@ -46,8 +62,6 @@ class OrderHistory extends Component
             ->with(['items.product'])
             ->orderBy('order_date', 'desc')
             ->paginate(10);
-
-
 
         return view('livewire.order-history', [
             'orders' => $orders,

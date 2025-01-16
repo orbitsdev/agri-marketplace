@@ -152,7 +152,9 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <div>
+                                    {{-- add summary breakdown here how gettthe value  --}}
+                                </div>
                                 <div>
 
                                     <div class="border-t pt-4 mt-6 flex justify-between items-center">
