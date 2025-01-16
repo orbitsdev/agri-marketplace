@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Farmer;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -14,7 +15,14 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-       
+
+        $categories = Category::all();
+
+        if ($categories->isEmpty()) {
+            $this->command->error('No categories found. Please seed categories first.');
+            return;
+        }
+
         $farmer1 = Farmer::first();
         $farmer2 = Farmer::orderBy('id', 'desc')->first();
 
@@ -23,30 +31,61 @@ class ProductSeeder extends Seeder
             return;
         }
 
-        // Products for the first farmer
         $productsForFarmer1 = [
-            ['product_name' => 'Organic Tomatoes', 'description' => 'Freshly harvested organic tomatoes', 'quantity' => 100, 'price' => 2.50],
-            ['product_name' => 'Red Apples', 'description' => 'Juicy and sweet red apples', 'quantity' => 50, 'price' => 3.00],
-            ['product_name' => 'Golden Potatoes', 'description' => 'Golden potatoes perfect for cooking', 'quantity' => 200, 'price' => 1.20],
-            ['product_name' => 'Sweet Corn', 'description' => 'Fresh and tender sweet corn', 'quantity' => 150, 'price' => 1.50],
-            ['product_name' => 'Carrots', 'description' => 'Crunchy and vibrant carrots', 'quantity' => 120, 'price' => 2.00],
+            [
+                'product_name' => 'Organic Tomatoes',
+                'description' => 'Organic tomatoes grown with natural farming techniques to ensure quality and freshness.',
+                'short_description' => 'Natural organic tomatoes.',
+                'quantity' => 100,
+                'price' => 2.50,
+            ],
+            [
+                'product_name' => 'Red Apples',
+                'description' => 'Juicy, sweet, and hand-picked red apples ideal for snacking or cooking.',
+                'short_description' => 'Fresh red apples.',
+                'quantity' => 50,
+                'price' => 3.00,
+            ],
+            [
+                'product_name' => 'Golden Potatoes',
+                'description' => 'Premium golden potatoes perfect for frying, baking, or boiling.',
+                'short_description' => 'High-quality potatoes.',
+                'quantity' => 200,
+                'price' => 1.20,
+            ],
         ];
 
-        // Products for the second farmer
         $productsForFarmer2 = [
-            ['product_name' => 'Fresh Milk', 'description' => 'Creamy and fresh milk', 'quantity' => 60, 'price' => 1.50],
-            ['product_name' => 'Free-range Eggs', 'description' => 'Eggs from free-range chickens', 'quantity' => 100, 'price' => 2.00],
-            ['product_name' => 'Honey', 'description' => 'Pure organic honey', 'quantity' => 40, 'price' => 6.00],
-            ['product_name' => 'Almonds', 'description' => 'Crunchy and nutritious almonds', 'quantity' => 80, 'price' => 4.50],
-            ['product_name' => 'Cheese', 'description' => 'Aged and flavorful cheese', 'quantity' => 30, 'price' => 5.00],
+            [
+                'product_name' => 'Fresh Milk',
+                'description' => 'Locally sourced fresh milk that’s creamy and full of flavor.',
+                'short_description' => 'Fresh creamy milk.',
+                'quantity' => 60,
+                'price' => 1.50,
+            ],
+            [
+                'product_name' => 'Free-range Eggs',
+                'description' => 'Eggs collected from free-range hens raised on open pastures.',
+                'short_description' => 'Pasture-raised eggs.',
+                'quantity' => 100,
+                'price' => 2.00,
+            ],
+            [
+                'product_name' => 'Honey',
+                'description' => 'Golden organic honey sourced from sustainable local apiaries.',
+                'short_description' => 'Pure organic honey.',
+                'quantity' => 40,
+                'price' => 6.00,
+            ],
         ];
 
-        // Seed products for the first farmer
         foreach ($productsForFarmer1 as $product) {
             Product::create([
                 'farmer_id' => $farmer1->id,
+                'category_id' => $categories->random()->id,
                 'product_name' => $product['product_name'],
                 'description' => $product['description'],
+                'short_description' => $product['short_description'],
                 'quantity' => $product['quantity'],
                 'price' => $product['price'],
                 'status' => 'Available',
@@ -54,18 +93,18 @@ class ProductSeeder extends Seeder
             ]);
         }
 
-        // Seed products for the second farmer
         foreach ($productsForFarmer2 as $product) {
             Product::create([
                 'farmer_id' => $farmer2->id,
+                'category_id' => $categories->random()->id,
                 'product_name' => $product['product_name'],
                 'description' => $product['description'],
+                'short_description' => $product['short_description'],
                 'quantity' => $product['quantity'],
                 'price' => $product['price'],
                 'status' => 'Available',
                 'is_published' => true,
             ]);
         }
-    
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Farmer;
+use App\Models\Category;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
@@ -29,7 +30,10 @@ class Product extends Model implements HasMedia
         self::PENDING => self::PENDING,
     ];
 
-
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
     public function farmer()
     {
         return $this->belongsTo(Farmer::class,);
@@ -58,7 +62,7 @@ class Product extends Model implements HasMedia
 
     //scope with relation farmer
     public function scopeWithRelations($query){
-        return $query->whereHas('farmer.user')->with(['farmer.user','media']);
+        return $query->whereHas('farmer.user')->with(['category','farmer.user','media']);
     }
 
     public function nameWithPrice(){
@@ -87,6 +91,9 @@ public function scopeMyProduct($query, $farmerId)
 {
     return $query->where('farmer_id', $farmerId);
 }
-
+public function scopeByCategory($query, $categoryId = null)
+{
+    return $categoryId ? $query->where('category_id', $categoryId) : $query;
+}
 
 }

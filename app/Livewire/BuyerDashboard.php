@@ -32,8 +32,8 @@ class BuyerDashboard extends Component implements  HasForms, HasActions
     public function addToCartAction(): Action
     {
         return Action::make('addToCart')
-            // ->color('primary')
-
+         ->color('gray')
+            ->size('md')
             // ->requiresConfirmation()
             ->form([
 
