@@ -60,6 +60,20 @@ class Product extends Model implements HasMedia
         return $query->where('quantity', '>', 0);
     }
 
+
+    public function scopeByStatus($query, $status = null)
+    {
+        return $status ? $query->where('status', $status) : $query;
+    }
+
+
+    // scopre for available
+    public function scopeAvailable($query)
+    {
+        return $query->where('status', self::AVAILABLE);
+    }
+
+
     //scope with relation farmer
     public function scopeWithRelations($query){
         return $query->whereHas('farmer.user')->with(['category','farmer.user','media']);
@@ -95,5 +109,13 @@ public function scopeByCategory($query, $categoryId = null)
 {
     return $categoryId ? $query->where('category_id', $categoryId) : $query;
 }
+
+//scope for is publis
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true);
+    }
+
 
 }

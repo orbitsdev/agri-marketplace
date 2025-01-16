@@ -1,9 +1,50 @@
 <div class="bg-white">
     <x-buyer-layout>
         <main class="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
-            <div class="border-b border-gray-200 pb-10 pt-24">
-                <h1 class="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
-                <p class="mt-4 text-base text-gray-500">Checkout the latest release of Basic Tees, new and improved with four openings!</p>
+            <div class="border-b border-gray-200 pb-10 pt-14">
+                <h1 class="text-4xl font-bold tracking-tight text-gray-900">Enhancing Trust Between Farmers and Buyers</h1>
+                <p class="mt-4 text-base text-gray-500">
+                    Welcome to a transparent and reliable agricultural marketplace. Discover fresh harvests and quality goods,
+                    brought to you directly by small-scale farmers. Support local agriculture while enjoying the best produce,
+                    grown with care and integrity.
+                </p>
+            </div>
+
+            <div x-data="{ activeTab: '{{ $category }}' }" class="">
+                <nav class=" border-gray-200 -mb-px flex space-x-8" aria-label="Tabs">
+                    <!-- All Products Tab -->
+                    <button
+                        x-on:click="activeTab = ''; $wire.set('category', '')"
+                        :class="{ 'border-primary-500 text-primary-600': activeTab === '', 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': activeTab !== '' }"
+                        class="flex whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium">
+                        All Products
+                    </button>
+
+                    <!-- Dynamic Category Tabs -->
+                    @foreach ($categories as $category)
+                        <button
+                            x-on:click="activeTab = '{{ $category->id }}'; $wire.set('category', '{{ $category->id }}')"
+                            :class="{ 'border-primary-500 text-primary-600': activeTab === '{{ $category->id }}', 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': activeTab !== '{{ $category->id }}' }"
+                            class="flex whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium">
+                            {{ $category->name }}
+                        </button>
+                    @endforeach
+                </nav>
+            </div>
+
+             <!-- Search Box -->
+             <div class="mt-8 relative max-w-lg mx-auto sm:max-w-sm md:max-w-md lg:max-w-lg">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />
+                    </svg>
+                </div>
+                <input
+                    type="text"
+                    wire:model.live.debounce.500ms="search"
+                    class="block w-full pl-10 rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                    placeholder="Search for products..."
+                />
             </div>
 
             <div class="pb-24 pt-12 lg:grid lg:grid-cols-6 lg:gap-x-8 xl:grid-cols-4">
@@ -14,7 +55,7 @@
                         <div>
                             <a href="{{ route('product.details', ['code'=> $product->code,'slug' => $product->slug]) }}" class="relative">
                               <div class="relative h-72 w-full overflow-hidden rounded-lg">
-                                
+
                                 <img src="{{ $product->getImage() }}" alt="Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls." class="size-full object-cover">
                               </div>
                               <div class="relative mt-4">
@@ -28,7 +69,7 @@
                             </a>
                             <div class="mt-6 flex flex-1 flex-col justify-end">
                                 {{ ($this->addToCartAction)(['record' => $product->id]) }}
-                              {{-- <a href="#" class="relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200">Add to bag<span class="sr-only">, Zip Tote Basket</span></a> --}}
+
                             </div>
                           </div>
 
@@ -36,43 +77,8 @@
                         <p class="col-span-full text-center text-gray-500">No products available.</p>
                     @endforelse
 
-                        <!-- More products... -->
+
                       </div>
-                    {{-- <div class="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 xl:grid-cols-3">
-                        @forelse ($products as $product)
-                        <div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
-                            <img src="{{ $product->getImage() }}"
-                                alt="{{ $product->product_name }}"
-                                class="aspect-[3/4] bg-gray-200 object-cover group-hover:opacity-75 sm:h-96">
-                            <div class="flex flex-1 flex-col space-y-2 p-4">
-                                <h3 class="text-xl font-medium text-gray-900">
-                                    <a href="{{ route('product.details', ['code'=> $product->code,'slug' => $product->slug]) }}">
-                                        <span aria-hidden="true" class="absolute inset-0"></span>
-                                        {{ $product->product_name }}
-                                    </a>
-                                </h3>
-                                <p>
-                                    {{$product->farmer->farm_name}}
-                                </p>
-                                <div class="product product-prose">
-                                    <p>
-                                        @markdown(Str::limit($product->description, 100, '...'))
-
-                                    </p>
-                                </div>
-                                <div class="flex flex-1 flex-col justify-end">
-                                    <p class="text-2xl font-medium text-gray-900">₱{{ $product->price }}</p>
-                                    <div class="mt-2">
-                                    </div>
-                                    {{ ($this->addToCartAction)(['record' => $product->id]) }}
-                                </div>
-                            </div>
-                        </div>
-                    @empty
-                        <p class="col-span-full text-center text-gray-500">No products available.</p>
-                    @endforelse
-
-                    </div> --}}
 
                     <!-- Pagination -->
                     <div class="mt-4">
