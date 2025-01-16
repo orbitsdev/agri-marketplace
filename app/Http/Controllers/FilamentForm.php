@@ -34,198 +34,99 @@ class FilamentForm extends Controller
                 Wizard\Step::make('User Details')
                     ->schema([
                         TextInput::make('first_name')
-                                            ->required()
-                                            ->columnSpan([
-                                                'sm' => 2,
-                                                'md' => 4,
-                                                'lg' => 4,
-                                            ]
-                                        ),
-                                        TextInput::make('middle_name')
-                                            ->required()
-                                            ->columnSpan([
-                                                'sm' => 2,
-                                                'md' => 4,
-                                                'lg' => 4,
-                                            ]
-                                        ),
-                                        TextInput::make('last_name')
-                                            ->required()
-                                            ->columnSpan([
-                                                'sm' => 2,
-                                                'md' => 4,
-                                                'lg' => 4,
-                                            ]
-                                        ),
+                            ->required()
+                            ->columnSpan(
+                                [
+                                    'sm' => 2,
+                                    'md' => 4,
+                                    'lg' => 4,
+                                ]
+                            ),
+                        TextInput::make('middle_name')
+                            ->required()
+                            ->columnSpan(
+                                [
+                                    'sm' => 2,
+                                    'md' => 4,
+                                    'lg' => 4,
+                                ]
+                            ),
+                        TextInput::make('last_name')
+                            ->required()
+                            ->columnSpan(
+                                [
+                                    'sm' => 2,
+                                    'md' => 4,
+                                    'lg' => 4,
+                                ]
+                            ),
 
-                                        TextInput::make('email')
-                                            ->required()
-                                            ->unique(ignoreRecord: true)
-                                            ->columnSpan([
-                                                'sm' => 2,
-                                                'md' => 4,
-                                                'lg' => 4,
-                                            ]),
+                        TextInput::make('email')
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->columnSpan([
+                                'sm' => 2,
+                                'md' => 4,
+                                'lg' => 4,
+                            ]),
 
-                                        Select::make('role')
-                                            ->default(User::FARMER)
-                                            ->required()
-                                            ->options(User::ROLE_OPTIONS)
-                                            ->columnSpan([
-                                                'sm' => 2,
-                                                'md' => 4,
-                                                'lg' => 4,
-                                            ])
-                                            ->searchable()
-                                            ->live()
+                        Select::make('role')
+                            ->default(User::FARMER)
+                            ->required()
+                            ->options(User::ROLE_OPTIONS)
+                            ->columnSpan([
+                                'sm' => 2,
+                                'md' => 4,
+                                'lg' => 4,
+                            ])
+                            ->searchable()
+                            ->live()
 
-                                            ->disabled(fn(string $operation): bool => $operation === 'edit'),
+                            ->disabled(fn(string $operation): bool => $operation === 'edit'),
 
-                                        TextInput::make('password')
-                                            ->password()
-                                            ->revealable()
-                                            ->columnSpan([
-                                                'sm' => 2,
-                                                'md' => 4,
-                                                'lg' => 4,
-                                            ])
-                                            ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
-                                            ->dehydrated(fn(?string $state): bool => filled($state))
-                                            ->required(fn(string $operation): bool => $operation === 'create')
-                                            ->label(fn(string $operation) => $operation == 'create' ? 'Password' : 'New Password'),
+                        TextInput::make('password')
+                            ->password()
+                            ->revealable()
+                            ->columnSpan([
+                                'sm' => 2,
+                                'md' => 4,
+                                'lg' => 4,
+                            ])
+                            ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
+                            ->dehydrated(fn(?string $state): bool => filled($state))
+                            ->required(fn(string $operation): bool => $operation === 'create')
+                            ->label(fn(string $operation) => $operation == 'create' ? 'Password' : 'New Password'),
 
-                                        FileUpload::make('profile_photo_path')
-                                            ->disk('public')
-                                            ->directory('accounts')
-                                            ->image()
-                                            ->imageEditor()
-                                            ->columnSpanFull()
-                                            ->label('Profile'),
+                        FileUpload::make('profile_photo_path')
+                            ->disk('public')
+                            ->directory('accounts')
+                            ->image()
+                            ->imageEditor()
+                            ->columnSpanFull()
+                            ->label('Profile'),
                     ]),
                 Wizard\Step::make('Farm Details')
                     ->schema([
                         ...self::farmerForm(),
                     ])->hidden(function (Get $get) {
-                                    return $get('role') !== User::FARMER;
-                                }),
+                        return $get('role') !== User::FARMER;
+                    }),
                 Wizard\Step::make('Farm Documents')
                     ->schema([
                         ...self::farmDocuments(),
                     ])->hidden(function (Get $get) {
-                                    return $get('role') !== User::FARMER;
-                                }),
+                        return $get('role') !== User::FARMER;
+                    }),
             ])
-            ->columns([
-                                'sm' => 2,
-                                'md' => 4,
-                                'lg' => 6,
-                                'xl' => 8,
-                                '2xl' => 12,
-                            ])
-            ->columnSpanFull(),
+                ->columns([
+                    'sm' => 2,
+                    'md' => 4,
+                    'lg' => 6,
+                    'xl' => 8,
+                    '2xl' => 12,
+                ])
+                ->columnSpanFull(),
 
-    //         Tabs::make('User Management')
-    //         ->columnSpanFull()
-    // ->tabs([
-    //     Tabs\Tab::make('Account Details')
-    //         ->schema([
-    //             Section::make('Account Details')
-    //             ->description('Provide the necessary account details. Ensure all required fields are filled out correctly.')
-    //             ->columns([
-    //                 'sm' => 2,
-    //                 'md' => 4,
-    //                 'lg' => 6,
-    //                 'xl' => 8,
-    //                 '2xl' => 12,
-    //             ])
-    //             ->schema([
-    //                 TextInput::make('first_name')
-    //                     ->required()
-    //                     ->columnSpan([
-    //                         'sm' => 2,
-    //                         'md' => 4,
-    //                         'lg' => 4,
-    //                     ]
-    //                 ),
-    //                 TextInput::make('middle_name')
-    //                     ->required()
-    //                     ->columnSpan([
-    //                         'sm' => 2,
-    //                         'md' => 4,
-    //                         'lg' => 4,
-    //                     ]
-    //                 ),
-    //                 TextInput::make('last_name')
-    //                     ->required()
-    //                     ->columnSpan([
-    //                         'sm' => 2,
-    //                         'md' => 4,
-    //                         'lg' => 4,
-    //                     ]
-    //                 ),
-
-    //                 TextInput::make('email')
-    //                     ->required()
-    //                     ->unique(ignoreRecord: true)
-    //                     ->columnSpan([
-    //                         'sm' => 2,
-    //                         'md' => 4,
-    //                         'lg' => 4,
-    //                     ]),
-
-    //                 Select::make('role')
-    //                     ->default(User::FARMER)
-    //                     ->required()
-    //                     ->options(User::ROLE_OPTIONS)
-    //                     ->columnSpan([
-    //                         'sm' => 2,
-    //                         'md' => 4,
-    //                         'lg' => 4,
-    //                     ])
-    //                     ->searchable()
-    //                     ->live()
-    //                     ->hidden(fn(string $operation): bool => $operation === 'edit'),
-
-    //                 TextInput::make('password')
-    //                     ->password()
-    //                     ->revealable()
-    //                     ->columnSpan([
-    //                         'sm' => 2,
-    //                         'md' => 4,
-    //                         'lg' => 4,
-    //                     ])
-    //                     ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
-    //                     ->dehydrated(fn(?string $state): bool => filled($state))
-    //                     ->required(fn(string $operation): bool => $operation === 'create')
-    //                     ->label(fn(string $operation) => $operation == 'create' ? 'Password' : 'New Password'),
-
-    //                 FileUpload::make('profile_photo_path')
-    //                     ->disk('public')
-    //                     ->directory('accounts')
-    //                     ->image()
-    //                     ->imageEditor()
-    //                     ->columnSpanFull()
-    //                     ->label('Profile'),
-
-
-
-
-    //             ]),
-
-    //         ]),
-    //     Tabs\Tab::make('Farm Details')
-    //         ->schema([
-    //              ...self::farmerForm(),
-    //         ])->hidden(function (Get $get) {
-    //             return $get('role') !== User::FARMER;
-    //         }),
-    //     Tabs\Tab::make('Farm Documents')
-    //         ->schema([
-    //         ...self::farmDocuments(),
-    //         ])->hidden(function (Get $get) {
-    //             return $get('role') !== User::FARMER;
-    //         }),
-    //     ]),
 
 
         ];
@@ -234,66 +135,66 @@ class FilamentForm extends Controller
     public static function farmerForm()
     {
         return [
- Group::make()
- ->columns([
-        'sm' => 2,
-        'md' => 4,
-        'lg' => 6,
-        'xl' => 8,
-        '2xl' => 12,
-    ])
-    ->columnSpanFull()
-    ->relationship('farmer')
+            Group::make()
+                ->columns([
+                    'sm' => 2,
+                    'md' => 4,
+                    'lg' => 6,
+                    'xl' => 8,
+                    '2xl' => 12,
+                ])
+                ->columnSpanFull()
+                ->relationship('farmer')
 
-    ->schema([
-        TextInput::make('farm_name')
+                ->schema([
+                    TextInput::make('farm_name')
 
-        ->required()
-        ->columnSpan([
-            'sm' => 2,
-            'md' => 4,
-            'lg' => 4,
+                        ->required()
+                        ->columnSpan([
+                            'sm' => 2,
+                            'md' => 4,
+                            'lg' => 4,
 
-        ]),
-    // text input location
-    TextInput::make('location')
-        ->required()
-        ->columnSpan([
-            'sm' => 2,
-            'md' => 4,
-            'lg' => 4,
+                        ]),
+                    // text input location
+                    TextInput::make('location')
+                        ->required()
+                        ->columnSpan([
+                            'sm' => 2,
+                            'md' => 4,
+                            'lg' => 4,
 
-        ]),
-    // text input farm size
-    TextInput::make('farm_size')
-        ->required()
-        ->columnSpan([
-            'sm' => 2,
-            'md' => 4,
-            'lg' => 4,
+                        ]),
+                    // text input farm size
+                    TextInput::make('farm_size')
+                        ->required()
+                        ->columnSpan([
+                            'sm' => 2,
+                            'md' => 4,
+                            'lg' => 4,
 
-        ]),
-    // text input description
-    RichEditor::make('description')
-    ->columnSpanFull()
-    ->required()
-    ->toolbarButtons([
-        'attachFiles',
-        'blockquote',
-        'bold',
-        'bulletList',
-        'codeBlock',
-        'h2',
-        'h3',
-        'italic',
-        'link',
-        'orderedList',
-        'redo',
-        'strike',
-        'underline',
-        'undo',
-    ]),
-    ]),
+                        ]),
+                    // text input description
+                    RichEditor::make('description')
+                        ->columnSpanFull()
+                        ->required()
+                        ->toolbarButtons([
+                            'attachFiles',
+                            'blockquote',
+                            'bold',
+                            'bulletList',
+                            'codeBlock',
+                            'h2',
+                            'h3',
+                            'italic',
+                            'link',
+                            'orderedList',
+                            'redo',
+                            'strike',
+                            'underline',
+                            'undo',
+                        ]),
+                ]),
 
 
 
@@ -304,48 +205,48 @@ class FilamentForm extends Controller
     {
         return [
             Group::make()
- ->columns([
-        'sm' => 2,
-        'md' => 4,
-        'lg' => 6,
-        'xl' => 8,
-        '2xl' => 12,
-    ])
-    ->columnSpanFull()
-    ->relationship('farmer')
-
-    ->schema([
-        TableRepeater::make('farmer_documents')
-                ->relationship('documents')
-                ->columnSpanFull()
-                ->columnWidths([
-
-                    'name' => '200px',
+                ->columns([
+                    'sm' => 2,
+                    'md' => 4,
+                    'lg' => 6,
+                    'xl' => 8,
+                    '2xl' => 12,
                 ])
-                ->maxItems(6)
+                ->columnSpanFull()
+                ->relationship('farmer')
 
-                ->withoutheader()
                 ->schema([
+                    TableRepeater::make('farmer_documents')
+                        ->relationship('documents')
+                        ->columnSpanFull()
+                        ->columnWidths([
 
-                    // text input name
-                    TextInput::make('name')
-                        ->required()
-                        ->columnSpan([
-                            'sm' => 2,
-                            'md' => 4,
-                            'lg' => 6,
-                            'xl' => 8,
-                            '2xl' => 12,
+                            'name' => '200px',
+                        ])
+                        ->maxItems(6)
+
+                        ->withoutheader()
+                        ->schema([
+
+                            // text input name
+                            TextInput::make('name')
+                                ->required()
+                                ->columnSpan([
+                                    'sm' => 2,
+                                    'md' => 4,
+                                    'lg' => 6,
+                                    'xl' => 8,
+                                    '2xl' => 12,
+                                ]),
+                            SpatieMediaLibraryFileUpload::make('file')
+                            //spatied media library file upload
+                            // SpatieMediaLibraryFileUpload::make('files')
+                            // ->multiple()
+                            // ->reorderable()->maxFiles(3)
+
                         ]),
-                        SpatieMediaLibraryFileUpload::make('file')
-                        //spatied media library file upload
-                        // SpatieMediaLibraryFileUpload::make('files')
-                        // ->multiple()
-                        // ->reorderable()->maxFiles(3)
 
-                ]),
-
-                        ])->columnSpanFull(),
+                ])->columnSpanFull(),
 
 
 
@@ -356,162 +257,164 @@ class FilamentForm extends Controller
     {
         return [
             Section::make('Product Details')
-            //description
-            ->description('Provide the necessary product details. Ensure all required fields are filled out correctly.')
-            ->columns([
-                'sm' => 2,
-                'md' => 4,
-                'lg' => 6,
-                'xl' => 8,
-                '2xl' => 12,
-            ])
-            ->columnSpanFull()
+                //description
+                ->description('Provide the necessary product details. Ensure all required fields are filled out correctly.')
+                ->columns([
+                    'sm' => 2,
+                    'md' => 4,
+                    'lg' => 6,
+                    'xl' => 8,
+                    '2xl' => 12,
+                ])
+                ->columnSpanFull()
 
-            ->schema([
-                TextInput::make('product_name')
-                    ->required()
-                    ->columnSpan([
-                        'sm' => 2,
-                        'md' => 4,
-                        'lg' => 4,
-                    ]),
-                TextInput::make('quantity')
-                    ->required()
-                    //number only
-                    ->numeric()
-                    ->default(1)
-                    ->columnSpan([
-                        'sm' => 2,
-                        'md' => 4,
-                        'lg' => 4,
-                    ]),
-                TextInput::make('price')
-                    ->required()
-                    //number only
-                    ->numeric()
+                ->schema([
+                    TextInput::make('product_name')
+                        ->required()
+                        ->columnSpan([
+                            'sm' => 2,
+                            'md' => 4,
+                            'lg' => 4,
+                        ]),
+                    TextInput::make('quantity')
+                        ->required()
+                        //number only
+                        ->numeric()
+                        ->default(1)
+                        ->columnSpan([
+                            'sm' => 2,
+                            'md' => 4,
+                            'lg' => 4,
+                        ]),
+                    TextInput::make('price')
+                        ->required()
+                        //number only
+                        ->numeric()
 
-                    ->columnSpan([
-                        'sm' => 2,
-                        'md' => 4,
-                        'lg' => 4,
-                    ]),
-                RichEditor::make('description')
-                    ->required()
-                    ->columnSpanFull()
-                    ->toolbarButtons([
-                        'attachFiles',
-                        'blockquote',
-                        'bold',
-                        'bulletList',
-                        'codeBlock',
-                        'h2',
-                        'h3',
-                        'italic',
-                        'link',
-                        'orderedList',
-                        'redo',
-                        'strike',
-                        'underline',
-                        'undo',
-                    ]),
-// status
+                        ->columnSpan([
+                            'sm' => 2,
+                            'md' => 4,
+                            'lg' => 4,
+                        ]),
+                    RichEditor::make('description')
+                        ->required()
+                        ->columnSpanFull()
+                        ->toolbarButtons([
+                            'attachFiles',
+                            'blockquote',
+                            'bold',
+                            'bulletList',
+                            'codeBlock',
+                            'h2',
+                            'h3',
+                            'italic',
+                            'link',
+                            'orderedList',
+                            'redo',
+                            'strike',
+                            'underline',
+                            'undo',
+                        ]),
+                    // status
 
-                Select::make('status')
-                    ->options(Product::STATUS_OPTIONS)
-                    ->default('Available')
-                    ->required()
-                    //columnspan
-                    ->columnSpan([
-                        'sm' => 2,
-                        'md' => 4,
-                        'lg' => 4,
-                    ]),
+                    Select::make('status')
+                        ->options(Product::STATUS_OPTIONS)
+                        ->default('Available')
+                        ->required()
+                        //columnspan
+                        ->columnSpan([
+                            'sm' => 2,
+                            'md' => 4,
+                            'lg' => 4,
+                        ]),
 
-                    SpatieMediaLibraryFileUpload::make('image')->columnSpanFull() ->image()
-                    ->imageEditor()
+                    SpatieMediaLibraryFileUpload::make('image')->columnSpanFull()->image()
+                        ->imageEditor()
                     // ->required()
                     ,
-            ]),
+                ]),
         ];
     }
-    public static function locationForm() : array {
+    public static function locationForm(): array
+    {
         return [
 
-           
+
             TextInput::make('region')
-            ->label('Region')
-            ->placeholder('Enter Region')
-            ->required(),
-        
-        TextInput::make('province')
-            ->label('Province')
-            ->placeholder('Enter Province')
-            ->required(),
-        
-        TextInput::make('city_municipality')
-            ->label('City/Municipality')
-            ->placeholder('Enter City/Municipality')
-            ->required(),
-        
-        TextInput::make('barangay')
-            ->label('Barangay')
-            ->placeholder('Enter Barangay')
-            ->required(),
-        
-        
-                        TextInput::make('street')
-                            ->label('Street')
-                            ->required(),
-        
-                        TextInput::make('zip_code')
-                            ->label('ZIP Code')
-                            ->required()
-                            ->numeric()
-                            ->mask(9999),
-        
-                        Toggle::make('is_default')->default(true)
+                ->label('Region')
+                ->placeholder('Enter Region')
+                ->required(),
+
+            TextInput::make('province')
+                ->label('Province')
+                ->placeholder('Enter Province')
+                ->required(),
+
+            TextInput::make('city_municipality')
+                ->label('City/Municipality')
+                ->placeholder('Enter City/Municipality')
+                ->required(),
+
+            TextInput::make('barangay')
+                ->label('Barangay')
+                ->placeholder('Enter Barangay')
+                ->required(),
+
+
+            TextInput::make('street')
+                ->label('Street')
+                ->required(),
+
+            TextInput::make('zip_code')
+                ->label('ZIP Code')
+                ->required()
+                ->numeric()
+                ->mask(9999),
+
+            Toggle::make('is_default')->default(true)
         ];
     }
 
-    public static function orderForm() : array {
+    public static function orderForm(): array
+    {
         return [
 
-           
+
             TextInput::make('region')
-            ->label('Region')
-            ->placeholder('Enter Region')
-            ->required(),
-        
-        TextInput::make('province')
-            ->label('Province')
-            ->placeholder('Enter Province')
-            ->required(),
-        
-        TextInput::make('city_municipality')
-            ->label('City/Municipality')
-            ->placeholder('Enter City/Municipality')
-            ->required(),
-        
-        TextInput::make('barangay')
-            ->label('Barangay')
-            ->placeholder('Enter Barangay')
-            ->required(),
-        
-        
-                        TextInput::make('street')
-                            ->label('Street')
-                            ->required(),
-        
-                        TextInput::make('zip_code')
-                            ->label('ZIP Code')
-                            ->required()
-                            ->numeric()
-                            ->mask(9999),
-        
+                ->label('Region')
+                ->placeholder('Enter Region')
+                ->required(),
+
+            TextInput::make('province')
+                ->label('Province')
+                ->placeholder('Enter Province')
+                ->required(),
+
+            TextInput::make('city_municipality')
+                ->label('City/Municipality')
+                ->placeholder('Enter City/Municipality')
+                ->required(),
+
+            TextInput::make('barangay')
+                ->label('Barangay')
+                ->placeholder('Enter Barangay')
+                ->required(),
+
+
+            TextInput::make('street')
+                ->label('Street')
+                ->required(),
+
+            TextInput::make('zip_code')
+                ->label('ZIP Code')
+                ->required()
+                ->numeric()
+                ->mask(9999),
+
             // Select
-         
-Select::make('payment_method')
-    ->options(Order::PAYMENT_METHOD_OPTIONS)
+
+            Select::make('payment_method')
+                ->options(Order::PAYMENT_METHOD_OPTIONS)
 
         ];
     }

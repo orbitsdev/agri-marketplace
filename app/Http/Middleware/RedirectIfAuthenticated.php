@@ -21,7 +21,18 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                // return redirect(RouteServiceProvider::HOME);
+
+                if ($request->is('admin/*')) {
+                    return redirect('/admin/dashboard'); // Redirect to admin dashboard
+                }
+
+                if ($request->is('farmer/*')) {
+                    return redirect('/farmer/dashboard'); // Redirect to farmer dashboard
+                }
+
+                // Default Jetstream redirection
+                return redirect('/dashboard');
             }
         }
 

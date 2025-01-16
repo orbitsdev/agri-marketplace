@@ -7,6 +7,8 @@ use App\Livewire\OrderHistory;
 use App\Livewire\FarmerDetails;
 use App\Livewire\BuyerDashboard;
 use App\Livewire\ProductDetails;
+use App\Livewire\FarmerNotApproved;
+use App\Livewire\WaitingForApproval;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     // return view('welcome');
-    // return redirect()->route('dashboard');
+    return redirect()->route('dashboard');
     
 });
 
@@ -33,6 +35,9 @@ Route::middleware([
     // config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+   
+
+Route::get('/farmer/status', WaitingForApproval::class)->name('farmer.waiting-for-approval')->middleware(['farmer.check.approval']);
 
 
     Route::get('/dashboard', function () {

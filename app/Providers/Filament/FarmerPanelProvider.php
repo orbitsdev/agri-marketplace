@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\RegisterFarmer;
+use App\Http\Middleware\EnsureFarmerIsApproved;
 use App\Http\Middleware\EnsureIsFarmer;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -26,6 +28,8 @@ class FarmerPanelProvider extends PanelProvider
         return $panel
             ->id('farmer')
             ->path('farmer')
+            ->login()
+            ->registration(RegisterFarmer::class)
             ->colors([
                 'primary' => Color::Green,
             ])
@@ -52,6 +56,7 @@ class FarmerPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                EnsureFarmerIsApproved::class,
                 EnsureIsFarmer::class
             ]);
     }

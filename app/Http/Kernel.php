@@ -65,5 +65,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'ensureNoPendingOrder' => \App\Http\Middleware\EnsureNoOrderPending::class,
         'ensureHasDefaultLocation' => \App\Http\Middleware\EnsureHasDefaultLocation::class,
+        'farmer.approved' => \App\Http\Middleware\EnsureFarmerIsApproved::class,
+        'farmer.check.approval' => \App\Http\Middleware\RedirectIfFarmerApproved::class,
     ];
 }
