@@ -116,7 +116,8 @@
 
 
                 <section aria-labelledby="summary-heading"
-                    class="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
+                    class="rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
+
 
                     <h2 id="summary-heading" class="text-lg font-medium text-gray-900">Order summary</h2>
 
@@ -131,7 +132,52 @@
                             </dd>
                         </div>
                     </dl>
+                    @if(  Auth::user()->hasDefaultLocation())
+                   <div class="rounded-md bg-green-50 p-4 mt-4">
+                    <div class="flex">
+                      <div class="shrink-0">
+                        <svg class="size-5 text-green-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" />
+                        </svg>
+                      </div>
+                      <div class="ml-3">
+                        <h3 class="text-sm font-medium text-green-800">Address</h3>
+                        <div class="mt-2 text-sm text-green-700">
+                          <p>{{Auth::user()->getDefaultLocation()->formattedAddress()}}</p>
+                        </div>
 
+                      </div>
+                    </div>
+                  </div>
+
+                   @else
+                   <div class="">
+                    <div class="">
+                        {{ $this->addAddressAction }}
+
+                    </div>
+                    <div class="mt-4 rounded-md bg-blue-50 p-4 mb-4">
+
+                        <div class="flex">
+                            <div class="shrink-0">
+                                <svg class="size-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div>
+
+                                <div class="ml-3 flex-1 md:flex md:justify-between">
+                                    <p class="text-sm text-blue-700">No Default Location was found  Please Create or set default location before proceeding to checkout</p>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                  </div>
+
+                   @endif
 
                     @if ($totalSelectedItems > 0)
                         <div class="mt-8 flex flex-1 flex-col justify-end">
@@ -139,8 +185,10 @@
                             {{ $this->checkoutCartAction }}
                         </div>
                     @endif
+
                 </section>
             </form>
+
 
 
         </div>

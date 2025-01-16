@@ -3,6 +3,7 @@
 use App\Livewire\BuyerDashboard;
 use App\Livewire\CartView;
 use App\Livewire\MyAddress;
+use App\Livewire\OrderHistory;
 use App\Livewire\PlaceOrder;
 use App\Livewire\ProductDetails;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    return redirect()->route('dashboard');
 });
 
 Route::middleware([
@@ -64,5 +66,6 @@ Route::middleware([
     Route::get('/{name}/cart', CartView::class)->name('cart.view')->middleware(['ensureNoPendingOrder',]);
     Route::get('/{name}/address', MyAddress::class)->name('address.index');
     Route::get('/{name}/place-order', PlaceOrder::class)->name('place.order')->middleware(['ensureHasDefaultLocation']);
+    Route::get('/{name}/order-history', OrderHistory::class)->name('order.history');
 
 });

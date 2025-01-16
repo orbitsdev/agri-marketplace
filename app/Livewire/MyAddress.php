@@ -42,12 +42,12 @@ class MyAddress extends Component implements HasForms, HasActions
     {
         $this->name = $name;
 
-        try {
-            $this->regions = $this->getPSGCService()->getRegions();
-            $this->addresses = auth()->user()->getAddresses();
-        } catch (\Exception $e) {
-            $this->handleError('Error loading initial data', $e);
-        }
+        // try {
+        //     $this->regions = $this->getPSGCService()->getRegions();
+        //     $this->addresses = auth()->user()->getAddresses();
+        // } catch (\Exception $e) {
+        //     $this->handleError('Error loading initial data', $e);
+        // }
     }
 
     public function render()

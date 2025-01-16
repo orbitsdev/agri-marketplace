@@ -210,7 +210,9 @@ public function getDefaultLocation()
 {
     return $this->locations()->default()->first();
 }
-
+public function hasDefaultLocation(){
+   return self::locations()->hasDefault()->exists();
+}
 
 
 

@@ -20,6 +20,12 @@ return new class extends Migration
             $table->double('total_price')->nullable();
             $table->double('subtotal', 10, 2)->nullable(); // Total price for this item (quantity * price_per_unit)
 
+            $table->string('product_name')->nullable();
+$table->text('product_description')->nullable();
+$table->double('product_price')->nullable();
+$table->integer('product_quantity')->nullable(); // Snapshot of the product's stock at the time of order
+
+
             $table->timestamps();
         });
     }

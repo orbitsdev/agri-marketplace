@@ -43,8 +43,8 @@ class Order extends Model
 public const PAYMENT_ONLINE = 'ONLINE (Online Payment)';
 
     public const PAYMENT_METHOD_OPTIONS = [
-        self::PAYMENT_COD,
-        self::PAYMENT_ONLINE,
+       self::PAYMENT_COD => self::PAYMENT_COD,
+       self::PAYMENT_ONLINE => self::PAYMENT_ONLINE,
     ];
 
     // Relationships
@@ -164,5 +164,34 @@ protected function orderDate(): Attribute
     $this->save();
 }
 
-    
+
+public function isDeliveryInformationComplete(): bool
+    {
+        return !(
+            empty($this->region) ||
+            empty($this->province) ||
+            empty($this->city_municipality) ||
+            empty($this->barangay) ||
+            empty($this->street) ||
+            empty($this->zip_code) ||
+            empty($this->payment_method)
+        );
+    }
+
+    public function getMissingDeliveryFields(): array
+    {
+        $fields = [
+            'region' => $this->region,
+            'province' => $this->province,
+            'city_municipality' => $this->city_municipality,
+            'barangay' => $this->barangay,
+            'street' => $this->street,
+            'zip_code' => $this->zip_code,
+            'payment_method' => $this->payment_method,
+        ];
+
+        // Return the list of keys with missing values
+        return array_keys(array_filter($fields, fn($value) => empty($value)));
+    }
+
 }

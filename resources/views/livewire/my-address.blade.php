@@ -1,11 +1,11 @@
 <div class="">
     <x-buyer-layout>
         <div class="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
-            
-              
+
+
             @if (session('message'))
-           
-            
+
+
             <div class="border-l-4 border-yellow-400 bg-yellow-50 p-4 mt-2 animate-pulse">
                 <div class="flex">
                   <div class="shrink-0">
@@ -20,7 +20,7 @@
                   </div>
                 </div>
               </div>
-              
+
 @endif
 
             <div class="flex ">

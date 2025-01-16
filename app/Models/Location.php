@@ -18,14 +18,14 @@ class Location extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
-  
+
+
     public function scopeNotDefault($query)
     {
         return $query->where('is_default', false);
     }
 
-    
+
     public function scopeDefault($query)
     {
         return $query->where('is_default', true);
@@ -35,13 +35,27 @@ class Location extends Model
         return $query->where('is_default', true);
     }
 
-   
+
     public static function getDefaultLocation()
     {
         return static::where('is_default', true)->first();
     }
-    
 
 
-    
+    public function formattedAddress(): string
+    {
+        $addressParts = collect([
+            $this->street ?? '',
+            $this->barangay ?? '',
+            $this->city_municipality ?? '',
+            $this->province ?? '',
+            $this->region ?? '',
+        ])->filter();
+
+        // Return a default message if all parts are null
+        return $addressParts->isNotEmpty()
+            ? $addressParts->implode(', ')
+            : 'No address available';
+    }
+
 }
