@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('location')->nullable();
             $table->string('farm_size')->nullable();
             $table->text('description')->nullable();
+            $table->text('contact')->nullable();
             $table->timestamps();
         });
     }

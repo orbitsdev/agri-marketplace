@@ -1,10 +1,11 @@
 <?php
 
-use App\Livewire\BuyerDashboard;
 use App\Livewire\CartView;
 use App\Livewire\MyAddress;
-use App\Livewire\OrderHistory;
 use App\Livewire\PlaceOrder;
+use App\Livewire\OrderHistory;
+use App\Livewire\FarmerDetails;
+use App\Livewire\BuyerDashboard;
 use App\Livewire\ProductDetails;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -67,5 +68,6 @@ Route::middleware([
     Route::get('/{name}/address', MyAddress::class)->name('address.index');
     Route::get('/{name}/place-order', PlaceOrder::class)->name('place.order')->middleware(['ensureHasDefaultLocation']);
     Route::get('/{name}/order-history', OrderHistory::class)->name('order.history');
+    Route::get('/farmer/{farmerId}', FarmerDetails::class)->name('farmer.details');
 
 });
