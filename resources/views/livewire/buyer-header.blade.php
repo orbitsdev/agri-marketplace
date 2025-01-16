@@ -29,8 +29,8 @@
               </div>
 
 
-              <a href="#" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">About Agri</a>
-              <a href="#" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">Developer</a>
+              <a href="#" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">Farms</a>
+              <a href="#" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">About us</a>
             </div>
           </div>
 

@@ -27,6 +27,11 @@
 
                     <div class="mt-4">
                         <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{{ $product->product_name }}</h1>
+                        @if ($product->category)
+                        <span class="mt-2 inline-block rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">
+                            {{ $product->category->name }}
+                        </span>
+                    @endif
                         <p class="mt-2 text-base text-gray-500">{{ $product->short_description }}</p>
                     </div>
 
