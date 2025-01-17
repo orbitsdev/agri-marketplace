@@ -81,10 +81,13 @@ class FarmerResource extends Resource
                         ->icon('heroicon-s-pencil-square')
                         ->modalWidth('6xl')
                         ->fillForm(function (Model $record) {
-                            return [
-                                'status' => $record->status,
-                                'remarks' => $record->remarks,
-                            ];
+                            $formData = ['status' => $record->status];
+
+                            if (in_array($record->status, [Farmer::STATUS_REJECTED, Farmer::STATUS_BLOCKED])) {
+                                $formData['remarks'] = $record->remarks;
+                            }
+                    
+                            return $formData;
                         })
                         ->form(AdminForm::manageFarmForm())
                         ->action(function (Model $record, array $data) {
@@ -95,12 +98,23 @@ class FarmerResource extends Resource
                                     ->send();
                                 return;
                             }
-
+                    
+                            // Validate remarks only if the new status requires it
+                            if (in_array($data['status'], [Farmer::STATUS_REJECTED, Farmer::STATUS_BLOCKED]) && empty($data['remarks'])) {
+                                Notification::make()
+                                    ->title('Remarks Required')
+                                    ->body('Please provide a reason for rejecting or blocking the farm.')
+                                    ->danger()
+                                    ->send();
+                                return;
+                            }
+                    
+                            // Update the status and remarks
                             $record->update([
                                 'status' => $data['status'],
-                                'remarks' => $data['remarks'],
+                                'remarks' => $data['remarks'] ?? null,
                             ]);
-
+                    
                             Notification::make()
                                 ->title('Farm Status Updated')
                                 ->success()
