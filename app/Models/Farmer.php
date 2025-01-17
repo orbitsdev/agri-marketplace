@@ -26,6 +26,46 @@ class Farmer extends Model
         self::STATUS_BLOCKED,
     ];
 
+    public const STATUSES = [
+        self::STATUS_PENDING,
+        self::STATUS_APPROVED,
+        self::STATUS_REJECTED,
+        self::STATUS_BLOCKED,
+    ];
+
+    // Status Transitions
+    public const IF_PENDING = [
+        self::STATUS_APPROVED => self::STATUS_APPROVED,
+        self::STATUS_REJECTED => self::STATUS_REJECTED,
+        self::STATUS_BLOCKED => self::STATUS_BLOCKED,
+    ];
+
+    public const IF_APPROVED = [
+        self::STATUS_BLOCKED => self::STATUS_BLOCKED,
+        self::STATUS_REJECTED => self::STATUS_REJECTED,
+    ];
+
+    public const IF_REJECTED = [
+        self::STATUS_APPROVED => self::STATUS_APPROVED,
+    ];
+
+    public const IF_BLOCKED = [
+        self::STATUS_APPROVED => self::STATUS_APPROVED,
+    ];
+
+    public function getAvailableStatusTransitions(): array
+    {
+        // Map the current status to its allowed transitions
+        $statusTransitions = [
+            self::STATUS_PENDING => self::IF_PENDING,
+            self::STATUS_APPROVED => self::IF_APPROVED,
+            self::STATUS_REJECTED => self::IF_REJECTED,
+            self::STATUS_BLOCKED => self::IF_BLOCKED,
+        ];
+
+        return $statusTransitions[$this->status] ?? [];
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

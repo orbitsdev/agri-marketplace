@@ -9,8 +9,14 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use App\Http\Controllers\AdminForm;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
+use Filament\Support\Enums\MaxWidth;
+use App\Http\Controllers\FilamentForm;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Notifications\Notification;
+use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\FarmerResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -34,33 +40,33 @@ class FarmerResource extends Resource
     {
         return $table
             ->columns([
-              TextColumn::make('user.fullName')
+                TextColumn::make('user.fullName')
                     ->searchable(query: function (Builder $query, string $search): Builder {
                         return $query->where('last_name', 'like', "%{$search}%")
-                        ->orWhere('first_name', 'like', "%{$search}%")
-                        ->orWhere('middle_name', 'like', "%{$search}%");
+                            ->orWhere('first_name', 'like', "%{$search}%")
+                            ->orWhere('middle_name', 'like', "%{$search}%");
                     })->label('Farm Owner'),
-              TextColumn::make('farm_name')
+                TextColumn::make('farm_name')
                     ->searchable(),
-              TextColumn::make('location')
+                TextColumn::make('location')
                     ->searchable(),
-              TextColumn::make('farm_size')
+                TextColumn::make('farm_size')
                     ->searchable(),
-                    TextColumn::make('status')
-                       ->badge()
-                       ->color(fn(string $state): string => match ($state) {
-                           Farmer::STATUS_PENDING => 'info',
-                           Farmer::STATUS_APPROVED => 'success',
-                           Farmer::STATUS_REJECTED => 'danger',
-                           Farmer::STATUS_BLOCKED => 'danger',
-   
-                           default => 'gray'
-                       }),
-              TextColumn::make('created_at')
+                TextColumn::make('status')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        Farmer::STATUS_PENDING => 'info',
+                        Farmer::STATUS_APPROVED => 'success',
+                        Farmer::STATUS_REJECTED => 'danger',
+                        Farmer::STATUS_BLOCKED => 'danger',
+
+                        default => 'gray'
+                    }),
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-              TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -69,7 +75,42 @@ class FarmerResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    Action::make('manage')
+                        ->label('Manage')
+                        ->icon('heroicon-s-pencil-square')
+                        ->modalWidth('6xl')
+                        ->fillForm(function (Model $record) {
+                            return [
+                                'status' => $record->status,
+                                'remarks' => $record->remarks,
+                            ];
+                        })
+                        ->form(AdminForm::manageFarmForm())
+                        ->action(function (Model $record, array $data) {
+                            if ($record->status === $data['status']) {
+                                Notification::make()
+                                    ->title('No Changes Made')
+                                    ->warning()
+                                    ->send();
+                                return;
+                            }
+
+                            $record->update([
+                                'status' => $data['status'],
+                                'remarks' => $data['remarks'],
+                            ]);
+
+                            Notification::make()
+                                ->title('Farm Status Updated')
+                                ->success()
+                                ->send();
+                        })
+                        ->color('gray'),
+
+                    Tables\Actions\EditAction::make('Update')->form(AdminForm::farm()),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -220,6 +220,7 @@ class FilamentForm extends Controller
                 ->schema([
                     TableRepeater::make('farmer_documents')
                         ->relationship('documents')
+                        ->maxItems(10)
                         ->columnSpanFull()
                         ->columnWidths([
 
@@ -240,7 +241,7 @@ class FilamentForm extends Controller
                                     'xl' => 8,
                                     '2xl' => 12,
                                 ]),
-                            SpatieMediaLibraryFileUpload::make('file')
+                            SpatieMediaLibraryFileUpload::make('file')->required()
                             //spatied media library file upload
                             // SpatieMediaLibraryFileUpload::make('files')
                             // ->multiple()

@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('farm_name')->nullable();
-            $table->string('location')->nullable();
+            $table->text('location')->nullable();
             $table->string('farm_size')->nullable();
             $table->text('description')->nullable();
-            $table->text('contact')->nullable();
+            $table->string('contact')->nullable();
             $table->enum('status', ['Pending', 'Approved', 'Rejected', 'Blocked'])->default('Pending');
             $table->text('remarks')->nullable();
             $table->timestamps();
