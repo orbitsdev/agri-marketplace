@@ -215,6 +215,12 @@ public function hasDefaultLocation(){
 }
 
 
+// scope role farmer
+
+public static function scopeIsFarmer($query){
+    return $query->where('role', '==', self::FARMER);
+}
+
 
 
 public function getAddresses()
