@@ -46,7 +46,7 @@
 
 
               <!-- Search Box -->
-<div class="mt-4 relative">
+<div class="mt-4 relative"
     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
         <!-- Icon -->
         <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
