@@ -57,7 +57,8 @@ class WaitingForApproval extends Component implements HasForms, HasActions
             ->record(function (array $arguments) {
                return User::findOrFail($arguments['record']);
             })
-            ->iconButton()
+            ->outlined()
+            // ->iconButton()
             ->model(User::class)
             ->using(function (Model $record, array $data): Model {
 
@@ -65,10 +66,10 @@ class WaitingForApproval extends Component implements HasForms, HasActions
 
                 return $record;
             })
-            ->label('Update Farmer Details')
+            ->label('Edit Details')
             ->icon('heroicon-m-pencil-square')
             ->form(FilamentForm::farmerDetailsForm())
-            ->label('Update Farm Details')
+          
             ->modalHeading('Update Farm Details')
             ->modalWidth(MaxWidth::SevenExtraLarge)
 
