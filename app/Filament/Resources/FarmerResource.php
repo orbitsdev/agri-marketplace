@@ -8,6 +8,7 @@ use App\Models\Farmer;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Actions\StaticAction;
 use App\Http\Controllers\AdminForm;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
@@ -76,6 +77,15 @@ class FarmerResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
+
+                    Action::make('View')
+                    ->icon('heroicon-s-eye')
+                    ->modalSubmitAction(false)
+                    ->modalContent(function (Model $record) {
+                        return view('livewire.farm-details', ['record' => $record]);
+                    })
+                    ->modalCancelAction(fn(StaticAction $action) => $action->label('Close'))
+                    ->closeModalByClickingAway(false)->modalWidth('7xl'),
                     Action::make('manage')
                         ->label('Manage')
                         ->icon('heroicon-s-pencil-square')
