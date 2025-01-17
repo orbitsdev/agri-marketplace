@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('farm_size')->nullable();
             $table->text('description')->nullable();
             $table->text('contact')->nullable();
+            $table->enum('status', ['Pending', 'Approved', 'Rejected', 'Blocked'])->default('Pending');
             $table->text('remarks')->nullable();
-            $table->boolean('is_approved')->default(false); 
             $table->timestamps();
         });
     }

@@ -132,6 +132,8 @@ class FilamentForm extends Controller
         ];
     }
 
+
+
     public static function farmerForm()
     {
         return [
@@ -249,6 +251,20 @@ class FilamentForm extends Controller
                 ])->columnSpanFull(),
 
 
+
+        ];
+    }
+
+    public static function farmerDetailsForm(): array{
+        return [
+            Wizard::make([
+                Wizard\Step::make('Farm Details')
+                    ->schema(self::farmerForm()),
+
+                    Wizard\Step::make('Farm Documents')
+                    ->schema(self::farmDocuments()),
+
+                    ])
 
         ];
     }
