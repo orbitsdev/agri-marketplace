@@ -217,7 +217,10 @@ public function hasDefaultLocation(){
 
 // scope role farmer
 
-public static function scopeIsFarmer($query){
+public static function scopeIsBuyerRole($query){
+    return $query->where('role', '==', self::BUYER);
+}
+public static function scopeIsFarmerRole($query){
     return $query->where('role', '==', self::FARMER);
 }
 

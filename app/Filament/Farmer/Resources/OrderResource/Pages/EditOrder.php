@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Farmer\Resources\FarmerResource\Pages;
+namespace App\Filament\Farmer\Resources\OrderResource\Pages;
 
-use App\Filament\Farmer\Resources\FarmerResource;
+use App\Filament\Farmer\Resources\OrderResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditFarmer extends EditRecord
+class EditOrder extends EditRecord
 {
-    protected static string $resource = FarmerResource::class;
+    protected static string $resource = OrderResource::class;
 
     protected function getHeaderActions(): array
     {

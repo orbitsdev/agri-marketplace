@@ -10,6 +10,7 @@
         "blade-ui-kit/blade-zondicons": "^1.5",
         "codeat3/blade-game-icons": "^1.4",
         "codeat3/blade-phosphor-icons": "^2.2",
+        "eduard9969/blade-polaris-icons": "^2.7",
         "filament/filament": "^3.2",
         "filament/spatie-laravel-media-library-plugin": "^3.2",
         "guzzlehttp/guzzle": "^7.2",
