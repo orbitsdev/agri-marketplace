@@ -7,6 +7,7 @@ use Filament\Tables;
 use App\Models\Farmer;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Actions\StaticAction;
 use App\Http\Controllers\AdminForm;
@@ -14,12 +15,16 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
 use Filament\Support\Enums\MaxWidth;
 use App\Http\Controllers\FilamentForm;
+use Filament\Infolists\Components\View;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
 use App\Filament\Resources\FarmerResource\Pages;
+use Filament\Infolists\Components\RepeatableEntry;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\FarmerResource\RelationManagers;
 
@@ -30,6 +35,81 @@ class FarmerResource extends Resource
     protected static ?string $navigationIcon = 'phosphor-farm';
     protected static ?string $navigationLabel = 'Farms';
     protected static ?int $navigationSort = 2;
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                ImageEntry::make('user.profile_photo_path')->label('Profile'),
+                TextEntry::make('user.fullName')
+                    ->label('Farm Owner'),
+
+
+                TextEntry::make('farm_name')
+                    ->label('Farm Name'),
+
+                TextEntry::make('location')
+                    ->label('Location'),
+
+                TextEntry::make('farm_size')
+                    ->label('Farm Size'),
+                  
+
+                TextEntry::make('description')
+                    ->label('Description')->markdown()->columnSpanFull(),
+
+              
+
+                // TextEntry::make('created_at')
+                //     ->label('Created At')
+                //     ->dateTime()
+                //     ->dateTimeTooltip(),
+
+                // TextEntry::make('updated_at')
+                //     ->label('Updated At')
+                //     ->dateTime()
+                //     ->dateTimeTooltip(),
+
+                // RepeatableEntry::make('documents')
+                // ->columnSpanFull()
+                //     ->schema([
+                //     // TextEntry::make('name'),
+                //         View::make('infolists.components.file-link')
+
+
+                //     ])
+                //     ->columns(1)
+                RepeatableEntry::make('documents')
+                ->columnSpanFull()
+                    ->schema([
+                    // TextEntry::make('name'),
+                        View::make('infolists.components.file-link')
+
+
+                    ])
+                    ->contained(false)
+                    ->columns(1),
+
+                    TextEntry::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        Farmer::STATUS_PENDING => 'info',
+                        Farmer::STATUS_APPROVED => 'success',
+                        Farmer::STATUS_REJECTED => 'danger',
+                        Farmer::STATUS_BLOCKED => 'danger',
+                        default => 'gray',
+                    }),
+
+                    TextEntry::make('remarks')
+                    ->label('Remarks')->markdown()->columnSpanFull()
+                    ->hidden(function (Model $record) {
+        
+                        return !in_array($record->status, [Farmer::STATUS_BLOCKED, Farmer::STATUS_REJECTED]);
+                    }),
+
+            ]);
+    }
 
     public static function form(Form $form): Form
     {
@@ -77,15 +157,15 @@ class FarmerResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-
-                    Action::make('View')
-                    ->icon('heroicon-s-eye')
-                    ->modalSubmitAction(false)
-                    ->modalContent(function (Model $record) {
-                        return view('livewire.farm-details', ['record' => $record]);
-                    })
-                    ->modalCancelAction(fn(StaticAction $action) => $action->label('Close'))
-                    ->closeModalByClickingAway(false)->modalWidth('7xl'),
+                    Tables\Actions\ViewAction::make()->modalWidth('7xl'),
+                    // Action::make('View')
+                    // ->icon('heroicon-s-eye')
+                    // ->modalSubmitAction(false)
+                    // ->modalContent(function (Model $record) {
+                    //     return view('livewire.farm-details', ['record' => $record]);
+                    // })
+                    // ->modalCancelAction(fn(StaticAction $action) => $action->label('Close'))
+                    // ->closeModalByClickingAway(false)->modalWidth('7xl'),
                     Action::make('manage')
                         ->label('Manage')
                         ->icon('heroicon-s-pencil-square')
@@ -96,7 +176,7 @@ class FarmerResource extends Resource
                             if (in_array($record->status, [Farmer::STATUS_REJECTED, Farmer::STATUS_BLOCKED])) {
                                 $formData['remarks'] = $record->remarks;
                             }
-                    
+
                             return $formData;
                         })
                         ->form(AdminForm::manageFarmForm())
@@ -108,7 +188,7 @@ class FarmerResource extends Resource
                                     ->send();
                                 return;
                             }
-                    
+
                             // Validate remarks only if the new status requires it
                             if (in_array($data['status'], [Farmer::STATUS_REJECTED, Farmer::STATUS_BLOCKED]) && empty($data['remarks'])) {
                                 Notification::make()
@@ -118,13 +198,13 @@ class FarmerResource extends Resource
                                     ->send();
                                 return;
                             }
-                    
+
                             // Update the status and remarks
                             $record->update([
                                 'status' => $data['status'],
                                 'remarks' => $data['remarks'] ?? null,
                             ]);
-                    
+
                             Notification::make()
                                 ->title('Farm Status Updated')
                                 ->success()
