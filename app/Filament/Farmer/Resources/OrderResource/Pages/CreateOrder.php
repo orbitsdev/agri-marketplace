@@ -9,12 +9,14 @@ use App\Filament\Farmer\Resources\OrderResource;
 
 class CreateOrder extends CreateRecord
 {   
-
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
     protected function mutateFormDataBeforeCreate(array $data): array
 {   
     $data['farmer_id'] = Auth::user()->farmer->id;
-    dd($data);
- 
+    // dd($data);
     return $data;
 }
     protected static string $resource = OrderResource::class;

@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use App\Http\Controllers\AdminForm;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -32,42 +33,48 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('buyer.fullName')
-                    ->searchable(query: function (Builder $query, string $search): Builder {
-                        return $query->where('last_name', 'like', "%{$search}%")
-                            ->orWhere('first_name', 'like', "%{$search}%")
-                            ->orWhere('middle_name', 'like', "%{$search}%");
-                    })->label('Farm Owner'),
+                // TextColumn::make('buyer.fullName')
+                //     ->searchable(query: function (Builder $query, string $search): Builder {
+                //         return $query->where('last_name', 'like', "%{$search}%")
+                //             ->orWhere('first_name', 'like', "%{$search}%")
+                //             ->orWhere('middle_name', 'like', "%{$search}%");
+                //     })->label('Farm Owner'),
                 Tables\Columns\TextColumn::make('order_number')
-                    ->searchable(),
+                    ->searchable(isIndividual:true),
              
                
-                Tables\Columns\TextColumn::make('region')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('province')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('city_municipality')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('barangay')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('street')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('zip_code')
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('region')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('province')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('city_municipality')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('barangay')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('street')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('zip_code')
+                //     ->searchable(),
                 Tables\Columns\TextColumn::make('payment_method')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('payment_reference')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ,
                 Tables\Columns\TextColumn::make('status'),
                 Tables\Columns\TextColumn::make('order_date')
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('shipped_date')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ,
                 Tables\Columns\TextColumn::make('delivery_date')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                    
                 Tables\Columns\TextColumn::make('total')
                     ->numeric()
                     ->sortable(),
@@ -86,7 +93,8 @@ class OrderResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()   ->modalWidth(MaxWidth::SevenExtraLarge),
+                
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

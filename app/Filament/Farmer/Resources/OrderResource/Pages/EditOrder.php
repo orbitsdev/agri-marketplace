@@ -8,6 +8,11 @@ use Filament\Resources\Pages\EditRecord;
 
 class EditOrder extends EditRecord
 {
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
     protected static string $resource = OrderResource::class;
 
     protected function getHeaderActions(): array

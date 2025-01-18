@@ -174,98 +174,142 @@ class AdminForm extends Controller
         ];
     }
 
-    public static function orderForm() :array{
+    public static function orderForm(): array
+    {
         return [
-            // Order Details Section
-            Section::make('Order Details')
+            Wizard::make()
                 ->schema([
+                    // Step 1: Order Details
+                    Wizard\Step::make('Order Details')
+                        ->schema([
+                            Select::make('buyer_id')
+                                ->label('Buyer')
+                                ->relationship(
+                                    'buyer',
+                                    'id',
+                                    modifyQueryUsing: fn(Builder $query) => $query->isBuyers(),
+                                )
+                                ->getOptionLabelFromRecordUsing(fn(Model $record) => "{$record->fullName} - ")
+                                ->searchable(['first_name', 'last_name', 'email'])
+                                ->preload()
+                                ->required(),
+                            TextInput::make('order_number')
+                                ->disabled(fn($operation) => $operation === 'edit')
+                                ->hidden(fn($operation) => $operation === 'create')
+                                ->required()
+                                ->maxLength(191),
+                        ])
+                        ->columns(2),
+
+                        Wizard\Step::make('Order Items')
+                        ->schema([
+                            TableRepeater::make('order_items_list')
+                                ->columnWidths([
+                                    'quantity' => '300px',
+                                ])
+                                ->relationship('items')
+                                ->schema([
+                                    Select::make('product_id')
+                                        ->label('Product')
+                                        ->relationship(
+                                            'product',
+                                            'id',
+                                            modifyQueryUsing: fn(Builder $query) => $query,
+                                        )
+                                        ->distinct()
+                                        ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                                        ->getOptionLabelFromRecordUsing(fn(Model $record) => "{$record->product_name}")
+                                        ->searchable(['product_name', 'short_description'])
+                                        ->preload()
+                                        ->required(),
+                                    TextInput::make('quantity')
+                                        ->numeric()
+                                        ->required(),
+                                ])
+                                ->withoutHeader()
+                                ->columnSpan('full')
+                                ->label('Items')
+                                ->maxItems(6)
+                                ,
+                        ])
+                        
+                        ->columns(1),
+    
+                    // Step 2: Shipping Address
+                    Wizard\Step::make('Shipping Address')
+                        ->schema([
+                            TextInput::make('region')
+                                ->label('Region')
+                                ->required()
+                                ->maxLength(191),
+                            TextInput::make('province')
+                                ->label('Province')
+                                ->required()
+                                ->maxLength(191),
+                            TextInput::make('city_municipality')
+                                ->label('City/Municipality')
+                                ->required()
+                                ->maxLength(191),
+                            TextInput::make('barangay')
+                                ->label('Barangay')
+                                ->required()
+                                ->maxLength(191),
+                            TextInput::make('street')
+                                ->label('Street')
+                                ->required()
+                                ->maxLength(191),
+                            TextInput::make('zip_code')
+                                ->label('Zip Code')
+                                ->required()
+                                ->maxLength(191),
+                        ])
+                        ->columns(2),
+                        
+    
+                    // Step 3: Order Status
+                    Wizard\Step::make('Order Status')
+                        ->schema([
+                            Select::make('status')
+                                ->label('Status')
+                                ->options(array_combine(Order::STATUS_OPTIONS, Order::STATUS_OPTIONS))
+                                ->required()
+                                ->placeholder('Select a status'),
+                            DatePicker::make('order_date')
+                                ->label('Order Date')
+                                ->date()
+                                ->required(),
+                            DatePicker::make('shipped_date')
+                                ->label('Shipped Date')
+                                ->date()
+                                ->required(),
+                            DatePicker::make('delivery_date')
+                                ->label('Delivery Date')
+                                ->date()
+                                ->required(),
+                        ])
+                        ->columns(2),
+                      
+                    // Step 4: Payment Details
+                    Wizard\Step::make('Payment Details')
+                        ->schema([
+                            Select::make('payment_method')
+                                ->label('Payment Method')
+                                ->options(Order::PAYMENT_METHOD_OPTIONS)
+                                ->required()
+                                ->placeholder('Select a payment method'),
+                            TextInput::make('payment_reference')
+                                ->label('Payment Reference')
+                                ->maxLength(191),
+                        ])
+                        ->columns(2),
+    
+                    // Step 5: Order Items
                   
-    
-                    Select::make('buyer_id')
-                        ->label('buyer')
-                        ->relationship(
-                            'buyer', 
-                            'last_name',
-                            modifyQueryUsing: fn (Builder $query) => $query->where('role', '==', User::BUYER),
-                            ) 
-                            ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->fullName}")
-                            ->searchable(['first_name', 'last_name'])
-                        ->searchable()
-                        ->preload()
-                        ->required(),
-    
-                    // Select::make('farmer_id')
-                    //     ->label('Farmer')
-                    //     ->relationship('farmer', 'farm_name') // Assuming 'farm_name' is the display column
-                    //     ->searchable(),
-                ])
-                ->columns(2),
-    
-            // Address Section
-            Section::make('Shipping Address')
-                ->schema([
-                    TextInput::make('region')
-                        ->label('Region')
-                        ->maxLength(191),
-                    TextInput::make('province')
-                        ->label('Province')
-                        ->maxLength(191),
-                    TextInput::make('city_municipality')
-                        ->label('City/Municipality')
-                        ->maxLength(191),
-                    TextInput::make('barangay')
-                        ->label('Barangay')
-                        ->maxLength(191),
-                    TextInput::make('street')
-                        ->label('Street')
-                        ->maxLength(191),
-                    TextInput::make('zip_code')
-                        ->label('Zip Code')
-                        ->maxLength(191),
-                ])
-                ->columns(2),
-    
-            // Payment Details Section
-            Section::make('Payment Details')
-                ->schema([
-                    TextInput::make('payment_method')
-                        ->label('Payment Method')
-                        ->maxLength(191)
-                        ->required(),
-                    TextInput::make('payment_reference')
-                        ->label('Payment Reference')
-                        ->maxLength(191),
-                ])
-                ->columns(2),
-    
-            // Order Status Section
-            Section::make('Order Status')
-                ->schema([
-                    TextInput::make('status')
-                        ->label('Status')
-                        ->required(),
-                    DatePicker::make('order_date')
-                        ->label('Order Date')
-                        ->required()->date(),
-                    DatePicker::make('shipped_date')
-                        ->label('Shipped Date'),
-                    DatePicker::make('delivery_date')
-                    ->date()
-                        ->label('Delivery Date'),
-                ])
-                ->columns(2),
-    
-            // Additional Details Section
-            Section::make('Additional Details')
-                ->schema([
-                    TextInput::make('total')
-                        ->label('Total Amount')
-                        ->numeric(),
-                    Toggle::make('is_received')
-                        ->label('Order Received')
-                        ->required(),
-                ])
-                ->columns(2),
+                ])->columnSpanfull()
+                
+               
         ];
     }
+    
+
 }
