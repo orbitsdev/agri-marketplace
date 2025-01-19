@@ -12,6 +12,7 @@ use Filament\Tables\Grouping\Group;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FilamentForm;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -61,6 +62,8 @@ class ProductResource extends Resource
                         Product::PENDING => 'info',
                         default => 'gray',
                     }),
+
+                    ToggleColumn::make('is_published')->label('Publish'),
 
                 // Tables\Columns\TextColumn::make('status'),
                 Tables\Columns\TextColumn::make('created_at')

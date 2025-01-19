@@ -287,6 +287,10 @@ class FilamentForm extends Controller
     
                 ->schema([
                     // Product Name
+                    SpatieMediaLibraryFileUpload::make('image')
+                    ->columnSpanFull()
+                    ->image()
+                    ->imageEditor(),
                     TextInput::make('product_name')
                         ->required()
                         ->columnSpan([
@@ -361,11 +365,10 @@ class FilamentForm extends Controller
                         'md' => 4,
                         'lg' => 4,
                     ]),
+                  
                     // Image Upload
-                    SpatieMediaLibraryFileUpload::make('image')
-                        ->columnSpanFull()
-                        ->image()
-                        ->imageEditor(),
+                   
+                        Toggle::make('is_published')->required()->columnSpanFull()->label('Publish'),
                 ]),
         ];
     }

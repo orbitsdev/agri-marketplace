@@ -66,7 +66,7 @@
                     @forelse ($orders as $order)
                         <div class="border rounded-md bg-white shadow-md">
                             <div class="flex flex-col border-b px-4 py-6 space-y-6 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between sm:space-x-6">
-                                <dl class="grid grid-cols-1 gap-6 text-sm text-gray-600 sm:grid-cols-3 sm:gap-x-6">
+                                <dl class="grid grid-cols-1 gap-6 text-sm text-gray-600 sm:grid-cols-4 sm:gap-x-6">
                                     <div>
                                         <dt class="font-medium text-gray-900">Ordered Date</dt>
                                         <dd class="mt-1 text-gray-700">
@@ -81,6 +81,18 @@
                                         <dt class="font-medium text-gray-900">Total amount</dt>
                                         <dd class="mt-1 text-gray-700">{{ $order->formatted_total }}</dd>
                                     </div>
+                                    
+                                    <div>
+                                        <dt class="font-medium text-gray-900">Order Received</dt>
+                                        <dd class="mt-1 text-gray-700"> 
+                                            
+                                            {{$order->is_received ? 'Yes' : 'No' }}
+                                            @if ($order->status === 'Completed' && $order->is_received === 0)
+                                            
+                                            {{ ($this->receiveOrderAction)(['record' => $order->id]) }} </dd>
+                                            @endif
+                                    </div>
+                                
                                 </dl>
                                 <div class="mt-4 sm:mt-0">
                                     <span
@@ -248,4 +260,5 @@
             </div>
         </div>
     </x-buyer-layout>
+    <x-filament-actions::modals />
 </div>

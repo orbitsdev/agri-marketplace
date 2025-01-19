@@ -23,7 +23,7 @@ return new class extends Migration
             $table->enum('status', ['Available', 'Sold', 'Pending'])->default('Available');
             $table->bigInteger('alert_level')->default(20); 
             $table->string('code')->unique()->nullable();
-            $table->boolean('is_published')->default(false);
+            $table->boolean('is_published')->default(true);
             $table->timestamps();
         });
     }

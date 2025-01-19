@@ -16,6 +16,7 @@ class Order extends Model
 {
     use HasFactory;
 
+   
     // make a static for statue
     use HasFactory;
 
