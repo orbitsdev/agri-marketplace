@@ -274,7 +274,7 @@ class FilamentForm extends Controller
     {
         return [
             Section::make('Product Details')
-                //description
+                // Description
                 ->description('Provide the necessary product details. Ensure all required fields are filled out correctly.')
                 ->columns([
                     'sm' => 2,
@@ -284,8 +284,9 @@ class FilamentForm extends Controller
                     '2xl' => 12,
                 ])
                 ->columnSpanFull()
-
+    
                 ->schema([
+                    // Product Name
                     TextInput::make('product_name')
                         ->required()
                         ->columnSpan([
@@ -293,26 +294,31 @@ class FilamentForm extends Controller
                             'md' => 4,
                             'lg' => 4,
                         ]),
+                    
+                    // Quantity
                     TextInput::make('quantity')
                         ->required()
-                        //number only
-                        ->numeric()
+                        ->numeric() // Number only
                         ->default(1)
                         ->columnSpan([
                             'sm' => 2,
                             'md' => 4,
                             'lg' => 4,
                         ]),
+    
+                  
+    
+                    // Price
                     TextInput::make('price')
                         ->required()
-                        //number only
-                        ->numeric()
-
+                        ->numeric() // Number only
                         ->columnSpan([
                             'sm' => 2,
                             'md' => 4,
                             'lg' => 4,
                         ]),
+    
+                    // Description
                     RichEditor::make('description')
                         ->required()
                         ->columnSpanFull()
@@ -332,26 +338,38 @@ class FilamentForm extends Controller
                             'underline',
                             'undo',
                         ]),
-                    // status
-
+    
+                    // Status
                     Select::make('status')
                         ->options(Product::STATUS_OPTIONS)
                         ->default('Available')
                         ->required()
-                        //columnspan
                         ->columnSpan([
                             'sm' => 2,
                             'md' => 4,
                             'lg' => 4,
                         ]),
-
-                    SpatieMediaLibraryFileUpload::make('image')->columnSpanFull()->image()
-                        ->imageEditor()
-                    // ->required()
-                    ,
+                          // Alert Level
+                    TextInput::make('alert_level')
+                    ->label('Stock Alert Level') // Friendly label
+                    ->numeric() // Number only
+                    ->default(20) // Default value is 20
+                    ->helperText('Set the minimum stock level for triggering alerts.')
+                    ->required()
+                    ->columnSpan([
+                        'sm' => 2,
+                        'md' => 4,
+                        'lg' => 4,
+                    ]),
+                    // Image Upload
+                    SpatieMediaLibraryFileUpload::make('image')
+                        ->columnSpanFull()
+                        ->image()
+                        ->imageEditor(),
                 ]),
         ];
     }
+    
     public static function locationForm(): array
     {
         return [

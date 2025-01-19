@@ -117,5 +117,34 @@ public function scopeByCategory($query, $categoryId = null)
         return $query->where('is_published', true);
     }
 
+    // for stats
+
+    public function scopeTotalProducts($query)
+{
+    return $query->count();
+}
+
+public function scopeOutOfStock($query)
+{
+    return $query->where('quantity', '<=', 0)->count();
+}
+
+public function scopeTotalByStatus($query, $status = null)
+{
+    if ($status) {
+        return $query->where('status', $status)->count();
+    }
+
+    return [
+        self::AVAILABLE => $query->where('status', self::AVAILABLE)->count(),
+        self::SOLD => $query->where('status', self::SOLD)->count(),
+        self::PENDING => $query->where('status', self::PENDING)->count(),
+    ];
+}
+
+public function scopeLowStock($query)
+{
+    return $query->where('quantity', '<=', 'alert_level');
+}
 
 }

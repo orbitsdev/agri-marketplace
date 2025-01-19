@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('zip_code')->nullable();
             $table->string('payment_method')->nullable();
             $table->string('payment_reference')->nullable();
-            $table->string('payment_reference')->nullable();
+            
             $table->enum('status', [
                 'Pending',
                 'Processing',

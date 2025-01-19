@@ -157,6 +157,10 @@ class Order extends Model
     {
         return $query->where('status', '!=', self::PROCESSING);
     }
+    public function scopePending($query)
+    {
+        return $query->where('status', self::PENDING);
+    }
 
     // Helper Methods
     public function hasCompleteLocation()
@@ -289,5 +293,40 @@ class Order extends Model
 {
     return $this->orderMovements()->latest()->get();
 }
+
+//stats
+
+public function scopeTotalOrders($query)
+{
+    return $query->count();
+}
+
+public function scopeByFarmer($query, $farmerId)
+{
+    return $query->where('farmer_id', $farmerId);
+}
+
+
+
+public function scopeCompletedOrders($query)
+{
+    return $query->where('status', self::COMPLETED)->count();
+}
+
+public function scopeCancelledOrders($query)
+{
+    return $query->where('status', self::CANCELLED)->count();
+}
+
+public function scopePendingOrders($query)
+{
+    return $query->where('status', self::PENDING)->count();
+}
+
+public function scopeReturnedOrders($query)
+{
+    return $query->where('status', self::RETURNED)->count();
+}
+
 
 }
