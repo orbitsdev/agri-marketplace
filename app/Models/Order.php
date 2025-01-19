@@ -31,14 +31,14 @@ class Order extends Model
 
     // Status Options
     public const STATUS_OPTIONS = [
-          self::PENDING =>  self::PENDING,
-         self::PROCESSING =>  self::PROCESSING,
-         self::CONFIRMED =>  self::CONFIRMED,
-         self::SHIPPED =>  self::SHIPPED,
-         self::OUT_FOR_DELIVERY =>  self::OUT_FOR_DELIVERY,
-         self::COMPLETED =>  self::COMPLETED,
-         self::CANCELLED =>  self::CANCELLED,
-         self::RETURNED =>  self::RETURNED,
+        self::PENDING =>  self::PENDING,
+        self::PROCESSING =>  self::PROCESSING,
+        self::CONFIRMED =>  self::CONFIRMED,
+        self::SHIPPED =>  self::SHIPPED,
+        self::OUT_FOR_DELIVERY =>  self::OUT_FOR_DELIVERY,
+        self::COMPLETED =>  self::COMPLETED,
+        self::CANCELLED =>  self::CANCELLED,
+        self::RETURNED =>  self::RETURNED,
     ];
 
     // use the admin
@@ -52,14 +52,63 @@ class Order extends Model
         self::RETURNED =>  self::RETURNED,
     ];
 
+    public const IF_PENDING = [
+        self::CONFIRMED => self::CONFIRMED,
+        self::CANCELLED => self::CANCELLED,
+    ];
+
+   
+    public const IF_CONFIRMED = [
+        self::SHIPPED => self::SHIPPED,
+        self::CANCELLED => self::CANCELLED,
+    ];
+
+    public const IF_SHIPPED = [
+        self::OUT_FOR_DELIVERY => self::OUT_FOR_DELIVERY,
+        self::COMPLETED => self::COMPLETED,
+        self::RETURNED => self::RETURNED,
+        self::CANCELLED => self::CANCELLED,
+        
+    ];
+
+    public const IF_OUT_FOR_DELIVERY = [
+        self::COMPLETED => self::COMPLETED,
+        self::CANCELLED => self::CANCELLED,
+        self::RETURNED => self::RETURNED,
+        // self::RETURNED => self::RETURNED,
+    ];
+
+    public const IF_COMPLETED = [];
+    public const IF_CANCELLED = [
+        self::CONFIRMED => self::CONFIRMED,
+        self::SHIPPED => self::SHIPPED,
+    ]; 
+
+    public const IF_RETURNED = [];
     // Payment Method Constants
     public const PAYMENT_COD = 'COD (Cash on Delivery)';
-public const PAYMENT_ONLINE = 'ONLINE (Online Payment)';
+    public const PAYMENT_ONLINE = 'ONLINE (Online Payment)';
 
     public const PAYMENT_METHOD_OPTIONS = [
-       self::PAYMENT_COD => self::PAYMENT_COD,
-       self::PAYMENT_ONLINE => self::PAYMENT_ONLINE,
+        self::PAYMENT_COD => self::PAYMENT_COD,
+        self::PAYMENT_ONLINE => self::PAYMENT_ONLINE,
     ];
+
+    public  function getAvailableStatusTransitions(): array
+    {
+        $statusTransitions = [
+            self::PENDING => self::IF_PENDING,
+       
+            self::CONFIRMED => self::IF_CONFIRMED,
+            self::SHIPPED => self::IF_SHIPPED,
+            self::OUT_FOR_DELIVERY => self::IF_OUT_FOR_DELIVERY,
+            self::COMPLETED => self::IF_COMPLETED,
+            self::CANCELLED => self::IF_CANCELLED,
+            self::RETURNED => self::IF_RETURNED,
+        ];
+
+        return $statusTransitions[$this->status] ?? [];
+    }
 
     // Relationships
     public function buyer()
@@ -137,12 +186,11 @@ public const PAYMENT_ONLINE = 'ONLINE (Online Payment)';
     public function calculateTotal()
     {
         return $this->items->sum('subtotal');
-
     }
     public function calculateTotalOrders()
-{
-    return $this->items->sum(fn ($item) => $item->price_per_unit * $item->quantity);
-}
+    {
+        return $this->items->sum(fn($item) => $item->price_per_unit * $item->quantity);
+    }
 
 
     public function getTotalAttribute()
@@ -161,16 +209,16 @@ public const PAYMENT_ONLINE = 'ONLINE (Online Payment)';
     }
 
     public function scopeGroupedByFarmer($query, $buyerId)
-{
-    return $query->where('buyer_id', $buyerId)
-        ->with('farmer.user')
-        ->get()
-        ->groupBy(fn($order) => $order->farmer->id);
-}
-protected function orderDate(): Attribute
+    {
+        return $query->where('buyer_id', $buyerId)
+            ->with('farmer.user')
+            ->get()
+            ->groupBy(fn($order) => $order->farmer->id);
+    }
+    protected function orderDate(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => \Carbon\Carbon::parse($value)->format('F j, Y g:i a'),
+            get: fn($value) => \Carbon\Carbon::parse($value)->format('F j, Y g:i a'),
             // get: fn ($value) => \Carbon\Carbon::parse($value)->format('F j, Y g:i a'),
         );
     }
@@ -179,7 +227,7 @@ protected function orderDate(): Attribute
     protected function shippedDate(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value ? \Carbon\Carbon::parse($value)->format('F j, Y g:i a') : '',
+            get: fn($value) => $value ? \Carbon\Carbon::parse($value)->format('F j, Y g:i a') : '',
         );
     }
 
@@ -187,17 +235,17 @@ protected function orderDate(): Attribute
     protected function deliveryDate(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value ? \Carbon\Carbon::parse($value)->format('F j, Y g:i a') : '',
+            get: fn($value) => $value ? \Carbon\Carbon::parse($value)->format('F j, Y g:i a') : '',
         );
     }
     public function updateTotal()
-{
-    $this->total = $this->items->sum('subtotal'); // Sum of all OrderItem subtotals
-    $this->save();
-}
+    {
+        $this->total = $this->items->sum('subtotal'); // Sum of all OrderItem subtotals
+        $this->save();
+    }
 
 
-public function isDeliveryInformationComplete(): bool
+    public function isDeliveryInformationComplete(): bool
     {
         return !(
             empty($this->region) ||
@@ -228,10 +276,9 @@ public function isDeliveryInformationComplete(): bool
 
     // order total items price * quantity 
 
-    
-    public function orderMovements(){
+
+    public function orderMovements()
+    {
         return $this->hasMany(OrderMovement::class);
     }
-
-
 }

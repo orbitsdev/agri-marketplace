@@ -24,6 +24,7 @@ use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ViewEntry;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Farmer\Resources\OrderResource\Pages;
@@ -130,6 +131,13 @@ class OrderResource extends Resource
                         ->label('Shipped Date'),
                     Infolists\Components\TextEntry::make('delivery_date')
                         ->label('Delivery Date'),
+
+                        TextEntry::make('remarks')
+                        ->label('Remarks')->markdown()->columnSpanFull()
+                        ->hidden(function (Model $record) {
+            
+                            return !in_array($record->status, [Order::CANCELLED, Order::RETURNED]);
+                        }),
                 ])
                 ->columns(2),
 

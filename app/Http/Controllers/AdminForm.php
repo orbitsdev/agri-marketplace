@@ -322,8 +322,11 @@ class AdminForm extends Controller
                 ->schema([
                     Select::make('status')
                         ->label('Status')
-                        ->options(Order::ADMIN_ORDER_MANAGE_OPTIONS)
+                        ->options(function (Model $record) {
+                            return $record->getAvailableStatusTransitions();
+                        })
                         ->live(debounce:500)
+                        ->live()
                         ->required()
                         ->columnSpanFull()
                         ->placeholder('Select a status'),
@@ -346,9 +349,11 @@ class AdminForm extends Controller
                         ->required()
                         ->rows(5)
                         ->hidden(function (Get $get) {
-
+        
                             return !in_array($get('status'), [Order::CANCELLED, Order::RETURNED]);
-                        }),
+                        })
+                        ,
+                       
                         Toggle::make('is_received')
                         ->required()->label('Order Received'),
 
@@ -369,24 +374,7 @@ class AdminForm extends Controller
                                 ->required()
                                 ->maxLength(191),
                     
-                            // Select::make('status')
-                            //     ->label('Status')
-                            //     ->options([
-                            //         'In Transit' => 'In Transit',
-                            //         'Delivered' => 'Delivered',
-                            //         'Delayed' => 'Delayed',
-                            //         'Pending' => 'Pending',
-                            //     ])
-                            //     ->required(),
-                    
-                            // Textarea::make('remarks')
-                            //     ->label('Remarks')
-                            //     ->rows(3)
-                            //     ->placeholder('Add any additional comments about this movement'),
-                    
-                            // Hidden::make('order_id') // Hidden field to ensure the order ID is set
-                            //     ->default(fn (Model $record) => $record->id),
-                    
+                            
                            
                         
                             ])

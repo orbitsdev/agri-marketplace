@@ -12,7 +12,10 @@ class ManageOrderRequest extends EditRecord
 {
     protected static string $resource = OrderResource::class;
 
-        
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
     protected ?string $heading = 'Manage Order';
     public function form(Form $form): Form
 {
