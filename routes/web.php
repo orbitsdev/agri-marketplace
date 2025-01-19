@@ -82,6 +82,16 @@ Route::get('/farmer/status', WaitingForApproval::class)->name('farmer.waiting-fo
 
     Route::get('/reports/yearly-sales', [ReportController::class, 'exportYearlySales'])->name('reports.yearly-sales');
 
+    Route::get('/reports/total-products', [ReportController::class, 'exportTotalProducts'])->name('reports.total-products');
+
+    Route::get('/reports/out-of-stock-products', [ReportController::class, 'exportOutOfStockProducts'])->name('reports.out-of-stock-products');
+
+
+    Route::get('/reports/total-orders', [ReportController::class, 'exportTotalOrders'])->name('reports.total-orders');
+
+    Route::get('/reports/orders-by-status', [ReportController::class, 'exportOrdersByStatus'])->name('reports.orders-by-status');
+
+
 
 
 });

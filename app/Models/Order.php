@@ -336,5 +336,14 @@ public function scopeReturnedOrders($query)
     return $query->where('status', self::RETURNED)->count();
 }
 
+public function scopeOutForDelivery($query)
+{
+    return $query->where('status', self::OUT_FOR_DELIVERY)->count();
+}
+public function scopeShipped($query)
+{
+    return $query->where('status', self::SHIPPED)->count();
+}
+
 
 }

@@ -1,9 +1,9 @@
 <table align="left">
     <thead>
         <tr style="background-color: #1d4ed8; color: white;">
-            <th style="background-color: #106c3b; color: white;">Month</th>
-            <th style="background-color: #106c3b; color: white;">Total Orders</th>
-            <th style="background-color: #106c3b; color: white;">Total Sales</th>
+            <th style="background-color: #7F64A1; color: white;">Month</th>
+            <th style="background-color: #7F64A1; color: white;">Total Orders</th>
+            <th style="background-color: #7F64A1; color: white;">Total Sales</th>
         </tr>
     </thead>
     <tbody>
@@ -25,9 +25,9 @@
     </tbody>
     <tfoot>
         <tr style="background-color: #1d4ed8; color: white;">
-            <th align="right" style="background-color: #106c3b; color: white;">Yearly Total</th>
-            <th align="left" style="background-color: #106c3b; color: white;">{{ $totalYearlyOrders }}</th>
-            <th align="left" style="background-color: #106c3b; color: white;">₱{{ number_format($totalYearlySales, 2) }}</th>
+            <th align="right" style="background-color: #FFCC99;">Yearly Total</th>
+            <th align="left" style="background-color: #FFCC99;">{{ $totalYearlyOrders }}</th>
+            <th align="left" style="background-color: #FFCC99;">₱{{ number_format($totalYearlySales, 2) }}</th>
         </tr>
     </tfoot>
 </table>
