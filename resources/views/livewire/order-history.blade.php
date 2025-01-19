@@ -68,7 +68,7 @@
                             <div class="flex flex-col border-b px-4 py-6 space-y-6 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between sm:space-x-6">
                                 <dl class="grid grid-cols-1 gap-6 text-sm text-gray-600 sm:grid-cols-3 sm:gap-x-6">
                                     <div>
-                                        <dt class="font-medium text-gray-900">Date placed</dt>
+                                        <dt class="font-medium text-gray-900">Ordered Date</dt>
                                         <dd class="mt-1 text-gray-700">
                                             <time>{{ $order->order_date }}</time>
                                         </dd>
@@ -99,6 +99,42 @@
                                 </div>
                             </div>
 
+                               <!-- Additional Ord  er Details -->
+                               <div class="px-4 py-4 rounded-md">
+                                <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <dt class="font-medium text-gray-900">Shipped Date</dt>
+                                        <dd class="text-sm text-gray-700">
+                                            {{ $order->shipped_date ? \Carbon\Carbon::parse($order->shipped_date)->format('F j, Y g:i a') : 'N/A' }}
+                                        </dd>
+                                    </div>
+                                    <div>
+                                        <dt class="font-medium text-gray-900">Expected Delivery Date</dt>
+                                        <dd class="text-sm text-gray-700">
+                                            {{ $order->delivery_date ? \Carbon\Carbon::parse($order->delivery_date)->format('F j, Y g:i a') : 'N/A' }}
+                                        </dd>
+                                    </div>
+                                    <div>
+                                        <dt class="font-medium text-gray-900">Received</dt>
+                                        <dd class="text-sm text-gray-700">
+                                            {{ $order->is_received ? 'Yes' : 'No' }}
+                                        </dd>
+                                    </div>
+                                    @if (in_array($order->status, ['Cancelled', 'Returned']))
+                                    <div class="sm:col-span-2">
+                                        <dt class="font-medium text-gray-900">Remarks</dt>
+                                        <dd class="text-sm text-gray-700">
+                                            <div class=" rounded-md border-0.5 border-gray-100 text-gray-500 text-sm">
+                                                {{ $order->remarks ?? 'No remarks available' }}
+                                            </div>
+                                        </dd>
+                                    </div>
+                                @endif
+                                
+                                </dl>
+                            </div>
+                            
+                              
                             <!-- Order Items -->
                             <table class="w-full text-sm text-gray-700">
                                 <thead class="text-left bg-gray-100 border-b text-gray-600">
@@ -165,11 +201,11 @@
                                     @endforelse
                                 </ul>
                             </div>
+                            
                         @endif
                         </div>
 
-                         <!-- Timeline Design for Order Movements -->
-                         <!-- Timeline for Order Movements -->
+                       
                         
                      
                          
