@@ -326,8 +326,9 @@ class AdminForm extends Controller
                             return $record->getAvailableStatusTransitions();
                         })
                         ->live(debounce:500)
-                        ->live()
-                        ->required()
+                        ->required(function(Model $record){
+                            return  empty($record->status) ? true :false;
+                        })
                         ->columnSpanFull()
                         ->placeholder('Select a status'),
                         
@@ -374,10 +375,13 @@ class AdminForm extends Controller
                                 ->required()
                                 ->maxLength(191),
                     
-                            
+                        
                            
                         
-                            ])
+                            ])->hidden(function (Get $get) {
+        
+                                return !in_array($get('status'), [Order::OUT_FOR_DELIVERY, Order::COMPLETED]);
+                            })
 
                 ])
                 ->columns(2),

@@ -281,4 +281,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderMovement::class);
     }
+
+    public function getLatestMovements()
+{
+    return $this->orderMovements()->latest()->get();
+}
+
 }
