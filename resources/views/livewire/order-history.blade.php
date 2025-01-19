@@ -98,6 +98,20 @@
                                     </span>
                                 </div>
                             </div>
+                            <div class="px-4 py-4 rounded-md ">
+                                <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                   
+                                    <div>
+                                        <dt class="font-medium text-gray-900">Farm Name</dt>
+                                        <dd class="text-sm text-gray-700">
+                                            {{ $order->farmer->farm_name ?? 'N/A' }}
+                                        </dd>
+                                        <div class="text-xs text-gray-500">
+                                            {{$order->farmer->location ??'N/A'}}
+                                        </div>
+                                    </div>
+                                </dl>
+                            </div>
 
                                <!-- Additional Ord  er Details -->
                                <div class="px-4 py-4 rounded-md">
@@ -140,8 +154,8 @@
                                 <thead class="text-left bg-gray-100 border-b text-gray-600">
                                     <tr>
                                         <th scope="col" class="py-3 px-4 font-medium">Product</th>
-                                        <th scope="col" class="hidden py-3 px-4 font-medium sm:table-cell">Price</th>
-                                        <th scope="col" class="hidden py-3 px-4 font-medium sm:table-cell">Quantity</th>
+                                        <th scope="col" class="hidden py-3 px-4 font-medium sm:table-cell text-right">Price</th>
+                                        <th scope="col" class="hidden py-3 px-4 font-medium sm:table-cell text-center">Quantity</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
@@ -156,12 +170,24 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="hidden py-4 px-4 sm:table-cell">{{ number_format($item->product_price, 2) }}</td>
-                                            <td class="hidden py-4 px-4 sm:table-cell">{{ $item->quantity }}</td>
+                                            <td class="hidden py-4 px-4 sm:table-cell text-right">₱{{ number_format($item->product_price, 2) }}</td>
+                                            <td class="hidden py-4 px-4 sm:table-cell text-center">{{ $item->quantity }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <tfoot class="bg-gray-50">
+                                    <tr>                                    
+                                            <td class="py-4 px-4 font-medium text-gray-900 text-left"  >Total</td>
+                                            <td class="py-4 px-4 font-medium text-gray-900 text-right"  >  ₱{{ number_format($order->items->sum(fn($item) => $item->product_price * $item->quantity), 2) }}</td>
+
+                                        <td class="py-4 px-4 text-right font-bold text-gray-900" >
+                                          
+                                        </td>
+                                       
+                                    </tr>
+                                </tfoot>
                             </table>
+                            
                             @if (in_array($order->status, ['Out for Delivery', 'Completed']))
                             <div class="px-4 py-6 border-t mt-4">
                                 <h3 class="text-lg font-semibold text-gray-900">Order Tracking</h3>

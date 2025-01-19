@@ -84,7 +84,10 @@ class Order extends Model
         self::SHIPPED => self::SHIPPED,
     ]; 
 
-    public const IF_RETURNED = [];
+    public const IF_RETURNED = [
+        self::SHIPPED => self::SHIPPED,
+        self::COMPLETED => self::COMPLETED,
+    ];
     // Payment Method Constants
     public const PAYMENT_COD = 'COD (Cash on Delivery)';
     public const PAYMENT_ONLINE = 'ONLINE (Online Payment)';
@@ -200,7 +203,7 @@ class Order extends Model
 
     public function getFormattedTotalAttribute()
     {
-        return '₱' . number_format($this->calculateTotal(), 2);
+        return '₱' . number_format($this->calculateTotalOrders(), 2);
     }
 
     public function getSubtotalAttribute()
