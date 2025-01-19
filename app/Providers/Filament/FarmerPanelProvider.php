@@ -77,6 +77,8 @@ class FarmerPanelProvider extends PanelProvider
                 //     ->isActiveWhen(fn () => request()->routeIs('filament.admin.pages.dashboard')),
                 // ...
             ])
+            ->sidebarCollapsibleOnDesktop()
+            
             ;
     }
 }
