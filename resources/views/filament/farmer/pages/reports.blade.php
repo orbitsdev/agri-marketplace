@@ -2,32 +2,38 @@
     <div class="space-y-4">
         <h2 class="text-lg font-bold text-gray-700">Available Reports</h2>
         <ul class="space-y-2">
-            <li>
+            <li class="flex">
+                <x-heroicon-o-arrow-down-tray class="w-5 h-5  text-yellow-600" />
                 <a href="{{ route('reports.monthly-sales') }}" class="text-sm text-blue-600 underline hover:text-blue-800">
                     Monthly Sales Report
                 </a>
             </li>
-            <li>
+            <li class="flex">
+                <x-heroicon-o-arrow-down-tray class="w-5 h-5  text-yellow-600" />
                 <a href="{{ route('reports.yearly-sales') }}" class="text-sm text-blue-600 underline hover:text-blue-800">
                     Yearly Sales Report
                 </a>
             </li>
-            <li>
+            <li class="flex">
+                <x-heroicon-o-arrow-down-tray class="w-5 h-5  text-yellow-600" />
                 <a href="{{ route('reports.total-products') }}" class="text-sm text-blue-600 underline hover:text-blue-800">
                     Total Products Report
                 </a>
             </li>
-            <li>
+            <li class="flex">
+                <x-heroicon-o-arrow-down-tray class="w-5 h-5  text-yellow-600" />
                 <a href="{{ route('reports.out-of-stock-products') }}" class="text-sm text-blue-600 underline hover:text-blue-800">
                     Out of Stock Products Report
                 </a>
             </li>
-            <li>
+            <li class="flex">
+                <x-heroicon-o-arrow-down-tray class="w-5 h-5  text-yellow-600" />
                 <a href="{{ route('reports.total-orders') }}" class="text-sm text-blue-600 underline hover:text-blue-800">
                     Total Orders Report
                 </a>
             </li>
-            <li>
+            <li class="flex">
+                <x-heroicon-o-arrow-down-tray class="w-5 h-5  text-yellow-600" />
                 <a href="{{ route('reports.orders-by-status') }}" class="text-sm text-blue-600 underline hover:text-blue-800">
                     Orders by Status Report
                 </a>
