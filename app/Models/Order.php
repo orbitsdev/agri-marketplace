@@ -6,9 +6,12 @@ use App\Models\User;
 use App\Models\Farmer;
 use App\Models\OrderItem;
 use App\Models\Transaction;
+use App\Models\OrderMovement;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class Order extends Model
 {
     use HasFactory;
@@ -28,14 +31,25 @@ class Order extends Model
 
     // Status Options
     public const STATUS_OPTIONS = [
-        self::PENDING,
-        self::PROCESSING,
-        self::CONFIRMED,
-        self::SHIPPED,
-        self::OUT_FOR_DELIVERY,
-        self::COMPLETED,
-        self::CANCELLED,
-        self::RETURNED,
+          self::PENDING =>  self::PENDING,
+         self::PROCESSING =>  self::PROCESSING,
+         self::CONFIRMED =>  self::CONFIRMED,
+         self::SHIPPED =>  self::SHIPPED,
+         self::OUT_FOR_DELIVERY =>  self::OUT_FOR_DELIVERY,
+         self::COMPLETED =>  self::COMPLETED,
+         self::CANCELLED =>  self::CANCELLED,
+         self::RETURNED =>  self::RETURNED,
+    ];
+
+    // use the admin
+    public const ADMIN_ORDER_MANAGE_OPTIONS = [
+        self::PENDING =>  self::PENDING,
+        self::CONFIRMED =>  self::CONFIRMED,
+        self::SHIPPED =>  self::SHIPPED,
+        self::OUT_FOR_DELIVERY =>  self::OUT_FOR_DELIVERY,
+        self::COMPLETED =>  self::COMPLETED,
+        self::CANCELLED =>  self::CANCELLED,
+        self::RETURNED =>  self::RETURNED,
     ];
 
     // Payment Method Constants
@@ -72,6 +86,10 @@ public const PAYMENT_ONLINE = 'ONLINE (Online Payment)';
     public function scopeForFarmer($query, $farmerId)
     {
         return $query->where('farmer_id', $farmerId);
+    }
+    public function scopeMyBuyersOrder($query)
+    {
+        return $query->where('farmer_id', Auth::user()->farmer->id);
     }
 
     public function scopeByStatus($query, $status)
@@ -119,7 +137,13 @@ public const PAYMENT_ONLINE = 'ONLINE (Online Payment)';
     public function calculateTotal()
     {
         return $this->items->sum('subtotal');
+
     }
+    public function calculateTotalOrders()
+{
+    return $this->items->sum(fn ($item) => $item->price_per_unit * $item->quantity);
+}
+
 
     public function getTotalAttribute()
     {
@@ -131,6 +155,10 @@ public const PAYMENT_ONLINE = 'ONLINE (Online Payment)';
         return '₱' . number_format($this->calculateTotal(), 2);
     }
 
+    public function getSubtotalAttribute()
+    {
+        return $this->calculateSubtotal();
+    }
 
     public function scopeGroupedByFarmer($query, $buyerId)
 {
@@ -197,5 +225,13 @@ public function isDeliveryInformationComplete(): bool
         // Return the list of keys with missing values
         return array_keys(array_filter($fields, fn($value) => empty($value)));
     }
+
+    // order total items price * quantity 
+
+    
+    public function orderMovements(){
+        return $this->hasMany(OrderMovement::class);
+    }
+
 
 }

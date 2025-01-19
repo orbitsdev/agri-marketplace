@@ -20,17 +20,19 @@ class Farmer extends Model
 
     // Status Options
     public const STATUS_OPTIONS = [
-        self::STATUS_PENDING,
-        self::STATUS_APPROVED,
-        self::STATUS_REJECTED,
-        self::STATUS_BLOCKED,
+        
+        self::STATUS_PENDING =>   self::STATUS_PENDING,
+        self::STATUS_APPROVED => self::STATUS_APPROVED,
+        self::STATUS_REJECTED =>  self::STATUS_REJECTED,
+        self::STATUS_BLOCKED =>self::STATUS_BLOCKED,
     ];
+    
 
     public const STATUSES = [
-        self::STATUS_PENDING,
-        self::STATUS_APPROVED,
-        self::STATUS_REJECTED,
-        self::STATUS_BLOCKED,
+        self::STATUS_PENDING =>   self::STATUS_PENDING,
+        self::STATUS_APPROVED => self::STATUS_APPROVED,
+        self::STATUS_REJECTED =>  self::STATUS_REJECTED,
+        self::STATUS_BLOCKED =>self::STATUS_BLOCKED,
     ];
 
     // Status Transitions

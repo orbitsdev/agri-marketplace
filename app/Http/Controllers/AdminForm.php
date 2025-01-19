@@ -14,6 +14,7 @@ use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Group;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Wizard;
@@ -44,99 +45,99 @@ class AdminForm extends Controller
                         Wizard\Step::make('Farm Details')
                             ->schema([
                                 Group::make()
-                                ->columns([
-                                    'sm' => 2,
-                                    'md' => 4,
-                                    'lg' => 6,
-                                    'xl' => 8,
-                                    '2xl' => 12,
-                                ])
-                                ->columnSpanFull()
-        
-        
-                                ->schema([
-                                    TextInput::make('farm_name')
-        
-                                        ->required()
-                                        ->columnSpan([
-                                            'sm' => 2,
-                                            'md' => 4,
-                                            'lg' => 4,
-        
-                                        ]),
-                                    // text input location
-                                    TextInput::make('location')
-                                        ->required()
-                                        ->columnSpan([
-                                            'sm' => 2,
-                                            'md' => 4,
-                                            'lg' => 4,
-        
-                                        ]),
-                                    // text input farm size
-                                    TextInput::make('farm_size')
-                                        ->required()
-                                        ->columnSpan([
-                                            'sm' => 2,
-                                            'md' => 4,
-                                            'lg' => 4,
-        
-                                        ]),
-                                    // text input description
-                                    RichEditor::make('description')
-                                        ->columnSpanFull()
-                                        ->required()
-                                        ->toolbarButtons([
-                                            'attachFiles',
-                                            'blockquote',
-                                            'bold',
-                                            'bulletList',
-                                            'codeBlock',
-                                            'h2',
-                                            'h3',
-                                            'italic',
-                                            'link',
-                                            'orderedList',
-                                            'redo',
-                                            'strike',
-                                            'underline',
-                                            'undo',
-                                        ]),
-                                ])->columnSpanFull()
+                                    ->columns([
+                                        'sm' => 2,
+                                        'md' => 4,
+                                        'lg' => 6,
+                                        'xl' => 8,
+                                        '2xl' => 12,
+                                    ])
+                                    ->columnSpanFull()
+
+
+                                    ->schema([
+                                        TextInput::make('farm_name')
+
+                                            ->required()
+                                            ->columnSpan([
+                                                'sm' => 2,
+                                                'md' => 4,
+                                                'lg' => 4,
+
+                                            ]),
+                                        // text input location
+                                        TextInput::make('location')
+                                            ->required()
+                                            ->columnSpan([
+                                                'sm' => 2,
+                                                'md' => 4,
+                                                'lg' => 4,
+
+                                            ]),
+                                        // text input farm size
+                                        TextInput::make('farm_size')
+                                            ->required()
+                                            ->columnSpan([
+                                                'sm' => 2,
+                                                'md' => 4,
+                                                'lg' => 4,
+
+                                            ]),
+                                        // text input description
+                                        RichEditor::make('description')
+                                            ->columnSpanFull()
+                                            ->required()
+                                            ->toolbarButtons([
+                                                'attachFiles',
+                                                'blockquote',
+                                                'bold',
+                                                'bulletList',
+                                                'codeBlock',
+                                                'h2',
+                                                'h3',
+                                                'italic',
+                                                'link',
+                                                'orderedList',
+                                                'redo',
+                                                'strike',
+                                                'underline',
+                                                'undo',
+                                            ]),
+                                    ])->columnSpanFull()
                             ]),
-                            Wizard\Step::make('Farm Documents')
+                        Wizard\Step::make('Farm Documents')
                             ->schema([
                                 TableRepeater::make('farmer_documents')
-                                ->relationship('documents')
-                                ->columnSpanFull()
-                                ->maxItems(10)
-                                ->columnWidths([
-        
-                                    'name' => '200px',
-                                ])
-                                ->maxItems(6)
-        
-                                ->withoutheader()
-                                ->schema([
-        
-                                    // text input name
-                                    TextInput::make('name')
-                                        ->required()
-                                        ->columnSpan([
-                                            'sm' => 2,
-                                            'md' => 4,
-                                            'lg' => 6,
-                                            'xl' => 8,
-                                            '2xl' => 12,
-                                        ]),
-                                    SpatieMediaLibraryFileUpload::make('file')->required()
-                                   
-        
-                                ]),
+                                    ->relationship('documents')
+                                    ->columnSpanFull()
+                                    ->maxItems(10)
+                                    ->columnWidths([
+
+                                        'name' => '200px',
+                                    ])
+                                    ->maxItems(6)
+
+                                    ->withoutheader()
+                                    ->schema([
+
+                                        // text input name
+                                        TextInput::make('name')
+                                            ->required()
+                                            ->columnSpan([
+                                                'sm' => 2,
+                                                'md' => 4,
+                                                'lg' => 6,
+                                                'xl' => 8,
+                                                '2xl' => 12,
+                                            ]),
+                                        SpatieMediaLibraryFileUpload::make('file')->required()
+
+
+                                    ]),
                             ]),
                     ]),
-                   
-                        
+
+
 
 
                 ])->columnSpanFull(),
@@ -147,30 +148,31 @@ class AdminForm extends Controller
     }
 
     //manage farmform
-    public static function manageFarmForm():array{
+    public static function manageFarmForm(): array
+    {
         return [
             Select::make('status')
 
-            ->live(debounce: 500)
-            ->options(function (Model $record) {
-                return $record->getAvailableStatusTransitions();
-            })
-            
-
-        ->required(),
+                ->live(debounce: 500)
+                ->options(function (Model $record) {
+                    return $record->getAvailableStatusTransitions();
+                })
 
 
-         // Status Reason Textarea
-    Textarea::make('remarks')
-    ->label('Why?')
-    ->helperText('Kindly provide a reason for your decision')
-    ->columnSpanFull()
-    ->required()
-    ->rows(5)
-    ->hidden(function (Get $get) {
-        
-        return !in_array($get('status'), [Farmer::STATUS_BLOCKED, Farmer::STATUS_REJECTED]);
-    }),
+                ->required(),
+
+
+            // Status Reason Textarea
+            Textarea::make('remarks')
+                ->label('Why?')
+                ->helperText('Kindly provide a reason for your decision')
+                ->columnSpanFull()
+                ->required()
+                ->rows(5)
+                ->hidden(function (Get $get) {
+
+                    return !in_array($get('status'), [Farmer::STATUS_BLOCKED, Farmer::STATUS_REJECTED]);
+                }),
         ];
     }
 
@@ -192,6 +194,9 @@ class AdminForm extends Controller
                                 ->getOptionLabelFromRecordUsing(fn(Model $record) => "{$record->fullName} - ")
                                 ->searchable(['first_name', 'last_name', 'email'])
                                 ->preload()
+                                ->disabled(function ($operation) {
+                                    return $operation === 'edit';
+                                })
                                 ->required(),
                             TextInput::make('order_number')
                                 ->disabled(fn($operation) => $operation === 'edit')
@@ -201,7 +206,7 @@ class AdminForm extends Controller
                         ])
                         ->columns(2),
 
-                        Wizard\Step::make('Order Items')
+                    Wizard\Step::make('Order Items')
                         ->schema([
                             TableRepeater::make('order_items_list')
                                 ->columnWidths([
@@ -229,12 +234,11 @@ class AdminForm extends Controller
                                 ->withoutHeader()
                                 ->columnSpan('full')
                                 ->label('Items')
-                                ->maxItems(6)
-                                ,
+                                ->maxItems(6),
                         ])
-                        
+
                         ->columns(1),
-    
+
                     // Step 2: Shipping Address
                     Wizard\Step::make('Shipping Address')
                         ->schema([
@@ -264,31 +268,31 @@ class AdminForm extends Controller
                                 ->maxLength(191),
                         ])
                         ->columns(2),
-                        
-    
+
+
                     // Step 3: Order Status
                     Wizard\Step::make('Order Status')
                         ->schema([
                             Select::make('status')
                                 ->label('Status')
-                                ->options(array_combine(Order::STATUS_OPTIONS, Order::STATUS_OPTIONS))
+                                ->options(Order::STATUS_OPTIONS)
                                 ->required()
                                 ->placeholder('Select a status'),
                             DatePicker::make('order_date')
                                 ->label('Order Date')
                                 ->date()
                                 ->required(),
-                            DatePicker::make('shipped_date')
-                                ->label('Shipped Date')
-                                ->date()
-                                ->required(),
-                            DatePicker::make('delivery_date')
-                                ->label('Delivery Date')
-                                ->date()
-                                ->required(),
+                            // DatePicker::make('shipped_date')
+                            //     ->label('Shipped Date')
+                            //     ->date()
+                            //     ->required(),
+                            // DatePicker::make('delivery_date')
+                            //     ->label('Delivery Date')
+                            //     ->date()
+                            //     ->required(),
                         ])
                         ->columns(2),
-                      
+
                     // Step 4: Payment Details
                     Wizard\Step::make('Payment Details')
                         ->schema([
@@ -302,14 +306,95 @@ class AdminForm extends Controller
                                 ->maxLength(191),
                         ])
                         ->columns(2),
-    
+
                     // Step 5: Order Items
-                  
+
                 ])->columnSpanfull()
-                
-               
+
+
         ];
     }
-    
+    public static function manageOrderRequestForm(): array
+    {
+        return [
+            Section::make('Order Status')
+                ->description('Manage the order status and provide relevant details for any changes.')
+                ->schema([
+                    Select::make('status')
+                        ->label('Status')
+                        ->options(Order::ADMIN_ORDER_MANAGE_OPTIONS)
+                        ->live(debounce:500)
+                        ->required()
+                        ->columnSpanFull()
+                        ->placeholder('Select a status'),
+                        
 
+                    // DatePicker::make('order_date')
+                    //     ->label('Order Date')
+                    //     ->required()->date(),
+                    DatePicker::make('shipped_date')
+                        ->label('Shipped Date')
+                        ->required(),
+                    DatePicker::make('delivery_date')
+                        ->date()
+                        ->required()
+                        ->label('Delivery Date'),
+                    Textarea::make('remarks')
+                        ->label('Why?')
+                        ->helperText('Kindly provide a reason for your decision')
+                        ->columnSpanFull()
+                        ->required()
+                        ->rows(5)
+                        ->hidden(function (Get $get) {
+
+                            return !in_array($get('status'), [Order::CANCELLED, Order::RETURNED]);
+                        }),
+                        Toggle::make('is_received')
+                        ->required()->label('Order Received'),
+
+                        TableRepeater::make('Order Movement')
+                        ->relationship('orderMovements') // Ensure this matches the relationship in your Order model
+                        ->columnSpanFull()
+                       
+                        ->maxItems(10) // Restrict to a maximum of 10 movements
+                        ->withoutHeader() // Remove the table header for a cleaner UI
+                        ->schema([
+                            TextInput::make('current_location')
+                                ->label('Current Location')
+                                ->required()
+                                ->maxLength(191),
+                    
+                            TextInput::make('destination')
+                                ->label('Destination')
+                                ->required()
+                                ->maxLength(191),
+                    
+                            // Select::make('status')
+                            //     ->label('Status')
+                            //     ->options([
+                            //         'In Transit' => 'In Transit',
+                            //         'Delivered' => 'Delivered',
+                            //         'Delayed' => 'Delayed',
+                            //         'Pending' => 'Pending',
+                            //     ])
+                            //     ->required(),
+                    
+                            // Textarea::make('remarks')
+                            //     ->label('Remarks')
+                            //     ->rows(3)
+                            //     ->placeholder('Add any additional comments about this movement'),
+                    
+                            // Hidden::make('order_id') // Hidden field to ensure the order ID is set
+                            //     ->default(fn (Model $record) => $record->id),
+                    
+                           
+                        
+                            ])
+
+                ])
+                ->columns(2),
+
+
+        ];
+    }
 }

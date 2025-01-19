@@ -350,6 +350,13 @@ class PlaceOrder extends Component implements HasForms, HasActions
             ->iconButton()
             ->icon('heroicon-o-pencil-square')
             ->color('primary')
+
+            ->fillForm(function (array $arguments) {
+                $orderItem = OrderItem::findOrFail($arguments['record']);
+                return [
+                    'quantity' => $orderItem->quantity
+                ];
+            })
             ->form([
                 TextInput::make('quantity')
                     ->numeric()
@@ -394,6 +401,5 @@ class PlaceOrder extends Component implements HasForms, HasActions
                 }
             })
             ->modalHeading('Update Quantity');
-
     }
 }

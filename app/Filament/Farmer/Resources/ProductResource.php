@@ -42,7 +42,7 @@ class ProductResource extends Resource
                 //     ->sortable(),
                 Tables\Columns\TextColumn::make('code')
                     ->searchable(isIndividual:true),
-                    SpatieMediaLibraryImageColumn::make('avatar') ->defaultImageUrl(url('/images/image-placeholder2.jpg')),
+                    SpatieMediaLibraryImageColumn::make('image') ->defaultImageUrl(url('/images/image-placeholder2.jpg')),
                 Tables\Columns\TextColumn::make('product_name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('quantity')
@@ -51,7 +51,18 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('price')
                     ->money()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status'),
+
+                    Tables\Columns\TextColumn::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        Product::AVAILABLE => 'success',
+                        Product::SOLD => 'green',
+                        Product::PENDING => 'info',
+                        default => 'gray',
+                    }),
+
+                // Tables\Columns\TextColumn::make('status'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

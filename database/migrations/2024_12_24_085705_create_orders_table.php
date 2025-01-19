@@ -40,6 +40,7 @@ return new class extends Migration
             $table->double('total', 10, 2)->nullable();
 
             $table->boolean('is_received')->default(false);
+            $table->text('remarks')->nullable();
             $table->timestamps();
 
         });

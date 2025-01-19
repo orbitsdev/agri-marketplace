@@ -20,11 +20,7 @@ class OrderObserver
 
         $order->order_number = "{$regionCode}-{$datePart}-F{$farmerId}-" . str_pad($sequential, 3, '0', STR_PAD_LEFT);
      
-        $a = $order->load('items'); // Ensure the items relationship is loaded
-    $order->total = $order->items->sum(function($item){
-        return $item->quantity * $item->price_per_unit;
-    });
-    $order->saveQuietly();
+        $order->save();
     }
 
     /**
@@ -32,14 +28,8 @@ class OrderObserver
      */
     public function updated(Order $order): void
     {
-        $order->load('items'); // Ensure the items relationship is loaded
-        dd($order);
-        $a = $order->total = $order->items->sum(function($item){
-            return $item->quantity * $item->price_per_unit;
-        });
-    $order->saveQuietly();
-    dd($a);
-
+       
+       
     }
 
     /**

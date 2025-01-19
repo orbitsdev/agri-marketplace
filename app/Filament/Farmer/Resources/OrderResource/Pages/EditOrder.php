@@ -8,7 +8,7 @@ use Filament\Resources\Pages\EditRecord;
 
 class EditOrder extends EditRecord
 {
-
+    protected static ?string $navigationLabel = 'Manage Order';
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');

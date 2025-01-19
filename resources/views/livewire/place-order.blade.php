@@ -20,11 +20,7 @@
                 <div class="mb-6 border mt-6 rounded-sm bg-white ">
                     <ul>
                         @forelse ($farmerOrders as $order)
-                            @php
-                                $orderTotal = $order->items->sum(function ($item) {
-                                    return $item->product->price * $item->quantity;
-                                });
-                            @endphp
+                           
                             <div class="mx-auto  rounded-lg p-6  relative">
                                 <span
                                     class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
@@ -177,7 +173,8 @@
                                             @endif
                                         </div>
                                         <h4 class="text-lg font-semibold text-gray-800">Total:
-                                            Php{{ number_format($orderTotal, 2) }}</h4>
+                                            
+                                            Php{{ number_format($order->calculateTotalOrders(), 2) }}</h4>
                                     </div>
 
                                 </div>
