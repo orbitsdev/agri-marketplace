@@ -11,6 +11,7 @@ use App\Livewire\FarmerNotApproved;
 use App\Livewire\WaitingForApproval;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,5 +76,12 @@ Route::get('/farmer/status', WaitingForApproval::class)->name('farmer.waiting-fo
     Route::get('/{name}/place-order', PlaceOrder::class)->name('place.order')->middleware(['ensureHasDefaultLocation']);
     Route::get('/{name}/order-history', OrderHistory::class)->name('order.history');
     Route::get('/farmer/{farmerId}', FarmerDetails::class)->name('farmer.details');
+
+
+    Route::get('/reports/monthly-sales', [ReportController::class, 'exportMonthlySales'])->name('reports.monthly-sales');
+
+    Route::get('/reports/yearly-sales', [ReportController::class, 'exportYearlySales'])->name('reports.yearly-sales');
+
+
 
 });

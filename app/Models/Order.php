@@ -16,6 +16,13 @@ class Order extends Model
 {
     use HasFactory;
 
+
+    protected $casts = [
+        'order_date' => 'datetime', // Ensure order_date is cast as a datetime
+        'shipped_date' => 'datetime',
+        'delivery_date' => 'datetime',
+    ];
+    
    
     // make a static for statue
     use HasFactory;

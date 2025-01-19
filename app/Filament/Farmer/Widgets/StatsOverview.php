@@ -38,7 +38,12 @@ class StatsOverview extends BaseWidget
                 ->description("Available: $totalAvailable | Sold: $totalSold")
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->chart([$totalAvailable, $totalSold])
-                ->color('primary'),
+                ->color('primary')
+                // ->extraAttributes([
+                //     'class' => 'cursor-pointer',
+                //     'wire:click' => ,
+                // ])
+                ,
 
             Stat::make('Out of Stock', $outOfStock)
                 ->description('Stock needs replenishment')
@@ -48,31 +53,7 @@ class StatsOverview extends BaseWidget
 
                   Stat::make('Total Orders', $totalOrders)
                 ->description("Pending: $pending | Completed: $completedOrders")
-                // ->color('primary'),
-
-            // Stat::make('Low Stock', $lowStock)
-            //     ->description('Products below alert level')
-            //     ->descriptionIcon($lowStockIcon)
-            //     ->chart([$lowStock, $totalProducts - $lowStock])
-            //     ->color($lowStock > 0 ? 'warning' : 'success'),
-
-            // Stat::make('Available Products', $totalAvailable)
-            //     ->description('Ready for sale')
-            //     ->descriptionIcon('heroicon-m-arrow-trending-up')
-            //     ->chart([$totalAvailable, $totalProducts - $totalAvailable])
-            //     ->color('success'),
-
-            // Stat::make('Sold Products', $totalSold)
-            //     ->description('Sold so far')
-            //     ->descriptionIcon('heroicon-m-arrow-trending-up')
-            //     ->chart([$totalSold])
-            //     ->color('info'),
-
-            // Stat::make('Published Products', $publishedProducts)
-            //     ->description('Visible to customers')
-            //     ->descriptionIcon($publishedProductsIcon)
-            //     ->chart([$publishedProducts, $totalProducts - $publishedProducts])
-            //     ->color($publishedProducts > 0 ? 'success' : 'warning'),
+                
         ];
     }
 }
