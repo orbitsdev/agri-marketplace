@@ -38,6 +38,17 @@ class OrderResource extends Resource
     protected static ?int $navigationSort = 3;
 
 
+    public static function getNavigationBadge(): ?string
+    {
+        $count = static::getModel()::query()
+            ->myBuyersOrder() // Ensure this scope exists and filters appropriately
+            ->pending() // Ensure this scope filters only pending orders
+            ->count();
+    
+        return $count > 0 ? (string) $count : null;
+    }
+    
+
     public static function infolist(Infolist $infolist): Infolist
 {
     return $infolist
