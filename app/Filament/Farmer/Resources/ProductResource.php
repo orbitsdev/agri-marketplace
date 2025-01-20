@@ -77,6 +77,10 @@ class ProductResource extends Resource
 
             ])
             ->filters([
+                SelectFilter::make('category')->label('Category')
+    ->relationship('category', 'name')
+    ->searchable()
+    ->preload(),
                 SelectFilter::make('status')
                 ->options(Product::STATUS_OPTIONS)->multiple()
                 ->searchable()
@@ -93,7 +97,16 @@ class ProductResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])->defaultGroup('status')
+            ])
+            ->groups([
+                Group::make('status')
+                    ->label('By Status')->titlePrefixedWithLabel(false),
+                Group::make('category.name')
+                    ->label('By Category')
+                    ->titlePrefixedWithLabel(false),
+                    
+            ])
+            ->defaultGroup('category.name')
             ->modifyQueryUsing(fn (Builder $query) => $query->myProduct(Auth::user()->farmer->id))
             ;
     }

@@ -67,5 +67,7 @@ class Kernel extends HttpKernel
         'ensureHasDefaultLocation' => \App\Http\Middleware\EnsureHasDefaultLocation::class,
         'farmer.approved' => \App\Http\Middleware\EnsureFarmerIsApproved::class,
         'farmer.check.approval' => \App\Http\Middleware\RedirectIfFarmerApproved::class,
+        'account.active' => \App\Http\Middleware\EnsureAccountIsActive::class,
+        'redirect.if.active' => \App\Http\Middleware\RedirectIfActive::class,
     ];
 }

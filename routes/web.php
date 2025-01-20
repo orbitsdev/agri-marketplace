@@ -12,6 +12,7 @@ use App\Livewire\WaitingForApproval;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
+use App\Livewire\AccountIsDeactivatedPage;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,7 @@ Route::middleware([
     // config('jetstream.auth_session'),
     // config('jetstream.auth_session'),
     'verified',
+    'account.active'
 ])->group(function () {
    
 
@@ -91,7 +93,11 @@ Route::get('/farmer/status', WaitingForApproval::class)->name('farmer.waiting-fo
 
     Route::get('/reports/orders-by-status', [ReportController::class, 'exportOrdersByStatus'])->name('reports.orders-by-status');
 
-
+   
 
 
 });
+Route::get('/account-deactivated', AccountIsDeactivatedPage::class)
+    ->name('account.deactivated')
+    ->middleware(['auth', 'redirect.if.active']);
+

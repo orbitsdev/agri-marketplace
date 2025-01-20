@@ -14,7 +14,7 @@ return new class extends Migration
         
         Schema::create('farmers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->string('farm_name')->nullable();
             $table->text('location')->nullable();
             $table->string('farm_size')->nullable();

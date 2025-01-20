@@ -271,93 +271,118 @@ class FilamentForm extends Controller
     }
 
     public static function productForm()
-    {
-        return [
-            Section::make('Product Details')
-                // Description
-                ->description('Provide the necessary product details. Ensure all required fields are filled out correctly.')
-                ->columns([
-                    'sm' => 2,
-                    'md' => 4,
-                    'lg' => 6,
-                    'xl' => 8,
-                    '2xl' => 12,
-                ])
-                ->columnSpanFull()
-    
-                ->schema([
-                    // Product Name
-                    SpatieMediaLibraryFileUpload::make('image')
+{
+    return [
+        Section::make('Product Details')
+            ->description('Provide the necessary product details. Ensure all required fields are filled out correctly.')
+            ->columns([
+                'sm' => 2,
+                'md' => 4,
+                'lg' => 6,
+                'xl' => 8,
+                '2xl' => 12,
+            ])
+            ->columnSpanFull()
+            ->schema([
+                // Product Image
+                SpatieMediaLibraryFileUpload::make('image')
                     ->columnSpanFull()
+                    ->label('Product Image')
                     ->image()
-                    ->imageEditor(),
-                    TextInput::make('product_name')
-                        ->required()
-                        ->columnSpan([
-                            'sm' => 2,
-                            'md' => 4,
-                            'lg' => 4,
-                        ]),
-                    
-                    // Quantity
-                    TextInput::make('quantity')
-                        ->required()
-                        ->numeric() // Number only
-                        ->default(1)
-                        ->columnSpan([
-                            'sm' => 2,
-                            'md' => 4,
-                            'lg' => 4,
-                        ]),
-    
-                  
-    
-                    // Price
-                    TextInput::make('price')
-                        ->required()
-                        ->numeric() // Number only
-                        ->columnSpan([
-                            'sm' => 2,
-                            'md' => 4,
-                            'lg' => 4,
-                        ]),
-    
-                    // Description
-                    RichEditor::make('description')
-                        ->required()
-                        ->columnSpanFull()
-                        ->toolbarButtons([
-                            'attachFiles',
-                            'blockquote',
-                            'bold',
-                            'bulletList',
-                            'codeBlock',
-                            'h2',
-                            'h3',
-                            'italic',
-                            'link',
-                            'orderedList',
-                            'redo',
-                            'strike',
-                            'underline',
-                            'undo',
-                        ]),
-    
-                    // Status
-                    Select::make('status')
-                        ->options(Product::STATUS_OPTIONS)
-                        ->default('Available')
-                        ->required()
-                        ->columnSpan([
-                            'sm' => 2,
-                            'md' => 4,
-                            'lg' => 4,
-                        ]),
-                          // Alert Level
-                    TextInput::make('alert_level')
-                    ->label('Stock Alert Level') // Friendly label
-                    ->numeric() // Number only
-                    ->default(20) // Default value is 20
+                    ->imageEditor()
+                    ->required(),
+
+                // Product Name
+                TextInput::make('product_name')
+                    ->required()
+                    ->label('Product Name')
+                    ->columnSpan([
+                        'sm' => 2,
+                        'md' => 4,
+                        'lg' => 12,
+                    ]),
+
+                // Quantity
+                TextInput::make('quantity')
+                    ->required()
+                    ->numeric()
+                    ->default(1)
+                    ->label('Quantity')
+                    ->helperText('Enter the number of items available in stock.')
+                    ->columnSpan([
+                        'sm' => 2,
+                        'md' => 4,
+                        'lg' => 4,
+                    ]),
+
+                // Category Selection
+                Select::make('category_id')
+                    ->relationship('category', 'name')
+                    ->label('Product Category')
+                    ->required()
+                    ->searchable()
+                    ->preload()
+                    ->helperText('Select the appropriate category for this product.')
+                    ->columnSpan([
+                        'sm' => 2,
+                        'md' => 4,
+                        'lg' => 4,
+                    ]),
+
+                // Price
+                TextInput::make('price')
+                    ->required()
+                    ->numeric()
+                    ->label('Price')
+                    ->prefix('₱')
+                    ->helperText('Enter the price for a single unit.')
+                    ->columnSpan([
+                        'sm' => 2,
+                        'md' => 4,
+                        'lg' => 4,
+                    ]),
+
+                // Description
+                RichEditor::make('description')
+                    ->required()
+                    ->label('Product Description')
+                    ->columnSpanFull()
+                    ->helperText('Provide a detailed description of the product.')
+                    ->toolbarButtons([
+                        'attachFiles',
+                        'blockquote',
+                        'bold',
+                        'bulletList',
+                        'codeBlock',
+                        'h2',
+                        'h3',
+                        'italic',
+                        'link',
+                        'orderedList',
+                        'redo',
+                        'strike',
+                        'underline',
+                        'undo',
+                    ]),
+
+                // Status
+                Select::make('status')
+                    ->options(Product::STATUS_OPTIONS)
+                    ->default('Available')
+                    ->required()
+                    ->label('Product Status')
+                    ->helperText('Set the current availability status of the product.')
+                    ->columnSpan([
+                        'sm' => 2,
+                        'md' => 4,
+                        'lg' => 4,
+                    ]),
+
+                // Stock Alert Level
+                TextInput::make('alert_level')
+                    ->label('Stock Alert Level')
+                    ->numeric()
+                    ->default(20)
                     ->helperText('Set the minimum stock level for triggering alerts.')
                     ->required()
                     ->columnSpan([
@@ -365,13 +390,17 @@ class FilamentForm extends Controller
                         'md' => 4,
                         'lg' => 4,
                     ]),
-                  
-                    // Image Upload
-                   
-                        Toggle::make('is_published')->required()->columnSpanFull()->label('Publish'),
-                ]),
-        ];
-    }
+
+                // Publish Toggle
+                Toggle::make('is_published')
+                    ->required()
+                    ->label('Publish')
+                    ->helperText('Toggle to make this product visible to buyers.')
+                    ->columnSpanFull(),
+            ]),
+    ];
+}
+
     
     public static function locationForm(): array
     {
