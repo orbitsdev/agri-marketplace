@@ -74,7 +74,10 @@ class UserResource extends Resource
                 // Tables\Actions\BulkActionGroup::make([
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
-            ]);
+            ])
+            ->modifyQueryUsing(fn (Builder $query) => $query->isNotSuperAdmin())
+            
+            ;
     }
 
     public static function getRelations(): array

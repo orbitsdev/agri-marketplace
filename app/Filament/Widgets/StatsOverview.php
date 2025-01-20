@@ -10,7 +10,7 @@ class StatsOverview extends BaseWidget
 {
     protected function getStats(): array
     {
-        $totalUsers = User::count();
+        $totalUsers = User::isNotSuperAdmin()->count();
 
         // Count users by role
         $totalFarmers = User::where('role', 'Farmer')->count();

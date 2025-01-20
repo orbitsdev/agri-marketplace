@@ -231,4 +231,14 @@ public function getAddresses()
     return $this->locations()->get();
 }
 
+public static function scopeIsNotAdmin($query)
+{
+    return $query->where('role', '!=', self::ADMIN);
+}
+public static function scopeIsNotSuperAdmin($query)
+{
+    return $query->where('email', '!=', 'superadmin@gmail.com')->where('role', '!=', self::ADMIN);
+}
+
+
 }
