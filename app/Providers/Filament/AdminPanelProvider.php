@@ -6,10 +6,11 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
 use Filament\PanelProvider;
+use Filament\Enums\ThemeMode;
 use Filament\Support\Colors\Color;
 use App\Http\Middleware\EnsureIsAdmin;
-use Filament\Http\Middleware\Authenticate;
 
+use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -56,6 +57,6 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 EnsureIsAdmin::class
-            ]);
+            ]) ->defaultThemeMode(ThemeMode::Light);;
     }
 }

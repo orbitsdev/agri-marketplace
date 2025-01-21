@@ -69,5 +69,11 @@ class Kernel extends HttpKernel
         'farmer.check.approval' => \App\Http\Middleware\RedirectIfFarmerApproved::class,
         'account.active' => \App\Http\Middleware\EnsureAccountIsActive::class,
         'redirect.if.active' => \App\Http\Middleware\RedirectIfActive::class,
+        'is-admin' => \App\Http\Middleware\IsAdmin::class,
+    'is-buyer' => \App\Http\Middleware\IsBuyer::class,
+    'is-farmer' => \App\Http\Middleware\IsFarmer::class,
+
+    'is-buyer-or-farmer' => \App\Http\Middleware\IsBuyerOrFarmer::class,
+        
     ];
 }

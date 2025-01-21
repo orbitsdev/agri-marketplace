@@ -19,7 +19,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Namu\WireChat\Traits\Chatable;
 
+use Illuminate\Database\Eloquent\Collection;
 class User extends Authenticatable implements FilamentUser, HasName , HasMedia {
 
     use HasApiTokens;
@@ -28,8 +30,16 @@ class User extends Authenticatable implements FilamentUser, HasName , HasMedia {
     use Notifiable;
     use TwoFactorAuthenticatable;
     use InteractsWithMedia;
+    use Chatable;
 
+    
 
+    public function getCoverUrlAttribute(): ?string
+    {
+      return self::getImage();
+    }
+
+    
 
     public const FARMER = 'Farmer';
     public const BUYER = 'Buyer';
@@ -158,6 +168,11 @@ public function farmer()
 {
     return $this->hasOne(Farmer::class);
 }
+public function scopeFarmerIsApproved($query){
+    return $query->whereHas('farmer', function($query){
+        $query->where('status', Farmer::STATUS_APPROVED);
+    });
+}
 
 public function locations()
 {
@@ -235,10 +250,54 @@ public static function scopeIsNotAdmin($query)
 {
     return $query->where('role', '!=', self::ADMIN);
 }
+public static function scopeIsNotBuyer($query)
+{
+    return $query->where('role', '!=', self::BUYER);
+}
 public static function scopeIsNotSuperAdmin($query)
 {
     return $query->where('email', '!=', 'superadmin@gmail.com')->where('role', '!=', self::ADMIN);
 }
+public function canCreateChats(): bool
+{
+    return in_array($this->role, [self::BUYER, self::FARMER]);
+}
+
+public function canCreateGroups(): bool
+    {
+        return false;
+    }
 
 
+    public function searchChatables(string $query): ?Collection
+{
+    $searchableFields = ['last_name', 'first_name', 'middle_name'];
+
+    return User::isNotAdmin()
+        ->isNotBuyer()
+        ->farmerIsApproved()
+        ->where(function ($queryBuilder) use ($searchableFields, $query) {
+            // Search user fields
+            foreach ($searchableFields as $field) {
+                $queryBuilder->orWhere($field, 'LIKE', '%' . $query . '%');
+            }
+
+            // Search farm_name in the related Farmer model
+            $queryBuilder->orWhereHas('farmer', function ($farmerQuery) use ($query) {
+                $farmerQuery->where('farm_name', 'LIKE', '%' . $query . '%');
+            });
+        })
+        ->limit(20)
+        ->get();
+}
+
+
+    public function getDisplayNameAttribute(): ?string
+    {
+        $displayName = $this->full_name ?? 'User'; // Default to 'User' if full_name is null
+        $farmName = $this->farmer->farm_name ?? null; // Safely get the farm name if available
+    
+        return $farmName ? "{$displayName} ({$farmName})" : $displayName; // Append farm name if it exists
+    }
+    
 }

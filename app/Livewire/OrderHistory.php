@@ -48,6 +48,21 @@ class OrderHistory extends Component implements HasForms, HasActions
         $this->resetPage();
     }
 
+    public function chatFarmer($orderId)
+{
+    $order = Order::with('farmer.user')->findOrFail($orderId);
+    $otherUser = $order->farmer->user;
+
+    // Create or fetch the conversation with the farmer
+    $conversation = auth()->user()->createConversationWith($otherUser, 'Order Discussion');
+
+    // Redirect to the chat route provided by WireChat
+    return redirect()->route('chat', ['conversation_id' => $conversation->id]);
+    
+}
+
+    
+
     public function calculateStatusCounts()
     {
         $this->statusCounts = Order::query()
@@ -73,38 +88,7 @@ class OrderHistory extends Component implements HasForms, HasActions
                     'is_received' => $record->region,
                 ];
             })
-            // ->using(function (array $arguments, array $data): Model {
-
-            //     try {
-            //         $record = Order::findOrFail($arguments['record']); // It's better to use findOrFail to throw an exception if not found
-
-            //         DB::beginTransaction();
-
-            //         $record->update($data); // Ensure $data is properly sanitized and validated
-
-            //         DB::commit();
-            //         $this->refreshOrder();
-            //         $this->dialog()->success(
-            //             title: 'Order Updated',
-            //             description: 'The item has been successfully updated in your cart.' // Change message to match the action (updated vs. deleted)
-            //         );
-
-            //         return $record;
-            //     } catch (\Exception $e) {
-            //         DB::rollBack();
-
-            //         $this->dialog()->error(
-            //             title: 'Error',
-            //             description: 'Failed to update the item. Please try again.' // Adjusted message to reflect the actual action
-            //         );
-
-
-            //         \Log::error('Order update failed', ['error' => $e->getMessage()]);
-
-
-            //         throw $e;
-            //     }
-            // })
+          
             ->icon('heroicon-m-pencil-square')
             ->iconButton()
             ->form([

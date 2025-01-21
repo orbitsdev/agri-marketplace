@@ -66,6 +66,16 @@ class FarmerPanelProvider extends PanelProvider
                 EnsureIsFarmer::class
             ])
             ->navigationItems([
+
+
+                NavigationItem::make('Chat')
+        ->url(fn (): string => url('/chats'),shouldOpenInNewTab: true) // Link to the chat page
+        ->icon('heroicon-o-chat-bubble-left-right') // Chat icon
+        ->group('Communication') // Optional: Group
+        // ->badge(fn (): ?string => $this->getUnreadMessagesCount()) // Add badge
+        // ->badgeColor('danger') // Set badge color (e.g., danger, primary, success, etc.)
+        ->sort(1), 
+                
                 // NavigationItem::make('Reports')
                 // ->url(fn (): string => Reports::getUrl())
                 //     ->icon('heroicon-o-arrow-down-tray')
@@ -78,6 +88,7 @@ class FarmerPanelProvider extends PanelProvider
                 // ...
             ])
             ->sidebarCollapsibleOnDesktop()
+            
             
             ;
     }

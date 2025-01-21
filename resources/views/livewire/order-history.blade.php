@@ -81,35 +81,44 @@
                                         <dt class="font-medium text-gray-900">Total amount</dt>
                                         <dd class="mt-1 text-gray-700">{{ $order->formatted_total }}</dd>
                                     </div>
-                                    
                                     <div>
                                         <dt class="font-medium text-gray-900">Order Received</dt>
-                                        <dd class="mt-1 text-gray-700"> 
-                                            
-                                            {{$order->is_received ? 'Yes' : 'No' }}
+                                        <dd class="mt-1 text-gray-700">
+                                            {{ $order->is_received ? 'Yes' : 'No' }}
                                             @if ($order->status === 'Completed' && $order->is_received === 0)
-                                            
-                                            {{ ($this->receiveOrderAction)(['record' => $order->id]) }} </dd>
+                                            {{ ($this->receiveOrderAction)(['record' => $order->id]) }}
                                             @endif
+                                        </dd>
                                     </div>
-                                
                                 </dl>
-                                <div class="mt-4 sm:mt-0">
+                                <div class="mt-4 flex items-center space-x-4 sm:mt-0">
                                     <span
                                         class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
-                                            @switch($order->status)
-                                                @case('Completed') bg-green-100 text-green-700 @break
-                                                @case('Cancelled') bg-red-100 text-red-700 @break
-                                                @case('Shipped') bg-blue-100 text-blue-700 @break
-                                                @case('Out for Delivery') bg-yellow-100 text-yellow-800 @break
-                                                @case('Confirmed') bg-indigo-100 text-indigo-700 @break
-                                                @case('Pending') bg-pink-100 text-pink-700 @break
-                                                @default bg-gray-100 text-gray-600
-                                            @endswitch">
+                                        @switch($order->status)
+                                            @case('Completed') bg-green-100 text-green-700 @break
+                                            @case('Cancelled') bg-red-100 text-red-700 @break
+                                            @case('Shipped') bg-blue-100 text-blue-700 @break
+                                            @case('Out for Delivery') bg-yellow-100 text-yellow-800 @break
+                                            @case('Confirmed') bg-indigo-100 text-indigo-700 @break
+                                            @case('Pending') bg-pink-100 text-pink-700 @break
+                                            @default bg-gray-100 text-gray-600
+                                        @endswitch">
                                         {{ $order->status }}
                                     </span>
+                                    <!-- Chat Icon Button -->
+<button type="button" 
+class="inline-flex items-center p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300"
+wire:click="chatFarmer({{ $order->id }})">
+<!-- Heroicon: Chat -->
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.6 9-8.25s-4.03-8.25-9-8.25c-4.96 0-9 3.6-9 8.25 0 2.01.76 3.85 2.02 5.28l-1.4 4.47c-.15.5.41.93.88.64l3.77-2.28a9.75 9.75 0 003.73.64z" />
+</svg>
+</button>
+
+                                
                                 </div>
                             </div>
+                            
                             <div class="px-4 py-4 rounded-md ">
                                 <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                    
