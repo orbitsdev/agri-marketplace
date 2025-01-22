@@ -34,4 +34,16 @@ window.Echo = new Echo({
 //     }
 // });
 
+document.addEventListener('livewire:load', () => {
+    const conversationId = document.getElementById('conversation-id')?.value;
 
+    if (conversationId) {
+        // Listen for the `MessageCreated` event
+        window.Echo.private(`conversation.${conversationId}`)
+            .listen('Namu\\WireChat\\Events\\MessageCreated', () => {
+                console.log('MessageCreated event triggered');
+                // Refresh the Livewire WireChat component
+                // $wire.$refresh();
+            });
+    }
+});
