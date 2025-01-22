@@ -181,7 +181,6 @@ wire:click="chatFarmer({{ $order->id }})">
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
                                     @foreach ($order->items as $item)
-                                    @dump($item)
                                         <tr>
                                             <td class="py-4 px-4">
                                                 <div class="flex items-center space-x-4">
