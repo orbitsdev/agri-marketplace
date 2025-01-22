@@ -18,16 +18,16 @@ class Order extends Model
 
 
     protected $casts = [
-        'order_date' => 'datetime', // Ensure order_date is cast as a datetime
+        'order_date' => 'datetime', 
         'shipped_date' => 'datetime',
         'delivery_date' => 'datetime',
     ];
     
    
-    // make a static for statue
+   
     use HasFactory;
 
-    // Order Status Constants
+   
     public const PENDING = 'Pending';
     public const PROCESSING = 'Processing';
     public const CONFIRMED = 'Confirmed';
@@ -49,7 +49,7 @@ class Order extends Model
         self::RETURNED =>  self::RETURNED,
     ];
 
-    // use the admin
+
     public const ADMIN_ORDER_MANAGE_OPTIONS = [
         self::PENDING =>  self::PENDING,
         self::CONFIRMED =>  self::CONFIRMED,
@@ -96,7 +96,7 @@ class Order extends Model
         self::SHIPPED => self::SHIPPED,
         self::COMPLETED => self::COMPLETED,
     ];
-    // Payment Method Constants
+  
     public const PAYMENT_COD = 'COD (Cash on Delivery)';
     public const PAYMENT_ONLINE = 'ONLINE (Online Payment)';
 
@@ -121,7 +121,7 @@ class Order extends Model
         return $statusTransitions[$this->status] ?? [];
     }
 
-    // Relationships
+  
     public function buyer()
     {
         return $this->belongsTo(User::class, 'buyer_id');
@@ -137,7 +137,7 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    // Scopes
+ 
     public function scopeForBuyer($query, $buyerId)
     {
         return $query->where('buyer_id', $buyerId);
@@ -170,7 +170,7 @@ class Order extends Model
         return $query->where('status', self::PENDING);
     }
 
-    // Helper Methods
+ 
     public function hasCompleteLocation()
     {
         return $this->region && $this->province && $this->city_municipality &&
@@ -197,7 +197,7 @@ class Order extends Model
         }
     }
 
-    // Total Calculation
+   
     public function calculateTotal()
     {
         return $this->items->sum('subtotal');
