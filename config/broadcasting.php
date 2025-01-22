@@ -58,7 +58,7 @@ return [
                 // 'encrypted' => true,
                 // 'useTLS' => env('PUSHER_SCHEME', 'https') === 'https',
                 'cluster' => 'ap1',
-                'useTLS' => false,
+                'useTLS' => true,
                 // 'curl_options' => [
                 //     CURLOPT_SSL_VERIFYHOST => 0,
                 //     CURLOPT_SSL_VERIFYPEER => 0,
