@@ -16,6 +16,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Tabs\Tab;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Forms\Components\FileUpload;
@@ -81,7 +82,7 @@ class FilamentForm extends Controller
                             ])
                             ->searchable()
                             ->live()
-                            
+
 
                             ->disabled(fn(string $operation): bool => $operation === 'edit'),
 
@@ -303,6 +304,7 @@ class FilamentForm extends Controller
                         'lg' => 12,
                     ]),
 
+
                 // Quantity
                 TextInput::make('quantity')
                     ->required()
@@ -343,28 +345,37 @@ class FilamentForm extends Controller
                         'lg' => 4,
                     ]),
 
+                    TextInput::make('short_description')
+                    ->required()
+                    ->label('Short Desciption')
+                    ->columnSpan([
+                        'sm' => 2,
+                        'md' => 4,
+                        'lg' => 12,
+                    ]),
                 // Description
-                RichEditor::make('description')
+                Textarea::make('description')
                     ->required()
                     ->label('Product Description')
                     ->columnSpanFull()
                     ->helperText('Provide a detailed description of the product.')
-                    ->toolbarButtons([
-                        'attachFiles',
-                        'blockquote',
-                        'bold',
-                        'bulletList',
-                        'codeBlock',
-                        'h2',
-                        'h3',
-                        'italic',
-                        'link',
-                        'orderedList',
-                        'redo',
-                        'strike',
-                        'underline',
-                        'undo',
-                    ]),
+                    ->rows(5),
+                    // ->toolbarButtons([
+                    //     'attachFiles',
+                    //     'blockquote',
+                    //     'bold',
+                    //     'bulletList',
+                    //     'codeBlock',
+                    //     'h2',
+                    //     'h3',
+                    //     'italic',
+                    //     'link',
+                    //     'orderedList',
+                    //     'redo',
+                    //     'strike',
+                    //     'underline',
+                    //     'undo',
+                    // ]),
 
                 // Status
                 Select::make('status')
