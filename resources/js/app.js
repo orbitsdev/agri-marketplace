@@ -13,6 +13,8 @@ window.Echo = new Echo({
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER, // Get the cluster from environment variables
     forceTLS: true, // Use HTTPS
 });
+
+
 // import './bootstrap';
 // import Echo from 'laravel-echo';
 // import Pusher from 'pusher-js';
@@ -33,8 +35,3 @@ window.Echo = new Echo({
 // });
 
 
-window.Echo.private(`conversation.${conversationId}`)
-    .listen('Namu\\WireChat\\Events\\MessageCreated', (data) => {
-        console.log('Message received:', data);
-        // Update your chat UI here
-    });
