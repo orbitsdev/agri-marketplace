@@ -40,9 +40,7 @@
         @stack('modals')
         @livewireScripts
         @filamentScripts
-        @script
         @vite('resources/js/app.js')
-        @endscript
         <x-dialog z-index="z-50" blur="md" align="center" />
     </body>
 </html>
