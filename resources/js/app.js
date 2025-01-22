@@ -31,3 +31,10 @@ window.Echo = new Echo({
 //         }
 //     }
 // });
+
+
+window.Echo.private(`conversation.${conversationId}`)
+    .listen('Namu\\WireChat\\Events\\MessageCreated', (data) => {
+        console.log('Message received:', data);
+        // Update your chat UI here
+    });
