@@ -32,14 +32,14 @@ class User extends Authenticatable implements FilamentUser, HasName , HasMedia {
     use InteractsWithMedia;
     use Chatable;
 
-    
+
 
     public function getCoverUrlAttribute(): ?string
     {
       return self::getImage();
     }
 
-    
+
 
     public const FARMER = 'Farmer';
     public const BUYER = 'Buyer';
@@ -296,8 +296,15 @@ public function canCreateGroups(): bool
     {
         $displayName = $this->full_name ?? 'User'; // Default to 'User' if full_name is null
         $farmName = $this->farmer->farm_name ?? null; // Safely get the farm name if available
-    
+
         return $farmName ? "{$displayName} ({$farmName})" : $displayName; // Append farm name if it exists
     }
-    
+
+
+    public function comments()
+{
+    return $this->hasMany(Comment::class, 'buyer_id');
+}
+
+
 }

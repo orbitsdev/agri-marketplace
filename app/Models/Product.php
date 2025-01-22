@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Farmer;
+use App\Models\Comment;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
@@ -145,6 +146,12 @@ public function scopeTotalByStatus($query, $status = null)
 public function scopeLowStock($query)
 {
     return $query->where('quantity', '<=', 'alert_level');
+}
+
+
+public function comments()
+{
+    return $this->hasMany(Comment::class);
 }
 
 }

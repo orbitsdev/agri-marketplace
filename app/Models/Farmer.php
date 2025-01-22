@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Comment;
 use App\Models\Product;
 use App\Models\Document;
 use Illuminate\Database\Eloquent\Model;
@@ -20,13 +21,13 @@ class Farmer extends Model
 
     // Status Options
     public const STATUS_OPTIONS = [
-        
+
         self::STATUS_PENDING =>   self::STATUS_PENDING,
         self::STATUS_APPROVED => self::STATUS_APPROVED,
         self::STATUS_REJECTED =>  self::STATUS_REJECTED,
         self::STATUS_BLOCKED =>self::STATUS_BLOCKED,
     ];
-    
+
 
     public const STATUSES = [
         self::STATUS_PENDING =>   self::STATUS_PENDING,
@@ -159,6 +160,22 @@ class Farmer extends Model
         } else {
             throw new \Exception("Invalid status: {$status}");
         }
+    }
+
+
+    public function comments()
+{
+    return $this->hasMany(Comment::class, 'farmer_id');
+}
+
+public function scopeVisibleToUser($query, $user)
+    {
+        return $query->where(function ($query) use ($user) {
+            $query->where('buyer_id', $user->id)
+                  ->orWhereHas('product', function ($subQuery) use ($user) {
+                      $subQuery->where('farmer_id', $user->id);
+                  });
+        });
     }
 
 }
