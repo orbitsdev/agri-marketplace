@@ -331,7 +331,7 @@ class AdminForm extends Controller
                         })
                         ->columnSpanFull()
                         ->placeholder('Select a status'),
-                        
+
 
                     // DatePicker::make('order_date')
                     //     ->label('Order Date')
@@ -350,18 +350,18 @@ class AdminForm extends Controller
                         ->required()
                         ->rows(5)
                         ->hidden(function (Get $get) {
-        
+
                             return !in_array($get('status'), [Order::CANCELLED, Order::RETURNED]);
                         })
                         ,
-                       
+
                         Toggle::make('is_received')
                         ->required()->label('Order Received'),
 
                         TableRepeater::make('Order Movement')
                         ->relationship('orderMovements') // Ensure this matches the relationship in your Order model
                         ->columnSpanFull()
-                       
+
                         ->maxItems(10) // Restrict to a maximum of 10 movements
                         ->withoutHeader() // Remove the table header for a cleaner UI
                         ->schema([
@@ -369,17 +369,17 @@ class AdminForm extends Controller
                                 ->label('Current Location')
                                 ->required()
                                 ->maxLength(191),
-                    
+
                             TextInput::make('destination')
                                 ->label('Destination')
                                 ->required()
                                 ->maxLength(191),
-                    
-                        
-                           
-                        
+
+
+
+
                             ])->hidden(function (Get $get) {
-        
+
                                 return !in_array($get('status'), [Order::OUT_FOR_DELIVERY, Order::COMPLETED]);
                             })
 

@@ -106,7 +106,7 @@
                                         {{ $order->status }}
                                     </span>
                                     <!-- Chat Icon Button -->
-<button type="button" 
+<button type="button"
 class="inline-flex items-center p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300"
 wire:click="chatFarmer({{ $order->id }})">
 <!-- Heroicon: Chat -->
@@ -115,13 +115,13 @@ wire:click="chatFarmer({{ $order->id }})">
 </svg>
 </button>
 
-                                
+
                                 </div>
                             </div>
-                            
+
                             <div class="px-4 py-4 rounded-md ">
                                 <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                   
+
                                     <div>
                                         <dt class="font-medium text-gray-900">Farm Name</dt>
                                         <dd class="text-sm text-gray-700">
@@ -165,11 +165,11 @@ wire:click="chatFarmer({{ $order->id }})">
                                         </dd>
                                     </div>
                                 @endif
-                                
+
                                 </dl>
                             </div>
-                            
-                              
+
+
                             <!-- Order Items -->
                             <table class="w-full text-sm text-gray-700">
                                 <thead class="text-left bg-gray-100 border-b text-gray-600">
@@ -181,13 +181,15 @@ wire:click="chatFarmer({{ $order->id }})">
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
                                     @foreach ($order->items as $item)
+                                    @dump($item)
                                         <tr>
                                             <td class="py-4 px-4">
                                                 <div class="flex items-center space-x-4">
                                                     <img src="{{ $item->product->getImage() }}" alt="{{ $item->product_name }}" class="h-16 w-16 rounded-lg object-cover">
                                                     <div>
                                                         <div class="font-medium text-gray-900">{{ $item->product_name }}</div>
-                                                        <div class="mt-1 text-sm text-gray-600">{{ Str::limit($item->product_description, 50) }}</div>
+
+                                                        <div class="mt-1 text-sm text-gray-600">{{ Str::limit($item->short_description, 50) }}</div>
                                                     </div>
                                                 </div>
                                             </td>
@@ -197,18 +199,18 @@ wire:click="chatFarmer({{ $order->id }})">
                                     @endforeach
                                 </tbody>
                                 <tfoot class="bg-gray-50">
-                                    <tr>                                    
+                                    <tr>
                                             <td class="py-4 px-4 font-medium text-gray-900 text-left"  >Total</td>
                                             <td class="py-4 px-4 font-medium text-gray-900 text-right"  >  ₱{{ number_format($order->items->sum(fn($item) => $item->product_price * $item->quantity), 2) }}</td>
 
                                         <td class="py-4 px-4 text-right font-bold text-gray-900" >
-                                          
+
                                         </td>
-                                       
+
                                     </tr>
                                 </tfoot>
                             </table>
-                            
+
                             @if (in_array($order->status, ['Out for Delivery', 'Completed']))
                             <div class="px-4 py-6 border-t mt-4">
                                 <h3 class="text-lg font-semibold text-gray-900">Order Tracking</h3>
@@ -219,12 +221,12 @@ wire:click="chatFarmer({{ $order->id }})">
                                             <div class="absolute -bottom-6 left-0 top-0 flex w-6 justify-center">
                                                 <div class="w-px {{ $index === 0 && $order->status === 'Out for Delivery' ? 'bg-primary-500 dark:bg-primary-400' : 'bg-gray-200 dark:bg-gray-700' }}"></div>
                                             </div>
-                                            
+
                                             <!-- Timeline Icon -->
                                             <div class="relative flex size-6 flex-none items-center justify-center bg-white">
                                                 <div class="size-1.5 rounded-full {{ $index === 0 && $order->status === 'Out for Delivery' ? 'bg-primary-500 ring-primary-600 dark:bg-primary-400 dark:ring-primary-500' : 'bg-gray-100 ring-gray-300' }}"></div>
                                             </div>
-                                            
+
                                             <!-- Movement Details -->
                                             <div class="flex-auto">
                                                 <p class="py-0.5 text-sm {{ $index === 0 && $order->status === 'Out for Delivery' ? 'text-primary-600 dark:text-primary-400 font-semibold' : 'text-gray-700 dark:text-gray-200' }}">
@@ -248,14 +250,14 @@ wire:click="chatFarmer({{ $order->id }})">
                                     @endforelse
                                 </ul>
                             </div>
-                            
+
                         @endif
                         </div>
 
-                       
-                        
-                     
-                         
+
+
+
+
 
                     @empty
                         <div class="text-center text-gray-500">No orders found.</div>

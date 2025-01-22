@@ -22,6 +22,7 @@ return new class extends Migration
 
             $table->string('product_name')->nullable();
 $table->text('product_description')->nullable();
+$table->string('short_description')->nullable();
 $table->double('product_price')->nullable();
 $table->integer('product_quantity')->nullable(); // Snapshot of the product's stock at the time of order
 

@@ -347,7 +347,7 @@ class FilamentForm extends Controller
 
                     TextInput::make('short_description')
                     ->required()
-                    ->label('Short Desciption')
+                    ->label('Short Description')
                     ->columnSpan([
                         'sm' => 2,
                         'md' => 4,

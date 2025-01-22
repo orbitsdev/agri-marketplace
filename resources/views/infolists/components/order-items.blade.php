@@ -18,7 +18,7 @@
                             <img src="{{ $item->product->getImage() }}" alt="Product Image" class="h-16 w-16 object-cover">
                         </td>
                         <td class="border border-gray-300 px-4  ">{{ $item->product_name }}</td>
-                        <td class="border border-gray-300 px-4  ">{{ $item->product_description }}</td>
+                        <td class="border border-gray-300 px-4  ">{{ $item->short_description }}</td>
                         <td class="border border-gray-300 px-4  ">{{ $item->quantity }}</td>
                         <td class="border border-gray-300 px-4  ">₱{{ number_format($item->price_per_unit, 2) }}</td>
                         <td class="border border-gray-300 px-4  ">{{ $item->formatted_subtotal }}</td>

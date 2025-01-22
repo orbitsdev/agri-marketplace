@@ -208,6 +208,7 @@ class CartView extends Component  implements HasForms, HasActions
                                 'product_id' => $cartItem->product_id,
                                 'product_name' => $cartItem->product->product_name,
                                 'product_description' => $cartItem->product->description,
+                                'short_description' => $cartItem->product->short_description,
                                 'product_price' => $cartItem->price_per_unit,
                                 'product_quantity' => $cartItem->quantity,
                                 'quantity' => $cartItem->quantity,
