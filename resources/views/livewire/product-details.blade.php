@@ -82,45 +82,74 @@
                     </section>
                 </div>
             </div>
-            <div class="bg-gray-200 grid-cols-2">
-                    Transaction
-
-                <div class="flex space-x-4 text-sm text-gray-500 container mx-auto  max-w-7xl">
-                    <div class="flex-none py-10">
-                      <img src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80" alt="" class="size-10 rounded-full bg-gray-100">
+            <div class="border-t py-8">
+                <div class="mx-auto max-w-7xl">
+                    <!-- Section Label -->
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">Transaction Conversation</h2>
+                        <p class="text-sm text-gray-500">Communicate directly with the seller about this product.</p>
                     </div>
-                    <div class="py-10">
-                      <h3 class="font-medium text-gray-900">Emily Selman</h3>
-                      <p><time datetime="2021-07-16">July 16, 2021</time></p>
-
-                      <div class="mt-4 flex items-center">
-                        <!-- Active: "text-yellow-400", Default: "text-gray-300" -->
-                        <svg class="size-5 shrink-0 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                          <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" clip-rule="evenodd" />
-                        </svg>
-                        <svg class="size-5 shrink-0 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                          <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" clip-rule="evenodd" />
-                        </svg>
-                        <svg class="size-5 shrink-0 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                          <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" clip-rule="evenodd" />
-                        </svg>
-                        <svg class="size-5 shrink-0 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                          <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" clip-rule="evenodd" />
-                        </svg>
-                        <svg class="size-5 shrink-0 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                          <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" clip-rule="evenodd" />
-                        </svg>
-                      </div>
-                      <p class="sr-only">5 out of 5 stars</p>
-
-                      <div class="mt-4 text-sm/6 text-gray-500">
-                        <p>This icon pack is just what I need for my latest project. There's an icon for just about anything I could ever need. Love the playful look!</p>
-                      </div>
+            
+                    <!-- Add Message Action -->
+                    <div class="flex justify-end">
+                        {{ ($this->addMessageAction)(['record' => $product->id]) }}
                     </div>
-                  </div>
+            
+                    <!-- Comments Section -->
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold text-gray-900">Conversation History</h3>
+            
+                        <div class="-my-10">
+                            <div class="-my-10">
+                                @forelse ($comments as $comment)
+                                    <div class="relative flex space-x-4 text-sm text-gray-500">
+                                        <!-- Delete Button -->
+                                        @if (auth()->id() === $comment->buyer_id || auth()->id() === $product->farmer->user_id)
+                                            <div class="absolute top-0 right-0 p-2">
+                                                {{ ($this->deleteMessageAction)(['record' => $comment->id]) }}
+                                            </div>
+                                        @endif
+                            
+                                        <!-- User Avatar -->
+                                        <div class="flex-none py-10">
+                                            <img src="{{ $comment->buyer->getImage() }}" 
+                                                 alt="{{ $comment->buyer->full_name }}" 
+                                                 class="h-10 w-10 rounded-full bg-gray-100">
+                                        </div>
+                            
+                                        <!-- Comment Content -->
+                                        <div class="flex-1 py-10">
+                                            <h4 class="font-medium text-gray-900">{{ $comment->buyer->full_name }}</h4>
+                                            <p class="text-xs text-gray-500">
+                                                <time datetime="{{ $comment->created_at }}">{{ $comment->created_at->format('F d, Y') }}</time>
+                                            </p>
+                            
+                                            <div class="mt-4 text-sm text-gray-500">
+                                                <p>{{ $comment->content }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Divider Between Comments -->
+                                    @if (!$loop->last)
+                                        <div class="border-t border-gray-200"></div>
+                                    @endif
+                                @empty
+                                    <!-- No Comments Message -->
+                                    <p class="text-gray-500 mt-4">No messages yet. Start a conversation with the seller!</p>
+                                @endforelse
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            
 
-
-        </div>
+           
+              
     </div>
     </x-buyer-layout>
     <x-filament-actions::modals />

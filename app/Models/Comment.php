@@ -26,4 +26,12 @@ public function farmer()
     return $this->belongsTo(Farmer::class, 'farmer_id');
 }
 
+public function scopeVisibleToUser($query, $farmerId, $productId, $buyerId)
+{
+    return $query->where('farmer_id', $farmerId)
+                 ->where('product_id', $productId)
+                 ->where('buyer_id', $buyerId);
+}
+
+
 }
