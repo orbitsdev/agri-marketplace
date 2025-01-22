@@ -44,7 +44,7 @@ return [
      */
     'routes' => [
     'prefix' => '/chats',
-       'middleware' => ['web', 'auth'], //
+       'middleware' => ['web', 'auth', 'is-buyer-or-farmer'], //
     //    'middleware' => ['web', 'auth', 'is-buyer-or-farmer'], //
     ],
 
