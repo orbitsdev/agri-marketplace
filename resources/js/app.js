@@ -34,12 +34,12 @@ window.Echo = new Echo({
 //     }
 // });
 
- var isAdmin = 5;
+//  var isAdmin = 5;
 
-window.Echo.private(`conversation.${isAdmin}`) // Replace 5 with the user ID for testing
-    .listen('Namu\\WireChat\\Events\\MessageCreated', (e) => {
-        console.log('Event received:', e);
-    });
+// window.Echo.private(`conversation.${isAdmin}`) // Replace 5 with the user ID for testing
+//     .listen('Namu\\WireChat\\Events\\MessageCreated', (e) => {
+//         console.log('Event received:', e);
+//     });
 
 // document.addEventListener('livewire:load', () => {
 //     const conversationId = document.getElementById('conversation-id')?.value;
