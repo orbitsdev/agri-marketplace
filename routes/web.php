@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+use App\Events\TestEvent;
 use App\Livewire\CartView;
 use App\Livewire\MyAddress;
 use App\Livewire\PlaceOrder;
@@ -28,7 +30,7 @@ use App\Livewire\AccountIsDeactivatedPage;
 Route::get('/', function () {
     // return view('welcome');
     return redirect()->route('dashboard');
-    
+
 });
 
 Route::middleware([
@@ -38,7 +40,7 @@ Route::middleware([
     'verified',
     'account.active'
 ])->group(function () {
-   
+
 
 Route::get('/farmer/status', WaitingForApproval::class)->name('farmer.waiting-for-approval')->middleware(['farmer.check.approval']);
 
@@ -93,7 +95,7 @@ Route::get('/farmer/status', WaitingForApproval::class)->name('farmer.waiting-fo
 
     Route::get('/reports/orders-by-status', [ReportController::class, 'exportOrdersByStatus'])->name('reports.orders-by-status');
 
-   
+
 
 
 });
@@ -101,3 +103,18 @@ Route::get('/account-deactivated', AccountIsDeactivatedPage::class)
     ->name('account.deactivated')
     ->middleware(['auth', 'redirect.if.active']);
 
+
+
+    Route::get('/test-event', function () {
+        // Retrieve a user instance (replace 1 with the actual user ID you want to test with)
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        // Trigger the event
+        event(new TestEvent($user));
+
+        return response()->json(['status' => 'Event triggered successfully!']);
+    });
