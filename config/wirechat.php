@@ -43,8 +43,9 @@ return [
      * Configures the URL prefix and middleware for Wirechat routes.
      */
     'routes' => [
-        'prefix' => '/chats',
-       'middleware' => ['web', 'auth', 'is-buyer-or-farmer'], //
+    'prefix' => '/chats',
+       'middleware' => ['web', 'auth'], //
+    //    'middleware' => ['web', 'auth', 'is-buyer-or-farmer'], //
     ],
 
     /**
