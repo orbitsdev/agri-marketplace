@@ -111,12 +111,7 @@ public function scopeByCategory($query, $categoryId = null)
     return $categoryId ? $query->where('category_id', $categoryId) : $query;
 }
 
-//scope for is publis
 
-    public function scopePublished($query)
-    {
-        return $query->where('is_published', true);
-    }
 
     // for stats
 
@@ -154,4 +149,15 @@ public function comments()
     return $this->hasMany(Comment::class);
 }
 
+
+public function scopePublished($query)
+    {
+        return $query->where('is_published', true);
+    }
+
+    // Scope for unpublished products
+    public function scopeUnpublished($query)
+    {
+        return $query->where('is_published', false);
+    }
 }

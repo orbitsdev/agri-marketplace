@@ -42,8 +42,10 @@
 
                                             <div class="flex items-center pr-4">
                                                 <input type="checkbox" wire:click="toggleSelect({{ $item->id }})"
-                                                    @if ($item->is_selected) checked @endif
-                                                    class="form-checkbox h-5 w-5 text-eucalyptus-600">
+       @if ($item->is_selected) checked @endif
+       @if (!$user->hasDefaultLocation()) disabled @endif
+       class="form-checkbox h-5 w-5 text-eucalyptus-600">
+
                                             </div>
 
 
@@ -156,20 +158,23 @@
                         {{ $this->addAddressAction }}
 
                     </div>
-                    <div class="mt-4 rounded-md bg-blue-50 p-4 mb-4">
+                    <div class="mt-4 rounded-md bg-red-50 p-4 mb-4">
 
                         <div class="flex">
                             <div class="shrink-0">
-                                <svg class="size-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                                <svg class="size-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
                                     <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clip-rule="evenodd" />
                                 </svg>
                             </div>
                             <div>
 
-                                <div class="ml-3 flex-1 md:flex md:justify-between">
-                                    <p class="text-sm text-blue-700">No Default Location was found  Please Create or set default location before proceeding to checkout</p>
+                                <div class="ml-3  ">
+                                    <p class="text-sm text-red-700">
+                                        No Default Location was found. Please create or set a default location before proceeding to checkout.
+                                        <br>
+                                        <p class="text-red-800 text-sm mt-1 animate-pulse font-semibold">You cannot check cart  until no default location is set.</p>
+                                    </p>
                                 </div>
-
 
                             </div>
                         </div>

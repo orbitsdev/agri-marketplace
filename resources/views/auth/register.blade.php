@@ -30,6 +30,18 @@
                 <x-label for="last_name" value="{{ __('Last Name') }}">Last Name</x-label>
                 <x-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" required autocomplete="last_name" />
             </div>
+            <div class="mt-4 relative">
+                <x-label for="phone" value="{{ __('Phone Number') }}"/>
+                
+                <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
+                    <span class="px-3  text-gray-700 text-sm">+63</span>
+                    <x-input id="phone" class="block w-full border-0 focus:ring-0" type="text" name="phone"
+                             :value="old('phone')" required autocomplete="phone"  maxlength="10"/>
+                </div>
+                
+               
+            </div>
+            
 
             <div class="mt-4">
                 <x-label for="email" value="{{ __('Email') }}">Email</x-label>

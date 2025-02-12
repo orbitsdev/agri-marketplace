@@ -72,6 +72,25 @@ class OrderResource extends Resource
 
                
 
+                Infolists\Components\Section::make('Buyer ')
+                ->schema([
+                   
+                        Infolists\Components\TextEntry::make('buyer.full_name')->label('Name'),
+                //     Infolists\Components\RepeatableEntry::make('items')
+                //         ->schema([
+                //             Infolists\Components\TextEntry::make('product.product_name')
+                //                 ->label('Product'),
+                //             Infolists\Components\TextEntry::make('quantity')
+                //                 ->label('Quantity'),
+                //         ])
+                //         ->contained(false)
+                //         ->label('Items')
+                        
+                //         ->columnSpan('full'),
+                    
+
+                
+                ]),
                 Infolists\Components\Section::make('Items')
                 ->schema([
                 //     Infolists\Components\RepeatableEntry::make('items')
@@ -93,6 +112,8 @@ class OrderResource extends Resource
             // Shipping Address Section
             Infolists\Components\Section::make('Shipping Address')
                 ->schema([
+                    Infolists\Components\TextEntry::make('phone')
+                        ->label('Phone'),
                     Infolists\Components\TextEntry::make('region')
                         ->label('Region'),
                     Infolists\Components\TextEntry::make('province')

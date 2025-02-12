@@ -71,6 +71,17 @@ class FilamentForm extends Controller
                                 'lg' => 4,
                             ]),
 
+                            
+TextInput::make('phone')
+->prefix('+63')
+->mask('9999999999')
+->columnSpan([
+    'sm' => 2,
+    'md' => 4,
+    'lg' => 4,
+])
+,
+
                         Select::make('role')
                             ->default(User::FARMER)
                             ->required()
@@ -120,6 +131,7 @@ class FilamentForm extends Controller
                         return $get('role') !== User::FARMER;
                     }),
             ])
+            
                 ->columns([
                     'sm' => 2,
                     'md' => 4,
@@ -449,7 +461,13 @@ class FilamentForm extends Controller
                 ->required()
                 ->numeric()
                 ->mask(9999),
+            
+                            
+TextInput::make('phone')
+->prefix('+63')
+->mask('9999999999')
 
+,
             Toggle::make('is_default')->default(true)
         ];
     }

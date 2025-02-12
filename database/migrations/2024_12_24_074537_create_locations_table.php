@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('city_code')->nullable(); // Add city/municipality code
             $table->string('barangay')->nullable();
             $table->string('barangay_code')->nullable(); // Add barangay code
+            $table->string('phone')->nullable();
+
             $table->string('street')->nullable();
             $table->string('zip_code')->nullable();
             $table->boolean('is_default')->default(false);

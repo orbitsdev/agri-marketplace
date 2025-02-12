@@ -90,6 +90,8 @@
                                             @endif
                                         </dd>
                                     </div>
+
+                                    
                                 </dl>
                                 <div class="mt-4 flex items-center space-x-4 sm:mt-0">
                                     <span
@@ -105,36 +107,67 @@
                                         @endswitch">
                                         {{ $order->status }}
                                     </span>
-                                    <!-- Chat Icon Button -->
-<button type="button"
-class="inline-flex items-center p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300"
-wire:click="chatFarmer({{ $order->id }})">
-<!-- Heroicon: Chat -->
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.6 9-8.25s-4.03-8.25-9-8.25c-4.96 0-9 3.6-9 8.25 0 2.01.76 3.85 2.02 5.28l-1.4 4.47c-.15.5.41.93.88.64l3.77-2.28a9.75 9.75 0 003.73.64z" />
-</svg>
-</button>
+                                                                                    <!-- Chat Icon Button -->
+                                                <button type="button"
+                                                class="inline-flex items-center p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300"
+                                                wire:click="chatFarmer({{ $order->id }})">
+                                                <!-- Heroicon: Chat -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.6 9-8.25s-4.03-8.25-9-8.25c-4.96 0-9 3.6-9 8.25 0 2.01.76 3.85 2.02 5.28l-1.4 4.47c-.15.5.41.93.88.64l3.77-2.28a9.75 9.75 0 003.73.64z" />
+                                                </svg>
+                                                </button>
 
-
+                                                
                                 </div>
+                                
                             </div>
 
                             <div class="px-4 py-4 rounded-md ">
+                                
                                 <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                                    <div>
-                                        <dt class="font-medium text-gray-900">Farm Name</dt>
-                                        <dd class="text-sm text-gray-700">
-                                            {{ $order->farmer->farm_name ?? 'N/A' }}
-                                        </dd>
-                                        <div class="text-xs text-gray-500">
-                                            {{$order->farmer->location ??'N/A'}}
+                                  
+                    
+                                <!-- 📍 Farm, Contact, and Address Information -->
+                                <div class="px-4 py-4 rounded-md">
+                                    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <!-- 🏡 Farm Name -->
+                                        <div>
+                                            <dt class="font-medium text-gray-900">Farm Name</dt>
+                                            <dd class="text-sm text-gray-700">
+                                                {{ $order->farmer->farm_name ?? 'N/A' }}
+                                            </dd>
+                                            <div class="text-xs text-gray-500">
+                                                {{ $order->farmer->location ?? 'N/A' }}
+                                            </div>
                                         </div>
-                                    </div>
+                    
+                                        <!-- 📞 Recipient Phone -->
+                                        <div>
+                                            <dt class="font-medium text-gray-900">Recipient Phone</dt>
+                                            <dd class="text-sm text-gray-700 flex items-center">
+                                                <i class="fas fa-phone-alt text-gray-500 mr-2"></i> 
+                                                {{ $order->phone ?? 'N/A' }}
+                                            </dd>
+                                        </div>
+                    
+                                        <!-- 📍 Shipping Address -->
+                                        <div class="sm:col-span-2">
+                                            <dt class="font-medium text-gray-900">Shipping Address</dt>
+                                            <dd class="text-sm text-gray-700">
+                                                {{ $order->street ? $order->street . ', ' : '' }}
+                                                {{ $order->barangay ? $order->barangay . ', ' : '' }}
+                                                {{ $order->city_municipality ? $order->city_municipality . ', ' : '' }}
+                                                {{ $order->province ? $order->province . ', ' : '' }}
+                                                {{ $order->region ? $order->region . ', ' : '' }}
+                                                {{ $order->zip_code ? 'ZIP: ' . $order->zip_code : '' }}
+                                            </dd>
+                                        </div>
+                                    </dl>
                                 </dl>
                             </div>
 
-                               <!-- Additional Ord  er Details -->
+                               
                                <div class="px-4 py-4 rounded-md">
                                 <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
@@ -170,7 +203,7 @@ wire:click="chatFarmer({{ $order->id }})">
                             </div>
 
 
-                            <!-- Order Items -->
+                          
                             <table class="w-full text-sm text-gray-700">
                                 <thead class="text-left bg-gray-100 border-b text-gray-600">
                                     <tr>
@@ -216,17 +249,17 @@ wire:click="chatFarmer({{ $order->id }})">
                                 <ul role="list" class="mt-2 space-y-6">
                                     @forelse ($order->getLatestMovements() as $index => $movement)
                                         <li class="relative flex gap-x-4 {{ $index === 0 && $order->status === 'Out for Delivery' ? 'bg-primary-50 dark:bg-primary-50 animate-pulse' : '' }}">
-                                            <!-- Vertical Line -->
+                                      
                                             <div class="absolute -bottom-6 left-0 top-0 flex w-6 justify-center">
                                                 <div class="w-px {{ $index === 0 && $order->status === 'Out for Delivery' ? 'bg-primary-500 dark:bg-primary-400' : 'bg-gray-200 dark:bg-gray-700' }}"></div>
                                             </div>
 
-                                            <!-- Timeline Icon -->
+                                         
                                             <div class="relative flex size-6 flex-none items-center justify-center bg-white">
                                                 <div class="size-1.5 rounded-full {{ $index === 0 && $order->status === 'Out for Delivery' ? 'bg-primary-500 ring-primary-600 dark:bg-primary-400 dark:ring-primary-500' : 'bg-gray-100 ring-gray-300' }}"></div>
                                             </div>
 
-                                            <!-- Movement Details -->
+                                    
                                             <div class="flex-auto">
                                                 <p class="py-0.5 text-sm {{ $index === 0 && $order->status === 'Out for Delivery' ? 'text-primary-600 dark:text-primary-400 font-semibold' : 'text-gray-700 dark:text-gray-200' }}">
                                                     <span class="font-medium text-gray-900 dark:text-gray-100">Current Location:</span> {{ $movement->current_location }}
@@ -250,7 +283,7 @@ wire:click="chatFarmer({{ $order->id }})">
                                 </ul>
                             </div>
 
-                        @endif
+                             @endif
                         </div>
 
 

@@ -61,7 +61,7 @@
                             <div class="min-w-0 flex-1">
                                 <div class="flex items-center justify-between">
                                     <p class="text-sm font-medium text-gray-900">
-                                        {{ $address->street }}, {{ $address->barangay }}, {{ $address->city_municipality }}, {{ $address->province }}, {{ $address->region }}
+                                        {{ $address->street }}, {{ $address->barangay }}, {{ $address->city_municipality }}, {{ $address->province }}, {{ $address->region }}, 
                                     </p>
                                     @if($address->is_default)
                                         <!-- Default Badge -->
@@ -74,6 +74,11 @@
                                     @endif
                                 </div>
                                 <p class="mt-1 text-sm text-gray-500">ZIP Code: {{ $address->zip_code }}</p>
+
+                                <p class="mt-1 text-sm text-gray-700">
+                                    <i class="fas fa-phone-alt text-gray-500 mr-2"></i> {{ $address->phone ?? 'None' }}
+                                </p>
+                                
                             </div>
 
                             <!-- Edit Button -->

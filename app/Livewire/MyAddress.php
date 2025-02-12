@@ -10,6 +10,7 @@ use App\Services\PSGCService;
 use Filament\Actions\EditAction;
 use WireUi\Traits\WireUiActions;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use App\Http\Controllers\FilamentForm;
@@ -51,8 +52,9 @@ class MyAddress extends Component implements HasForms, HasActions
     }
 
     public function render()
-    {
-        return view('livewire.my-address');
+    {   
+        $this->addresses = auth()->user()->getAddresses();
+        return view('livewire.my-address',['address'=> $this->addresses]);
     }
 
     public function addAddressAction(): Action
@@ -61,6 +63,13 @@ class MyAddress extends Component implements HasForms, HasActions
             ->label('New Address')
             ->modalHeading('Add New Address')
             ->size('xl')
+            ->fillForm(function(){
+                return [
+                
+                    'phone' => Auth::user()->phone ?? null,
+                
+                ];
+            })
             ->form(FilamentForm::locationForm())
             ->action(function (array $data) {
                 DB::beginTransaction();
@@ -90,6 +99,7 @@ class MyAddress extends Component implements HasForms, HasActions
                         'street' => $data['street'],
                         'zip_code' => $data['zip_code'],
                         'is_default' => $data['is_default'],
+                        'phone' => $data['phone'],
                     ]);
                     // Location::create([
                     //     'user_id' => auth()->id(),
@@ -136,6 +146,7 @@ class MyAddress extends Component implements HasForms, HasActions
                     'street'=> $record->street,
                     'zip_code'=> $record->zip_code,
                     'is_default'=> $record->is_default,
+                    'phone'=> $record->phone,
                 ];
             })
             ->using(function (Model $record, array $data): Model {
@@ -153,7 +164,7 @@ class MyAddress extends Component implements HasForms, HasActions
             ->icon('heroicon-m-pencil-square')
              ->iconButton()
             ->form(FilamentForm::locationForm())
-            ->label('New Address')
+            ->label('Edit Address')
             ->modalHeading('Add New Address')
             ->size('xl')
 

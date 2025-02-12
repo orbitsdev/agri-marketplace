@@ -145,6 +145,7 @@ class CartView extends Component  implements HasForms, HasActions
             'totalSelectedItems' => $this->totalSelectedItems,
             'totalSelectedValue' => $this->totalSelectedValue,
             'totalCartItem' => $this->totalCartItem,
+            'user' => Auth::user(),
         ]);
     }
 
@@ -196,6 +197,7 @@ class CartView extends Component  implements HasForms, HasActions
                             'barangay' => $defaultLocation->barangay ?? null,
                             'street' => $defaultLocation->street ?? null,
                             'zip_code' => $defaultLocation->zip_code ?? null,
+                            'phone' => $defaultLocation->phone ?? null,
                             'total' => $orderTotal,
                             'status' => Order::PROCESSING,
                             'payment_method' => Order::PAYMENT_COD
@@ -296,6 +298,13 @@ class CartView extends Component  implements HasForms, HasActions
             ->icon('heroicon-m-plus')
             ->modalHeading('Add New Address')
             ->color('info')
+            ->fillForm(function(){
+                return [
+                
+                    'phone' => Auth::user()->phone ?? null,
+                
+                ];
+            })
             ->form(FilamentForm::locationForm())
             ->action(function (array $data) {
                 DB::beginTransaction();

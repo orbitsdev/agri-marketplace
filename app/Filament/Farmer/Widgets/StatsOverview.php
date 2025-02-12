@@ -21,8 +21,8 @@ class StatsOverview extends BaseWidget
         $pending = Order::query()->byFarmer($farmerId)->pendingOrders();
         $canceled = Order::query()->byFarmer($farmerId)->cancelledOrders();
         $returned = Order::query()->byFarmer($farmerId)->returnedOrders();
-        $outForDelivery = Order::query()->byFarmer($farmerId)->OutForDelivery();
-        $shipped = Order::query()->byFarmer($farmerId)->Shipped();
+        $outForDelivery = Order::query()->byFarmer($farmerId)->OutForDeliveryOrders();
+        $shipped = Order::query()->byFarmer($farmerId)->shippedOrders();
 
 
         // Retrieve statistics using scopes

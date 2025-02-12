@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('order_number')->unique()->nullable();
             $table->foreignId('buyer_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('farmer_id')->nullable()->constrained('farmers')->onDelete('set null');
+            $table->string('phone')->nullable();
             $table->string('region')->nullable();
             $table->string('province')->nullable();
             $table->string('city_municipality')->nullable();

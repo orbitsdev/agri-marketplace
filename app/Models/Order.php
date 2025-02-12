@@ -165,10 +165,7 @@ class Order extends Model
     {
         return $query->where('status', '!=', self::PROCESSING);
     }
-    public function scopePending($query)
-    {
-        return $query->where('status', self::PENDING);
-    }
+   
 
  
     public function hasCompleteLocation()
@@ -316,6 +313,12 @@ public function scopeByFarmer($query, $farmerId)
 
 
 
+public function scopeConfirmedOrders($query)
+{
+    return $query->where('status', self::CONFIRMED)->count();
+}
+
+
 public function scopeCompletedOrders($query)
 {
     return $query->where('status', self::COMPLETED)->count();
@@ -336,13 +339,50 @@ public function scopeReturnedOrders($query)
     return $query->where('status', self::RETURNED)->count();
 }
 
-public function scopeOutForDelivery($query)
+public function scopeOutForDeliveryOrders($query)
 {
     return $query->where('status', self::OUT_FOR_DELIVERY)->count();
 }
-public function scopeShipped($query)
+public function scopeShippedOrders($query)
 {
     return $query->where('status', self::SHIPPED)->count();
+}
+
+
+
+public function scopeConfirmed($query)
+{
+    return $query->where('status', self::CONFIRMED);
+}
+
+
+public function scopeCompleted($query)
+{
+    return $query->where('status', self::COMPLETED);
+}
+
+public function scopeCancelled($query)
+{
+    return $query->where('status', self::CANCELLED);
+}
+
+public function scopePending($query)
+{
+    return $query->where('status', self::PENDING);
+}
+
+public function scopeReturned($query)
+{
+    return $query->where('status', self::RETURNED);
+}
+
+public function scopeOutForDelivery($query)
+{
+    return $query->where('status', self::OUT_FOR_DELIVERY);
+}
+public function scopeShipped($query)
+{
+    return $query->where('status', self::SHIPPED);
 }
 
 
