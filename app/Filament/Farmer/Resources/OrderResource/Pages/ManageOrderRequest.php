@@ -78,7 +78,62 @@ class ManageOrderRequest extends EditRecord
             ->success()
             ->send();
 
-            dd('test');
+            if ($statusChanged && !empty($record->phone)) {
+                $smsService = app(TeamSSProgramSmsService::class);
+                $buyerName = $record->buyer->full_name ?? 'Customer';
+                $orderNumber = $record->order_number;
+                $totalOrder = $record->getFormattedTotalAttribute();
+                $phone = $record->phone;
+                $message = '';
+    
+                switch ($record->status) {
+                    case Order::PENDING:
+                        $message = "Hello $buyerName, we’ve received your order #$orderNumber with a total of $totalOrder. It’s currently pending and will be processed soon. Thank you for ordering from Agri Market!";
+                        break;
+    
+                    case Order::CONFIRMED:
+                        $message = "Good news, $buyerName! Your order #$orderNumber has been confirmed, and we are preparing it for shipment. The total amount is $totalOrder. Thank you for choosing Agri Market!";
+                        break;
+    
+                    case Order::SHIPPED:
+                        $message = "Hi $buyerName, your order #$orderNumber has been shipped! It’s on the way, and you’ll receive it soon. We appreciate your trust in Agri Market.";
+                        break;
+    
+                    case Order::OUT_FOR_DELIVERY:
+                        $message = "Hello $buyerName, your order #$orderNumber is out for delivery. Please prepare $totalOrder for payment if needed. Expect it to arrive soon. Thank you for ordering with Agri Market!";
+                        break;
+    
+                    case Order::COMPLETED:
+                        $message = "Hi $buyerName, your order #$orderNumber has been successfully delivered. We hope you’re happy with your purchase! Let us know if you need anything else.";
+                        break;
+    
+                    case Order::CANCELLED:
+                        $message = "Hi $buyerName, we regret to inform you that your order #$orderNumber has been canceled. If you need further assistance, feel free to contact us.";
+                        break;
+    
+                    case Order::RETURNED:
+                        $message = "Hello $buyerName, your return request for order #$orderNumber has been processed. If you have any concerns, please reach out to us.";
+                        break;
+                }
+    
+                if (!empty($message)) {
+                    $response = $smsService->sendSms($phone, $message);
+    
+                    Log::info("TeamSSProgram SMS Response: " . json_encode($response));
+    
+                    if (!isset($response['success']) || !$response['success']) {
+                        Log::error("SMS API Response Error: " . json_encode($response));
+                    }
+    
+                    Notification::make()
+                        ->title('SMS Sent Successfully')
+                        ->body("An SMS notification has been sent to $buyerName regarding order #$orderNumber.")
+                        ->success()
+                        ->send();
+                }
+            }
+
+            
 
     } catch (\Exception $e) {
         DB::rollBack();
@@ -92,76 +147,6 @@ class ManageOrderRequest extends EditRecord
         return $record;
     }
 
-    // **Send SMS only if status changed**
-    
-    if ($statusChanged && !empty($record->phone)) {
-        try {
-            $smsService = app(TeamSSProgramSmsService::class);
-            $buyerName = $record->buyer->full_name ?? 'Customer';
-            $orderNumber = $record->order_number;
-            $totalOrder = $record->getFormattedTotalAttribute();
-            $phone = $record->phone;
-            $message = '';
-           
-
-            switch ($record->status) {
-                case Order::PENDING:
-                    $message = "Hello $buyerName, we’ve received your order #$orderNumber with a total of $totalOrder. It’s currently pending and will be processed soon. Thank you for ordering from Agri Market!";
-                    break;
-
-                case Order::CONFIRMED:
-                    $message = "Good news, $buyerName! Your order #$orderNumber has been confirmed, and we are preparing it for shipment. The total amount is $totalOrder. Thank you for choosing Agri Market!";
-                    break;
-
-                case Order::SHIPPED:
-                    $message = "Hi $buyerName, your order #$orderNumber has been shipped! It’s on the way, and you’ll receive it soon. We appreciate your trust in Agri Market.";
-                    break;
-
-                case Order::OUT_FOR_DELIVERY:
-                    $message = "Hello $buyerName, your order #$orderNumber is out for delivery. Please prepare $totalOrder for payment if needed. Expect it to arrive soon. Thank you for ordering with Agri Market!";
-                    break;
-
-                case Order::COMPLETED:
-                    $message = "Hi $buyerName, your order #$orderNumber has been successfully delivered. We hope you’re happy with your purchase! Let us know if you need anything else.";
-                    break;
-
-                case Order::CANCELLED:
-                    $message = "Hi $buyerName, we regret to inform you that your order #$orderNumber has been canceled. If you need further assistance, feel free to contact us.";
-                    break;
-
-                case Order::RETURNED:
-                    $message = "Hello $buyerName, your return request for order #$orderNumber has been processed. If you have any concerns, please reach out to us.";
-                    break;
-            }
-
-          
-            if (!empty($message)) {
-                $response = $smsService->sendSms($phone, $message);
-
-                // ✅ Ensure the response is logged correctly
-                Log::info('TeamSSProgram SMS Response: ' . json_encode($response));
-
-                if (!isset($response['success']) || !$response['success']) {
-                    Log::error('SMS API Response Error: ' . json_encode($response));
-                }
-
-                Notification::make()
-                    ->title('SMS Sent Successfully')
-                    ->body("An SMS notification has been sent to $buyerName regarding order #$orderNumber.")
-                    ->success()
-                    ->send();
-            }
-
-        } catch (\Exception $e) {
-            Log::error('Error Sending SMS: ' . $e->getMessage());
-
-            Notification::make()
-                ->title('SMS Sending Failed')
-                ->body("Failed to send SMS for order #{$record->order_number}. Please check the SMS service.")
-                ->danger()
-                ->send();
-        }
-    }
 
     return $record;
 }
