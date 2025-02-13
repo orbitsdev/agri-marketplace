@@ -82,7 +82,7 @@ class ManageOrderRequest extends EditRecord
             $smsService = app(TeamSSProgramSmsService::class);
             $buyerName = $record->buyer->full_name ?? 'Customer';
             $orderNumber = $record->order_number;
-            $totalOrder = $record->getFormattedTotalAttribute();
+            $totalOrder = 'Php'.$record->calculateTotalOrders();
             $phone = $record->phone;
             $message = '';
 
