@@ -8,6 +8,7 @@ use Filament\Forms\Form;
 use WireUi\Traits\WireUiActions;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AdminForm;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
@@ -142,7 +143,8 @@ class ManageOrderRequest extends EditRecord
                 }
     
                 if (!empty($message)) {
-                    $smsService->sendSms($phone, $message);
+                    $response =  $smsService->sendSms($phone, $message);
+                    Log::info('TeamSSProgram SMS Response:', $response);
                     Notification::make()
                     ->title('SMS Sent Successfully')
                     ->body("An SMS notification has been sent to $buyerName regarding order #$orderNumber.")
@@ -151,6 +153,7 @@ class ManageOrderRequest extends EditRecord
                 }
     
             } catch (\Exception $e) {
+                Log::error('Error Sending SMS: ' . $e->getMessage());
                 Notification::make()
                 ->title('SMS Sending Failed')
                 ->body("Failed to send SMS for order #{$record->order_number}. Please check the SMS service.")
