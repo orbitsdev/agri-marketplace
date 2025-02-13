@@ -31,4 +31,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'teamssprogram' => [
+        'secret' => env('TEAMSSPROGRAM_SECRET'),
+        'device_id' => env('TEAMSSPROGRAM_DEVICE_ID'),
+        'sim' => env('TEAMSSPROGRAM_SIM', 1),
+        'priority' => env('TEAMSSPROGRAM_PRIORITY', 1),
+    ]
+
 ];

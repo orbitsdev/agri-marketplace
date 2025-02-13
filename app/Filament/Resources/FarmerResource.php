@@ -171,8 +171,9 @@ class FarmerResource extends Resource
                         ->icon('heroicon-s-pencil-square')
                         ->modalWidth('6xl')
                         ->fillForm(function (Model $record) {
-                            $formData = ['status' => $record->status];
 
+                            $formData = ['status' => $record->status];
+                           
                             if (in_array($record->status, [Farmer::STATUS_REJECTED, Farmer::STATUS_BLOCKED])) {
                                 $formData['remarks'] = $record->remarks;
                             }
