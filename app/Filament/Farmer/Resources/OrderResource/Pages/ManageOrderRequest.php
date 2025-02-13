@@ -78,6 +78,8 @@ class ManageOrderRequest extends EditRecord
             ->success()
             ->send();
 
+            dd('test');
+
     } catch (\Exception $e) {
         DB::rollBack();
 
@@ -100,7 +102,7 @@ class ManageOrderRequest extends EditRecord
             $totalOrder = $record->getFormattedTotalAttribute();
             $phone = $record->phone;
             $message = '';
-            dd($message, $phone);
+           
 
             switch ($record->status) {
                 case Order::PENDING:
