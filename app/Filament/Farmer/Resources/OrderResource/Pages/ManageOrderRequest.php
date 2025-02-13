@@ -77,6 +77,7 @@ class ManageOrderRequest extends EditRecord
             ->body("Order #{$record->order_number} status updated to {$record->status}.")
             ->success()
             ->send();
+            dd($statusChanged);
 
             if ($statusChanged && !empty($record->phone)) {
                 dd('test', $statusChanged, $record->phone);
