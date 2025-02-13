@@ -284,7 +284,7 @@ class OrderResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->modifyQueryUsing(fn(Builder $query) => $query->notProcessing()->myBuyersOrder()->latests())
+            ->modifyQueryUsing(fn(Builder $query) => $query->notProcessing()->myBuyersOrder()->latest())
         ;
     }
 
