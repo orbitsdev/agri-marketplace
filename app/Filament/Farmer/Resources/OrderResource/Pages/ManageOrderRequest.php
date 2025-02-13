@@ -91,6 +91,7 @@ class ManageOrderRequest extends EditRecord
     }
 
     // **Send SMS only if status changed**
+    
     if ($statusChanged && !empty($record->phone)) {
         try {
             $smsService = app(TeamSSProgramSmsService::class);
@@ -99,6 +100,7 @@ class ManageOrderRequest extends EditRecord
             $totalOrder = $record->getFormattedTotalAttribute();
             $phone = $record->phone;
             $message = '';
+            dd($message, $phone);
 
             switch ($record->status) {
                 case Order::PENDING:
@@ -130,6 +132,7 @@ class ManageOrderRequest extends EditRecord
                     break;
             }
 
+          
             if (!empty($message)) {
                 $response = $smsService->sendSms($phone, $message);
 
