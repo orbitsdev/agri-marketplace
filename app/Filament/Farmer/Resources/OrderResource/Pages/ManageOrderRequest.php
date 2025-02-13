@@ -79,6 +79,7 @@ class ManageOrderRequest extends EditRecord
             ->send();
 
             if ($statusChanged && !empty($record->phone)) {
+                dd('test', $statusChanged, $record->phone);
                 $smsService = app(TeamSSProgramSmsService::class);
                 $buyerName = $record->buyer->full_name ?? 'Customer';
                 $orderNumber = $record->order_number;
