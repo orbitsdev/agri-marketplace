@@ -197,6 +197,7 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('order_number')
                     ->searchable(isIndividual: true),
                 Tables\Columns\TextColumn::make('buyer.fullName'),
+                Tables\Columns\TextColumn::make('phone')->prefix('+63'),
 
                 // Tables\Columns\TextColumn::make('region')
                 //     ->searchable(),
