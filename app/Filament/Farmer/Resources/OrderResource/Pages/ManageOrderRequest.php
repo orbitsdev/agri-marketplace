@@ -100,7 +100,7 @@ class ManageOrderRequest extends EditRecord
                     break;
 
                 case Order::OUT_FOR_DELIVERY:
-                    $message = "Hello $buyerName, your order #$orderNumber is out for delivery. Please prepare $totalOrder for payment if needed. Expect it to arrive soon. Thank you for ordering with Agri Market!";
+                    $message = "Hello $buyerName, your order #$orderNumber is out for delivery. Please prepare $totalOrder for payment. Expect it to arrive soon. Thank you for ordering with Agri Market!";
                     break;
 
                 case Order::COMPLETED:
