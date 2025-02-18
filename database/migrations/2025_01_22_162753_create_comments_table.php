@@ -12,15 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('comments', function (Blueprint $table) {
-            $table->id(); //
+            $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade'); // Product reference
-            $table->foreignId('buyer_id')->constrained('users')->onDelete('cascade'); // Buyer reference
-            $table->foreignId('farmer_id')->constrained('farmers')->onDelete('cascade'); // Farmer reference
+            $table->foreignId('buyer_id')->nullable()->constrained('users')->onDelete('cascade'); // Buyer reference
+            $table->foreignId('farmer_id')->nullable()->constrained('farmers')->onDelete('cascade'); // Farmer reference
+            $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade'); // Allows replies
             $table->text('content'); // Comment content
-            $table->timestamps(); // Created at & Updated at timestamps
+            $table->timestamps();
 
-            // Add indexes for efficient lookups
-            $table->index(['product_id', 'buyer_id', 'farmer_id']);
+            $table->index(['product_id']);
+            $table->index(['buyer_id']);
+            $table->index(['farmer_id']);
         });
     }
 
