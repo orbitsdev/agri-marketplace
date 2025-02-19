@@ -26,6 +26,129 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class FilamentForm extends Controller
 {
+    public static function profileform()
+    {
+        return [
+
+
+            Wizard::make([
+                Wizard\Step::make('Account Details')
+                    ->schema([
+                        TextInput::make('first_name')
+                            ->required()
+                            ->columnSpan(
+                                [
+                                    'sm' => 2,
+                                    'md' => 4,
+                                    'lg' => 4,
+                                ]
+                            ),
+                        TextInput::make('middle_name')
+                            ->required()
+                            ->columnSpan(
+                                [
+                                    'sm' => 2,
+                                    'md' => 4,
+                                    'lg' => 4,
+                                ]
+                            ),
+                        TextInput::make('last_name')
+                            ->required()
+                            ->columnSpan(
+                                [
+                                    'sm' => 2,
+                                    'md' => 4,
+                                    'lg' => 4,
+                                ]
+                            ),
+
+                        TextInput::make('email')
+                            ->required()
+                            ->disabled(fn(string $operation): bool => $operation === 'App\Livewire\Buyer\EditProfile')
+                            ->unique(ignoreRecord: true)
+                            ->columnSpan([
+                                'sm' => 2,
+                                'md' => 4,
+                                'lg' => 4,
+                            ]),
+
+
+TextInput::make('phone')
+->prefix('+63')
+->mask('9999999999')
+->columnSpan([
+    'sm' => 2,
+    'md' => 4,
+    'lg' => 4,
+])
+,
+
+                        Select::make('role')
+                            ->default(User::FARMER)
+                            ->required()
+                            ->options(User::ROLE_OPTIONS)
+                            ->columnSpan([
+                                'sm' => 2,
+                                'md' => 4,
+                                'lg' => 4,
+                            ])
+                            ->searchable()
+                            ->live()
+
+
+
+                            ->disabled(fn(string $operation): bool => $operation === 'App\Livewire\Buyer\EditProfile'),
+
+                        TextInput::make('password')
+                            ->password()
+                            ->revealable()
+                            ->columnSpan([
+                                'sm' => 2,
+                                'md' => 4,
+                                'lg' => 4,
+                            ])
+                            ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
+                            ->dehydrated(fn(?string $state): bool => filled($state))
+                            ->required(fn(string $operation): bool => $operation === 'create')
+                            ->label(fn(string $operation) => $operation == 'create' ? 'Password' : 'New Password')
+                            ->helperText('Your password will be updated. Make sure to save it in a secure place before proceeding.')
+                            ,
+
+                            SpatieMediaLibraryFileUpload::make('image')
+                            ->image()
+                            ->imageEditor()
+                            ->columnSpanFull()
+                            ->label('Profile'),
+
+
+                    ]),
+                Wizard\Step::make('Farm Details')
+                    ->schema([
+                        ...self::farmerForm(),
+                    ])->hidden(function (Get $get) {
+                        return $get('role') !== User::FARMER;
+                    }),
+                Wizard\Step::make('Farm Documents')
+                    ->schema([
+                        ...self::farmDocuments(),
+                    ])->hidden(function (Get $get) {
+                        return $get('role') !== User::FARMER;
+                    }),
+            ])
+                    ->skippable()
+                ->columns([
+                    'sm' => 2,
+                    'md' => 4,
+                    'lg' => 6,
+                    'xl' => 8,
+                    '2xl' => 12,
+                ])
+                ->columnSpanFull(),
+
+
+
+        ];
+    }
     public static function userForm()
     {
         return [
@@ -64,6 +187,7 @@ class FilamentForm extends Controller
 
                         TextInput::make('email')
                             ->required()
+
                             ->unique(ignoreRecord: true)
                             ->columnSpan([
                                 'sm' => 2,
@@ -71,7 +195,7 @@ class FilamentForm extends Controller
                                 'lg' => 4,
                             ]),
 
-                            
+
 TextInput::make('phone')
 ->prefix('+63')
 ->mask('9999999999')
@@ -131,7 +255,7 @@ TextInput::make('phone')
                         return $get('role') !== User::FARMER;
                     }),
             ])
-            
+
                 ->columns([
                     'sm' => 2,
                     'md' => 4,
@@ -461,8 +585,8 @@ TextInput::make('phone')
                 ->required()
                 ->numeric()
                 ->mask(9999),
-            
-                            
+
+
 TextInput::make('phone')
 ->prefix('+63')
 ->mask('9999999999')

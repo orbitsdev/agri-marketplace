@@ -47,6 +47,7 @@ class BuyerDashboard extends Component implements HasForms, HasActions
 
         $products = Product::published()
         // hasQuantity()
+        ->approveFarmer()
             ->withRelations()
             ->available()
             ->when($this->search, function ($query) {

@@ -160,4 +160,13 @@ public function scopePublished($query)
     {
         return $query->where('is_published', false);
     }
+
+
+    public function scopeApproveFarmer($query)
+{
+    return $query->whereHas('farmer', function ($q) {
+        $q->where('status', Farmer::STATUS_APPROVED);
+    });
+}
+
 }

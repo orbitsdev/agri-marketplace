@@ -9,6 +9,7 @@ use App\Livewire\OrderHistory;
 use App\Livewire\FarmerDetails;
 use App\Livewire\BuyerDashboard;
 use App\Livewire\ProductDetails;
+use App\Livewire\Buyer\EditProfile;
 use App\Livewire\FarmerNotApproved;
 use App\Livewire\WaitingForApproval;
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +42,8 @@ Route::middleware([
     'account.active'
 ])->group(function () {
 
+// edit profile
+Route::get('/edit/profile{record}', EditProfile::class)->name('edit.profile');
 
 Route::get('/farmer/status', WaitingForApproval::class)->name('farmer.waiting-for-approval')->middleware(['farmer.check.approval']);
 

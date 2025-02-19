@@ -37,13 +37,13 @@
           <div class="ml-auto flex items-center">
             <!-- Cart Badge -->
             @livewire('cart-badge')
-        
+
             <!-- My Orders Link -->
             <div class="flex items-center space-x-6">
               <!-- My Orders Icon -->
               <div class="ml-4 flow-root lg:ml-6 relative group">
-                  <a 
-                      href="{{ route('order.history', ['name' => Auth::user()->fullNameSlug()]) }}" 
+                  <a
+                      href="{{ route('order.history', ['name' => Auth::user()->fullNameSlug()]) }}"
                       class="-m-2 flex items-center p-2">
                       <!-- Icon -->
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-gray-400 group-hover:text-gray-500">
@@ -55,11 +55,11 @@
                       My Orders
                   </div>
               </div>
-          
+
               <!-- My Chats Icon -->
               <div class="ml-4 flow-root lg:ml-6 relative group">
-                  <a 
-                      href="{{ url('/chats') }}" 
+                  <a
+                      href="{{ url('/chats') }}"
                       class="-m-2 flex items-center p-2">
                       <!-- Chat Icon -->
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-gray-400 group-hover:text-gray-500">
@@ -72,27 +72,27 @@
                   </div>
               </div>
           </div>
-          
-          
-          
-        
+
+
+
+
             <!-- User Name (Large Screens) -->
             <div class="ml-4 hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                 <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">
                     {{ Auth::user()->full_name }}
                 </a>
             </div>
-        
+
             <!-- Profile Dropdown -->
             <div class="ml-4 relative" x-data="{ open: false }">
               <!-- Profile Button -->
-              <button 
-                  @click="open = ! open" 
+              <button
+                  @click="open = ! open"
                   class="flex items-center text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition"
                   title="Update Profile">
                   <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->getImage() }}" alt="{{ Auth::user()->name }}">
               </button>
-          
+
               <!-- Dropdown Menu -->
               <div
                   x-show="open"
@@ -107,35 +107,35 @@
               >
                   <div class="py-1">
                       <!-- Profile Link -->
-                      <a 
-                          href="{{ route('profile.show') }}" 
-                          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
+                      <a
+                          href="{{ route('edit.profile',['record'=> Auth::user()]) }}"
+                          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           title="View or Update Profile">
                           {{ __('Profile') }}
                       </a>
-          
+
                       <!-- Address Link -->
-                      <a 
-                          href="{{ route('address.index', ['name' => Auth::user()->fullNameSlug()]) }}" 
-                          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
+                      <a
+                          href="{{ route('address.index', ['name' => Auth::user()->fullNameSlug()]) }}"
+                          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           title="Manage Your Address">
                           {{ __('My Address') }}
                       </a>
-          
+
                       <!-- Order History Link -->
-                      {{-- <a 
-                          href="{{ route('order.history', ['name' => Auth::user()->fullNameSlug()]) }}" 
-                          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
+                      {{-- <a
+                          href="{{ route('order.history', ['name' => Auth::user()->fullNameSlug()]) }}"
+                          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           title="View Your Order History">
                           {{ __('Order History') }}
                       </a> --}}
-          
+
                       <!-- Logout Button -->
                       <form method="POST" action="{{ route('logout') }}">
                           @csrf
-                          <button 
-                              type="submit" 
-                              class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
+                          <button
+                              type="submit"
+                              class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                               title="Log Out of Your Account">
                               {{ __('Log Out') }}
                           </button>
@@ -143,9 +143,9 @@
                   </div>
               </div>
           </div>
-          
+
         </div>
-        
+
             </div>
           </div>
     </nav>

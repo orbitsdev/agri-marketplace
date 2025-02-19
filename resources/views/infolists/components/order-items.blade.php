@@ -1,6 +1,6 @@
 <x-dynamic-component :component="$getEntryWrapperView()" :entry="$entry">
-    <div class="overflow-x-auto " >
-        <table class="min-w-full border-collapse border border-gray-200">
+    <div class="overflow-x-auto  w-full" >
+        <table class="w-full border-collapse border border-gray-200">
             <thead>
                 <tr>
                     <th class="border border-gray-300 px-4  ">Image</th>

@@ -44,10 +44,10 @@ class OrderResource extends Resource
             ->myBuyersOrder() // Ensure this scope exists and filters appropriately
             ->pending() // Ensure this scope filters only pending orders
             ->count();
-    
+
         return $count > 0 ? (string) $count : null;
     }
-    
+
 
     public static function infolist(Infolist $infolist): Infolist
 {
@@ -62,7 +62,7 @@ class OrderResource extends Resource
                     // Infolists\Components\TextEntry::make('total.'),
                     ViewEntry::make('total')
     ->view('infolists.components.order-total')
-                       
+
 
                     // Infolists\Components\SelectEntry::make('farmer_id')
                     //     ->label('Farmer')
@@ -70,11 +70,11 @@ class OrderResource extends Resource
                 ])
                 ->columns(2),
 
-               
+
 
                 Infolists\Components\Section::make('Buyer ')
                 ->schema([
-                   
+
                         Infolists\Components\TextEntry::make('buyer.full_name')->label('Name'),
                 //     Infolists\Components\RepeatableEntry::make('items')
                 //         ->schema([
@@ -85,11 +85,11 @@ class OrderResource extends Resource
                 //         ])
                 //         ->contained(false)
                 //         ->label('Items')
-                        
-                //         ->columnSpan('full'),
-                    
 
-                
+                //         ->columnSpan('full'),
+
+
+
                 ]),
                 Infolists\Components\Section::make('Items')
                 ->schema([
@@ -102,7 +102,7 @@ class OrderResource extends Resource
                 //         ])
                 //         ->contained(false)
                 //         ->label('Items')
-                        
+
                 //         ->columnSpan('full'),
 
                 ViewEntry::make('Order Items')->label('')
@@ -156,7 +156,7 @@ class OrderResource extends Resource
                         Order::RETURNED => 'danger', // Returned orders also use danger color (red).
                         default => 'gray', // Any unknown state defaults to neutral (gray).
                     }),
-                
+
                     Infolists\Components\TextEntry::make('order_date')
                         ->label('Order Date'),
                     Infolists\Components\TextEntry::make('shipped_date')
@@ -167,14 +167,20 @@ class OrderResource extends Resource
                         TextEntry::make('remarks')
                         ->label('Remarks')->markdown()->columnSpanFull()
                         ->hidden(function (Model $record) {
-            
+
                             return !in_array($record->status, [Order::CANCELLED, Order::RETURNED]);
                         }),
                 ])
                 ->columns(2),
+            Infolists\Components\Section::make('Order Movement')
+                ->schema([
+                    ViewEntry::make(' ')
+    ->view('infolists.components.order-movement')
+                ])
+                ->columns(2),
 
             // Order Items Section
-            
+
         ]);
 }
 
@@ -238,7 +244,7 @@ class OrderResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                
+
                 Tables\Columns\TextColumn::make('delivery_date')
                     ->dateTime()
                     ->sortable()
@@ -272,7 +278,7 @@ class OrderResource extends Resource
                     Tables\Actions\Action::make('Manage')
                     ->icon('heroicon-s-pencil-square')
                         ->url(fn(Model $record): string => route('filament.farmer.resources.orders.manager-order', ['record' => $record])),
-                  
+
 
                         Tables\Actions\ViewAction::make()->modalWidth(MaxWidth::SevenExtraLarge),
                     Tables\Actions\EditAction::make('update'),
