@@ -36,10 +36,23 @@ class Comment extends Model
         return $this->belongsTo(Comment::class, 'parent_id');
     }
 
-    public function scopeVisibleToUser($query, $farmerId, $productId, $buyerId)
-    {
-        return $query->where('farmer_id', $farmerId)
-            ->where('product_id', $productId)
-            ->where('buyer_id', $buyerId);
-    }
+    public function scopeVisibleToUser($query, $buyerId, $farmerId, $productId)
+{
+    return $query->where('product_id', $productId)
+        ->where(function ($query) use ($buyerId, $farmerId) {
+            $query->where('buyer_id', $buyerId) // Show comments for the authenticated buyer
+                  ->orWhere('farmer_id', $farmerId); // Show all comments to the farmer (product owner)
+        });
+}
+
+public function scopePrivateToFarmerAndBuyer($query, $buyerId, $farmerId, $productId)
+{
+    return $query->where('product_id', $productId)->where('farmer_id', $farmerId)->where('buyer_id', $buyerId)
+    ;
+
+}
+
+
+
+
 }

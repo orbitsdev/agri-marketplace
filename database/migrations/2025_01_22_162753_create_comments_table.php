@@ -14,15 +14,15 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade'); // Product reference
-            $table->foreignId('buyer_id')->nullable()->constrained('users')->onDelete('cascade'); // Buyer reference
-            $table->foreignId('farmer_id')->nullable()->constrained('farmers')->onDelete('cascade'); // Farmer reference
-            $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade'); // Allows replies
-            $table->text('content'); // Comment content
+            $table->foreignId('buyer_id')->constrained('users')->onDelete('cascade'); // Buyer reference
+            $table->foreignId('farmer_id')->constrained('farmers')->onDelete('cascade'); // Farmer reference
+            $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade'); // Allow replies
+            $table->text('content'); // Message content
+            $table->boolean('is_read')->default(false); // Message content
             $table->timestamps();
 
-            $table->index(['product_id']);
-            $table->index(['buyer_id']);
-            $table->index(['farmer_id']);
+            // Indexes for faster queries
+            $table->index(['product_id', 'buyer_id', 'farmer_id', 'parent_id']);
         });
     }
 

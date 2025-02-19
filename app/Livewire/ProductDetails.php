@@ -37,11 +37,23 @@ class ProductDetails extends Component implements HasForms, HasActions
 
      public function loadComments()
     {
-        $this->comments = Comment::where('product_id', $this->product->id)
-            ->where('farmer_id', $this->product->farmer->id)
-            ->where('buyer_id', Auth::id())
+        $buyerId = Auth::id();
+        $farmerId = $this->product->farmer->id;
+        $productId = $this->product->id;
+
+        //  dd($productId, $buyerId, $farmerId);
+
+        $buyerId = Auth::id();
+        $farmerId = $this->product->farmer->id;
+        $productId = $this->product->id;
+
+        $this->comments = Comment::with('replies')
+            ->privateToFarmerAndBuyer($buyerId, $farmerId, $productId)
+            ->whereNull('parent_id') // Only fetch top-level comments
             ->latest()
             ->get();
+
+            // dd($this->comments);
     }
     public function render()
     {
@@ -123,6 +135,57 @@ class ProductDetails extends Component implements HasForms, HasActions
                 }
             });
     }
+    // public function addMessageAction(): Action
+    // {
+    //     return Action::make('addMessage')
+    //         ->label('Message')
+    //         ->size('xl')
+    //         ->modalHeading('Add New Message')
+    //         ->color('primary')
+    //         ->icon('heroicon-o-chat-bubble-bottom-center-text')
+    //         ->form([
+    //             Textarea::make('content')
+    //                 ->required()
+    //                 ->label('Message Content')
+    //                 ->columnSpanFull()
+    //                 ->helperText('Write your message to the product owner here.')
+    //                 ->rows(5),
+    //         ])
+    //         ->action(function (array $arguments, array $data) {
+
+    //             try {
+    //                 $record = Product::findOrFail($arguments['record']);
+    //                 DB::beginTransaction();
+    //                 $productId = $record->id;
+    //                 $farmerId = $record->farmer->id;
+    //                $buyerId = Auth::user()->id;
+
+    //                 // Assuming $arguments['product_id'], $arguments['buyer_id'], and $arguments['farmer_id'] are provided
+    //                 $comment = Comment::create([
+    //                     'product_id' => $productId,
+    //                     'buyer_id' => $buyerId,
+    //                     'farmer_id' => $farmerId,
+    //                     'content' => $data['content'],
+    //                 ]);
+
+    //                 DB::commit();
+    //                 $this->loadComments();
+    //                 $this->dialog()->success(
+    //                     title: 'Message Sent',
+    //                     description: 'Your message has been successfully sent to the product owner.'
+    //                 );
+
+    //             } catch (\Exception $e) {
+    //                 DB::rollBack();
+
+    //                 $this->dialog()->error(
+    //                     title: 'Error',
+    //                     description: 'Failed to send the message. Please try again later. ' . $e->getMessage()
+    //                 );
+    //             }
+    //         });
+    // }
+
     public function addMessageAction(): Action
     {
         return Action::make('addMessage')
@@ -140,40 +203,28 @@ class ProductDetails extends Component implements HasForms, HasActions
                     ->rows(5),
             ])
             ->action(function (array $arguments, array $data) {
-    
-                try {
-                    $record = Product::findOrFail($arguments['record']);
-                    DB::beginTransaction();
-                    $productId = $record->id;
-                    $farmerId = $record->farmer->id;
-                   $buyerId = Auth::user()->id;  
-                    
-                    // Assuming $arguments['product_id'], $arguments['buyer_id'], and $arguments['farmer_id'] are provided
-                    $comment = Comment::create([
-                        'product_id' => $productId,
-                        'buyer_id' => $buyerId,
-                        'farmer_id' => $farmerId,
-                        'content' => $data['content'],
-                    ]);
-    
-                    DB::commit();
-                    $this->loadComments();
-                    $this->dialog()->success(
-                        title: 'Message Sent',
-                        description: 'Your message has been successfully sent to the product owner.'
-                    );
-    
-                } catch (\Exception $e) {
-                    DB::rollBack();
-    
-                    $this->dialog()->error(
-                        title: 'Error',
-                        description: 'Failed to send the message. Please try again later. ' . $e->getMessage()
-                    );
-                }
+                DB::beginTransaction();
+
+                $productId = $this->product->id;
+                $farmerId = $this->product->farmer->id;
+                $buyerId = Auth::user()->id;
+
+                Comment::create([
+                    'product_id' => $productId,
+                    'buyer_id' => $buyerId,
+                    'farmer_id' => $farmerId,
+                    'content' => $data['content'],
+                ]);
+
+                DB::commit();
+
+                $this->loadComments();
+                $this->dialog()->success(
+                    title: 'Message Sent',
+                    description: 'Your message has been successfully sent to the product owner.'
+                );
             });
     }
-
 
     public function deleteMessageAction(): Action
 {
@@ -214,5 +265,70 @@ class ProductDetails extends Component implements HasForms, HasActions
         });
 }
 
-    
+public function addReplyAction(): Action
+{
+    return Action::make('addReply')
+        ->label('Reply')
+        ->size('xs')
+        ->extraAttributes([
+            'style' => 'font-weight:normal; color:blue;'
+        ])
+        // ->icon('heroicon-o-reply')
+        ->link()
+        ->modalHeading('Add Reply')
+        ->color('primary')
+        ->form([
+            Textarea::make('content')
+                ->required()
+                ->label('Reply Content')
+                ->columnSpanFull()
+                ->helperText('Write your reply to this comment.')
+                ->rows(4),
+        ])
+        ->action(function (array $data, array $arguments) {
+            DB::beginTransaction();
+
+            try {
+                $productId = $this->product->id;
+                $farmerId = $this->product->farmer->id;
+                $buyerId = Auth::id();
+                $commentId = $arguments['record']; // Parent Comment ID
+
+                // Ensure the comment exists
+                $parentComment = Comment::findOrFail($commentId);
+
+                // Prevent replies to replies (only allow replies on top-level comments)
+                if ($parentComment->parent_id !== null) {
+                    throw new \Exception('You can only reply to top-level comments.');
+                }
+
+                // Create the reply comment
+                Comment::create([
+                    'product_id' => $productId,
+                    'buyer_id' => $buyerId,
+                    'farmer_id' => $farmerId,
+                    'content' => $data['content'],
+                    'parent_id' => $commentId, // Set parent_id to create the reply
+                ]);
+
+                DB::commit();
+                $this->loadComments(); // Refresh comments after adding reply
+
+                $this->dialog()->success(
+                    title: 'Reply Sent',
+                    description: 'Your reply has been successfully added.'
+                );
+            } catch (\Exception $e) {
+                DB::rollBack();
+                $this->dialog()->error(
+                    title: 'Error',
+                    description: 'Failed to send the reply. ' . $e->getMessage()
+                );
+            }
+        });
+}
+
+
+
+
 }
