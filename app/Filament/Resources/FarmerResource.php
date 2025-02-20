@@ -27,6 +27,7 @@ use App\Filament\Resources\FarmerResource\Pages;
 use Filament\Infolists\Components\RepeatableEntry;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\FarmerResource\RelationManagers;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 
 class FarmerResource extends Resource
 {
@@ -40,7 +41,7 @@ class FarmerResource extends Resource
     {
         return $infolist
             ->schema([
-                ImageEntry::make('user.profile_photo_path')->label('Profile'),
+                SpatieMediaLibraryImageEntry::make('image')->label('Profile'),
                 TextEntry::make('user.fullName')
                     ->label('Farm Owner'),
 
@@ -53,12 +54,12 @@ class FarmerResource extends Resource
 
                 TextEntry::make('farm_size')
                     ->label('Farm Size'),
-                  
+
 
                 TextEntry::make('description')
                     ->label('Description')->markdown()->columnSpanFull(),
 
-              
+
 
                 // TextEntry::make('created_at')
                 //     ->label('Created At')
@@ -104,7 +105,7 @@ class FarmerResource extends Resource
                     TextEntry::make('remarks')
                     ->label('Remarks')->markdown()->columnSpanFull()
                     ->hidden(function (Model $record) {
-        
+
                         return !in_array($record->status, [Farmer::STATUS_BLOCKED, Farmer::STATUS_REJECTED]);
                     }),
 
@@ -173,7 +174,7 @@ class FarmerResource extends Resource
                         ->fillForm(function (Model $record) {
 
                             $formData = ['status' => $record->status];
-                           
+
                             if (in_array($record->status, [Farmer::STATUS_REJECTED, Farmer::STATUS_BLOCKED])) {
                                 $formData['remarks'] = $record->remarks;
                             }

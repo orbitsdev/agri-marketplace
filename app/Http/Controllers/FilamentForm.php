@@ -97,7 +97,7 @@ TextInput::make('phone')
 
 
 
-                            ->disabled(fn(string $operation): bool => $operation === 'App\Livewire\Buyer\EditProfile'),
+                            ->disabled(fn(string $operation): bool => $operation === 'edit'),
 
                         TextInput::make('password')
                             ->password()

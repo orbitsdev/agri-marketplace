@@ -14,6 +14,7 @@ use App\Filament\Farmer\Pages\Reports;
 use App\Http\Middleware\EnsureIsFarmer;
 use Filament\Navigation\NavigationItem;
 use App\Filament\Farmer\Pages\EditProfile;
+use App\Filament\Farmer\Pages\ViewProfile;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\Pages\Auth\RegisterFarmer;
 use App\Livewire\DatabaseCustomNotifications;
@@ -72,9 +73,7 @@ class FarmerPanelProvider extends PanelProvider
                 EnsureIsFarmer::class
             ])
 
-            ->userMenuItems([
-                'profile' => MenuItem::make()->url(fn (): string => EditProfile::getUrl(), )
-            ])
+            ->profile(EditProfile::class,isSimple:false)
             // ->plugins([
             //     FilamentEditProfilePlugin::make()
             //     ->setTitle('My Profile')
@@ -119,6 +118,13 @@ class FarmerPanelProvider extends PanelProvider
                 //     ->url(fn (): string => Dashboard::getUrl())
                 //     ->isActiveWhen(fn () => request()->routeIs('filament.admin.pages.dashboard')),
                 // ...
+            ])
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label('Farm Details')
+                    ->url(fn (): string => ViewProfile::getUrl())
+                    ->icon('heroicon-s-clipboard-document'),
+
             ])
             // ->databaseNotifications()
             ->databaseNotifications(DatabaseCustomNotifications::class)
