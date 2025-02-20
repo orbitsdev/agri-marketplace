@@ -13,6 +13,7 @@ use App\Http\Middleware\EnsureIsFarmer;
 use Filament\Navigation\NavigationItem;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\Pages\Auth\RegisterFarmer;
+use App\Livewire\DatabaseCustomNotifications;
 use App\Http\Middleware\EnsureFarmerIsApproved;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -88,7 +89,9 @@ class FarmerPanelProvider extends PanelProvider
                 //     ->isActiveWhen(fn () => request()->routeIs('filament.admin.pages.dashboard')),
                 // ...
             ])
-            ->databaseNotifications()
+            // ->databaseNotifications()
+            ->databaseNotifications(DatabaseCustomNotifications::class)
+
             ->sidebarCollapsibleOnDesktop()
 
 

@@ -11,6 +11,8 @@ use Filament\Resources\Resource;
 use Filament\Tables\Grouping\Group;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FilamentForm;
+use Filament\Support\Enums\ActionSize;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -65,6 +67,8 @@ class ProductResource extends Resource
 
                     ToggleColumn::make('is_published')->label('Publish'),
 
+                    Tables\Columns\TextColumn::make('comments_count')->counts('comments')->label('Messages'),
+
                 // Tables\Columns\TextColumn::make('status'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -87,6 +91,20 @@ class ProductResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
+                    Tables\Actions\Action::make('View Messages') // Disable closing the modal by clicking outside
+                    ->modalWidth('7xl')
+
+                    ->label('Messages') // Add label for better UX
+                    ->icon('heroicon-s-chat-bubble-left-right') // Optional: Add an icon for better UI
+                    ->url(function (Model $record) {
+
+                      return self::getUrl('messages',['record'=>$record->id]);
+
+                    }, shouldOpenInNewTab: true)->visible(function(Model $record){
+                        return $record->has_comments;
+                    }),
+
+
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make()->color('gray'),
@@ -104,7 +122,7 @@ class ProductResource extends Resource
                 Group::make('category.name')
                     ->label('By Category')
                     ->titlePrefixedWithLabel(false),
-                    
+
             ])
             ->defaultGroup('category.name')
             ->modifyQueryUsing(fn (Builder $query) => $query->myProduct(Auth::user()->farmer->id))
@@ -124,6 +142,7 @@ class ProductResource extends Resource
             'index' => Pages\ListProducts::route('/'),
             'create' => Pages\CreateProduct::route('/create'),
             'edit' => Pages\EditProduct::route('/{record}/edit'),
+            'messages' => Pages\ProductComments::route('/{record}/messages'),
         ];
     }
 }

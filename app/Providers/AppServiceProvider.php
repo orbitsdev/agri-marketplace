@@ -10,6 +10,9 @@ use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentColor;
 use Filament\Support\View\Components\Modal;
 use Filament\Support\Colors\Color;
+
+use App\Filament\Notification;
+use Filament\Notifications\Notification as BaseNotification;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -48,5 +51,7 @@ class AppServiceProvider extends ServiceProvider
             'primary' => "#048E5C",
 
         ]);
+
+        $this->app->bind(BaseNotification::class, Notification::class);
     }
 }

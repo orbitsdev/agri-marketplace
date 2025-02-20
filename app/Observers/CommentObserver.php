@@ -3,8 +3,10 @@
 namespace App\Observers;
 
 use App\Models\Comment;
-use Filament\Notifications\Notification;
+
+use App\Filament\Notification;
 use Filament\Notifications\Actions\Action;
+
 class CommentObserver
 {
     /**
@@ -34,15 +36,16 @@ class CommentObserver
                 ->title($notificationTitle)
                 ->body("\"{$comment->content}\"")
                 ->sendToDatabase($recipient)
+                ->size('YOOW')
+                // ->mydata([
+                //     'comment_id' => $comment->id,
+                //     'product_id' => $product->id,
+                //     'farmer_id' => $farmer->id,
+                //     'buyer_id' => $buyer->id,
+                //     'comment_content' => $comment->content,
+                // ])
 
-                ->actions([
-                    Action::make('markAsUnread')
-                        ->button()
-                        ->markAsUnread(),
 
-                        Action::make('view')
-                        ->button(),
-                ])
                 ;
         }
 

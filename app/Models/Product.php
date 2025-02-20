@@ -149,6 +149,12 @@ public function comments()
     return $this->hasMany(Comment::class);
 }
 
+public function getHasCommentsAttribute(): bool
+{
+    return $this->comments()->exists(); // ✅ Returns true if comments exist
+}
+
+
 
 public function scopePublished($query)
     {
@@ -168,5 +174,7 @@ public function scopePublished($query)
         $q->where('status', Farmer::STATUS_APPROVED);
     });
 }
+
+
 
 }
