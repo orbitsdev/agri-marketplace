@@ -115,7 +115,7 @@
                                     <div class="flex-none py-10">
                                         <img src="{{ $comment->creator === 'Farmer' ? $comment->farmer->user->getImage() : $comment->buyer->getImage() }}"
                                              alt="{{ $comment->creator === 'Farmer' ? $comment->farmer->user->full_name : $comment->buyer->full_name }}"
-                                             class="h-10 w-10 rounded-full bg-gray-100">
+                                             class="h-10 w-10 rounded-full bg-gray-100 object-cover">
                                     </div>
 
                                     <!-- Comment Content -->
@@ -144,7 +144,7 @@
                                                     <div class="flex-none">
                                                         <img src="{{ $reply->creator === 'Farmer' ? $reply->farmer->user->getImage() : $reply->buyer->getImage() }}"
                                                              alt="{{ $reply->creator === 'Farmer' ? $reply->farmer->user->full_name : $reply->buyer->full_name }}"
-                                                             class="h-8 w-8 rounded-full bg-gray-100">
+                                                             class="h-8 w-8 rounded-full bg-gray-100 object-cover">
                                                     </div>
 
                                                     <!-- Reply Content -->
