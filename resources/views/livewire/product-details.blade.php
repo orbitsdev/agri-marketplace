@@ -87,10 +87,11 @@
             <div class="border-t py-8">
                 <div class="mx-auto max-w-7xl">
                     <!-- Section Label -->
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900">Transaction Conversation</h2>
-                        <p class="text-sm text-gray-500">Communicate directly with the seller about this product.</p>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-900">Transaction Conversation</h2>
+                        <p class="text-sm text-gray-500 mt-2 md:mt-0">Communicate directly with the seller about this product.</p>
                     </div>
+
 
                     <!-- Add Message Action -->
                     <div class="flex justify-end">

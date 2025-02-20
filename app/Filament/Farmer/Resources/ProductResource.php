@@ -48,6 +48,8 @@ class ProductResource extends Resource
                     SpatieMediaLibraryImageColumn::make('image') ->defaultImageUrl(url('/images/image-placeholder2.jpg')),
                 Tables\Columns\TextColumn::make('product_name')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('short_description')->wrap()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('quantity')
                     ->numeric()
                     ->sortable(),
