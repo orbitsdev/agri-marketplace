@@ -17,8 +17,8 @@
             <!-- Desktop menu -->
             <div class="hidden lg:flex space-x-8">
                 <a href="{{route('dashboard')}}" class="text-sm font-medium text-gray-700 hover:text-gray-800">Agri Products</a>
-                <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">Farms</a>
-                <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">About us</a>
+                {{-- <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">Farms</a>
+                <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">About us</a> --}}
             </div>
 
             <div class="flex items-center space-x-4">
@@ -53,8 +53,8 @@
         <div x-show="mobileMenuOpen" class="lg:hidden">
             <div class="pt-2 pb-3 space-y-1">
                 <a href="{{route('dashboard')}}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">Agri Products</a>
-                <a href="#" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">Farms</a>
-                <a href="#" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">About us</a>
+                {{-- <a href="#" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">Farms</a>
+                <a href="#" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">About us</a> --}}
             </div>
             <div class="border-t border-gray-200 pt-4 pb-3">
                 <div class="px-5 flex items-center">

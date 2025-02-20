@@ -105,4 +105,44 @@ public function addReplyAction(): Action
             }
         });
 }
+
+public function deleteMessageAction(): Action
+{
+    return Action::make('deleteMessage')
+        ->label('Delete')
+        ->iconButton()
+        ->color('danger')
+        ->icon('heroicon-o-trash')
+        ->requiresConfirmation()
+        ->modalHeading('Confirm Delete')
+        ->modalDescription('Are you sure you want to delete this message? This action cannot be undone.')
+        ->action(function (array $arguments) {
+            try {
+                $commentId = $arguments['record'];
+
+                DB::beginTransaction();
+
+                // Ensure the comment exists and the user is authorized to delete it
+                $comment = Comment::findOrFail($commentId);
+                $comment->delete();
+
+                DB::commit();
+
+                Notification::make()
+                ->title('Message Deleted')
+                ->body('The message has been successfully deleted.')
+                ->success()
+                ->send();
+            } catch (\Exception $e) {
+                DB::rollBack();
+
+                Notification::make()
+                ->title('Error')
+                ->body('Failed to delete the reply. ' . $e->getMessage())
+                ->danger()
+                ->send();
+            }
+        });
+}
+
 }
