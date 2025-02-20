@@ -39,6 +39,9 @@ class CommentObserver
                     Action::make('markAsUnread')
                         ->button()
                         ->markAsUnread(),
+
+                        Action::make('view')
+                        ->button(),
                 ])
                 ;
         }
