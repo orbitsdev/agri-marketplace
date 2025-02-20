@@ -82,68 +82,7 @@
                     </section>
                 </div>
             </div>
-            {{-- <div class="border-t py-8">
-                <div class="mx-auto max-w-7xl">
-                    <!-- Section Label -->
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900">Transaction Conversation</h2>
-                        <p class="text-sm text-gray-500">Communicate directly with the seller about this product.</p>
-                    </div>
-
-                    <!-- Add Message Action -->
-                    <div class="flex justify-end">
-                        {{ ($this->addMessageAction)(['record' => $product->id]) }}
-                    </div>
-
-                    <!-- Comments Section -->
-                    <div class="mt-8">
-                        <h3 class="text-xl font-semibold text-gray-900">Conversation History</h3>
-
-                        <div class="-my-10">
-                            <div class="-my-10">
-                                @forelse ($comments as $comment)
-                                    <div class="relative flex space-x-4 text-sm text-gray-500">
-                                        <!-- Delete Button -->
-                                        @if (auth()->id() === $comment->buyer_id || auth()->id() === $product->farmer->user_id)
-                                            <div class="absolute top-0 right-0 p-2">
-                                                {{ ($this->deleteMessageAction)(['record' => $comment->id]) }}
-                                            </div>
-                                        @endif
-
-                                        <!-- User Avatar -->
-                                        <div class="flex-none py-10">
-                                            <img src="{{ $comment->buyer->getImage() }}"
-                                                 alt="{{ $comment->buyer->full_name }}"
-                                                 class="h-10 w-10 rounded-full bg-gray-100">
-                                        </div>
-
-                                        <!-- Comment Content -->
-                                        <div class="flex-1 py-10">
-                                            <h4 class="font-medium text-gray-900">{{ $comment->buyer->full_name }}</h4>
-                                            <p class="text-xs text-gray-500">
-                                                <time datetime="{{ $comment->created_at }}">{{ $comment->created_at->format('F d, Y') }}</time>
-                                            </p>
-
-                                            <div class="mt-4 text-sm text-gray-500">
-                                                <p>{{ $comment->content }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Divider Between Comments -->
-                                    @if (!$loop->last)
-                                        <div class="border-t border-gray-200"></div>
-                                    @endif
-                                @empty
-                                    <!-- No Comments Message -->
-                                    <p class="text-gray-500 mt-4">No messages yet. Start a conversation with the seller!</p>
-                                @endforelse
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
+            
 
             <div class="border-t py-8">
                 <div class="mx-auto max-w-7xl">
