@@ -17,11 +17,25 @@ class CommentObserver
             $buyer = $comment->buyer;
             $farmer = $comment->farmer;
 
+
+            $recipient = $farmer->user;
+            $notificationTitle = "{$buyer->full_name} commented on Product '{$product->product_name}' ({$product->code})";
+
+            if ($comment->parent_id) {
+                $parentComment = Comment::find($comment->parent_id);
+
+                if ($parentComment) {
+                    $recipient = $parentComment->buyer->user;
+                    $notificationTitle = "{$buyer->full_name} replied to a comment on '{$product->product_name}' ({$product->code})";
+                }
+            }
+
             Notification::make()
-                ->title("{$buyer->full_name} commented on Product \n'{$product->product_name}' ( {$product->code})\n")
-                ->body("{$comment->content}")
-                ->sendToDatabase($farmer->user);
+                ->title($notificationTitle)
+                ->body("\"{$comment->content}\"")
+                ->sendToDatabase($recipient);
         }
+
 
 
 
