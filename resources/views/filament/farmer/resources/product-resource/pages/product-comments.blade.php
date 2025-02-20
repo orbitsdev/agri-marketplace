@@ -2,15 +2,21 @@
     <div class="p-4 space-y-4">
         <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Product Comments</h2>
 
-        @forelse ($record->comments as $comment)
+        @forelse ($record->latestComments as $comment)
             <div class="p-3 border rounded-lg shadow-sm flex gap-3 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
                 <!-- User Avatar -->
-                <img src="{{ $comment->buyer->getImage() }}" alt="User Image" class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700">
+                <img src="{{ $comment->creator === 'Farmer' ? $comment->farmer->user->getImage() : $comment->buyer->getImage() }}"
+                     alt="User Image"
+                     class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700">
 
                 <div class="flex-1">
                     <p class="text-sm font-semibold text-gray-900 dark:text-gray-200">
-                        {{ $comment->buyer->full_name ?? 'Unknown Buyer' }}
+                        {{ $comment->creator === 'Farmer' ? $comment->farmer->user->full_name : $comment->buyer->full_name }}
                     </p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                        <time datetime="{{ $comment->created_at }}">{{ $comment->created_at->format('F d, Y h:i A') }}</time>
+                    </p>
+
                     <p class="text-base text-gray-900 dark:text-gray-200">
                         {{ $comment->content }}
                     </p>
@@ -26,12 +32,18 @@
                             @foreach ($comment->replies as $reply)
                                 <div class="p-2 border-t border-gray-200 dark:border-gray-700 flex gap-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
                                     <!-- Reply Avatar -->
-                                    <img src="{{ $reply->buyer->getImage() }}" alt="User Image" class="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700">
+                                    <img src="{{ $reply->creator === 'Farmer' ? $reply->farmer->user->getImage() : $reply->buyer->getImage() }}"
+                                         alt="User Image"
+                                         class="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700">
 
                                     <div>
                                         <p class="text-sm font-semibold text-gray-900 dark:text-gray-200">
-                                            {{ $reply->buyer->full_name ?? 'Unknown' }}
+                                            {{ $reply->creator === 'Farmer' ? $reply->farmer->user->full_name : $reply->buyer->full_name }}
                                         </p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                                            <time datetime="{{ $reply->created_at }}">{{ $reply->created_at->format('F d, Y h:i A') }}</time>
+                                        </p>
+
                                         <p class="text-sm text-gray-900 dark:text-gray-200">
                                             {{ $reply->content }}
                                         </p>

@@ -149,6 +149,19 @@ public function comments()
     return $this->hasMany(Comment::class);
 }
 
+public function latestComments()
+{
+    return $this->hasMany(Comment::class)
+        ->whereNull('parent_id') // Fetch only top-level comments
+        ->with(['replies' => function ($query) {
+            $query->orderBy('created_at', 'asc'); // Ensure replies are ordered correctly
+        }])
+        ->orderBy('created_at', 'desc'); // Get latest top-level comments first
+}
+
+
+
+
 public function getHasCommentsAttribute(): bool
 {
     return $this->comments()->exists(); // ✅ Returns true if comments exist

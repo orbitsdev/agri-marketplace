@@ -82,7 +82,7 @@
                     </section>
                 </div>
             </div>
-            
+
 
             <div class="border-t py-8">
                 <div class="mx-auto max-w-7xl">
@@ -97,7 +97,6 @@
                         {{ ($this->addMessageAction)(['record' => $product->id]) }}
                     </div>
 
-                    <!-- Comments Section -->
                     <div class="mt-8">
                         <h3 class="text-xl font-semibold text-gray-900">Conversation History</h3>
 
@@ -113,14 +112,16 @@
 
                                     <!-- User Avatar -->
                                     <div class="flex-none py-10">
-                                        <img src="{{ $comment->buyer->getImage() }}"
-                                             alt="{{ $comment->buyer->full_name }}"
+                                        <img src="{{ $comment->creator === 'Farmer' ? $comment->farmer->user->getImage() : $comment->buyer->getImage() }}"
+                                             alt="{{ $comment->creator === 'Farmer' ? $comment->farmer->user->full_name : $comment->buyer->full_name }}"
                                              class="h-10 w-10 rounded-full bg-gray-100">
                                     </div>
 
                                     <!-- Comment Content -->
                                     <div class="flex-1 py-10">
-                                        <h4 class="font-medium text-gray-900">{{ $comment->buyer->full_name }}</h4>
+                                        <h4 class="font-medium text-gray-900">
+                                            {{ $comment->creator === 'Farmer' ? $comment->farmer->user->full_name : $comment->buyer->full_name }}
+                                        </h4>
                                         <p class="text-xs text-gray-500">
                                             <time datetime="{{ $comment->created_at }}">{{ $comment->created_at->format('F d, Y') }}</time>
                                         </p>
@@ -129,35 +130,27 @@
                                             <p>{{ $comment->content }}</p>
                                         </div>
 
-                                        <!-- Reply Section (Using Alpine.js) -->
+                                        <!-- Reply Section -->
                                         @if(is_null($comment->parent_id))
-                                        {{ ($this->addReplyAction)(['record' => $comment->id]) }}
-
-                                            {{-- <div x-data="{ showReply: false, replyContent: '' }">
-                                                <button class="text-blue-500 mt-2" @click="showReply = !showReply">
-                                                    Reply
-                                                </button>
-
-                                                <div x-show="showReply" class="ml-4 mt-2">
-                                                    <textarea x-model="replyContent" class="w-full p-2 border" placeholder="Write a reply..."></textarea>
-                                                </div>
-                                            </div> --}}
+                                            {{ ($this->addReplyAction)(['record' => $comment->id]) }}
                                         @endif
 
-                                        <!-- Display Replies (One Level Only) -->
+                                        <!-- Display Replies -->
                                         @foreach($comment->replies as $reply)
                                             <div class="ml-4 border-l-2 pl-4 mt-4">
                                                 <div class="relative flex space-x-4 text-sm text-gray-500">
-                                                    <!-- User Avatar -->
+                                                    <!-- Reply Avatar -->
                                                     <div class="flex-none">
-                                                        <img src="{{ $reply->buyer->getImage() }}"
-                                                             alt="{{ $reply->buyer->full_name }}"
+                                                        <img src="{{ $reply->creator === 'Farmer' ? $reply->farmer->user->getImage() : $reply->buyer->getImage() }}"
+                                                             alt="{{ $reply->creator === 'Farmer' ? $reply->farmer->user->full_name : $reply->buyer->full_name }}"
                                                              class="h-8 w-8 rounded-full bg-gray-100">
                                                     </div>
 
                                                     <!-- Reply Content -->
                                                     <div class="flex-1">
-                                                        <h4 class="font-medium text-gray-900">{{ $reply->buyer->full_name }}</h4>
+                                                        <h4 class="font-medium text-gray-900">
+                                                            {{ $reply->creator === 'Farmer' ? $reply->farmer->user->full_name : $reply->buyer->full_name }}
+                                                        </h4>
                                                         <p class="text-xs text-gray-500">
                                                             <time datetime="{{ $reply->created_at }}">{{ $reply->created_at->format('F d, Y') }}</time>
                                                         </p>
@@ -177,11 +170,11 @@
                                     <div class="border-t border-gray-200"></div>
                                 @endif
                             @empty
-                                <!-- No Comments Message -->
                                 <p class="text-gray-500 mt-4">No messages yet. Start a conversation with the seller!</p>
                             @endforelse
                         </div>
                     </div>
+
                 </div>
             </div>
 
