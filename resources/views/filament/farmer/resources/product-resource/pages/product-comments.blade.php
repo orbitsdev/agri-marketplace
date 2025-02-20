@@ -43,7 +43,7 @@
                                     <!-- Reply Avatar -->
                                     <img src="{{ $reply->creator === 'Farmer' ? $reply->farmer->user->getImage() : $reply->buyer->getImage() }}"
                                          alt="User Image"
-                                         class="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700">
+                                         class="w-8 h-8 rounded-full  object-cover bg-gray-300 dark:bg-gray-700">
 
                                     <div class="w-full">
                                         <div class="flex justify-between w-full">

@@ -10,19 +10,23 @@ use App\Models\Location;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
-use Filament\Models\Contracts\HasName;
+use Namu\WireChat\Traits\Chatable;
 
+use Filament\Models\Contracts\HasName;
 use Laravel\Jetstream\HasProfilePhoto;
+use Illuminate\Support\Facades\Storage;
+use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Collection;
+
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Namu\WireChat\Traits\Chatable;
 
-use Illuminate\Database\Eloquent\Collection;
-class User extends Authenticatable implements FilamentUser, HasName , HasMedia {
+class User extends Authenticatable implements FilamentUser, HasName , HasMedia ,HasAvatar
+ {
 
     use HasApiTokens;
     use HasFactory;
@@ -34,7 +38,11 @@ class User extends Authenticatable implements FilamentUser, HasName , HasMedia {
 
 
 
-
+    public function getFilamentAvatarUrl(): ?string
+    {
+        $avatarColumn = config('filament-edit-profile.avatar_column', 'avatar_url');
+        return $this->$avatarColumn ? Storage::url("$this->$avatarColumn") : null;
+    }
 
 
 
@@ -163,7 +171,7 @@ public function getImage()
         return $this->getFirstMediaUrl();
     }
 
-    return url('images/placeholder-image.jpg');
+    return url('images/avatar.png');
 
 
 }
