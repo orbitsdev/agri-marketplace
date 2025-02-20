@@ -11,6 +11,12 @@ class Comment extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['product_id', 'buyer_id', 'farmer_id', 'parent_id', 'content', 'creator', 'is_read'];
+
+    protected $casts = [
+        'creator' => 'string',
+    ];
+
     public function product()
     {
         return $this->belongsTo(Product::class);

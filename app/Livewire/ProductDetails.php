@@ -166,6 +166,7 @@ class ProductDetails extends Component implements HasForms, HasActions
     //                     'buyer_id' => $buyerId,
     //                     'farmer_id' => $farmerId,
     //                     'content' => $data['content'],
+    // 'creator' => 'Buyer',
     //                 ]);
 
     //                 DB::commit();
@@ -214,6 +215,7 @@ class ProductDetails extends Component implements HasForms, HasActions
                     'buyer_id' => $buyerId,
                     'farmer_id' => $farmerId,
                     'content' => $data['content'],
+                    'creator' => 'Buyer',
                 ]);
 
                 DB::commit();
@@ -308,6 +310,7 @@ public function addReplyAction(): Action
                     'buyer_id' => $buyerId,
                     'farmer_id' => $farmerId,
                     'content' => $data['content'],
+                    'creator' => 'Buyer',
                     'parent_id' => $commentId, // Set parent_id to create the reply
                 ]);
 

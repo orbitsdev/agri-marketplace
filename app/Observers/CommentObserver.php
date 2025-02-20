@@ -12,13 +12,23 @@ class CommentObserver
     public function created(Comment $comment): void
     {
 
+        if ($comment->creator === 'Buyer') {
+            $product = $comment->product;
+            $buyer = $comment->buyer;
+            $farmer = $comment->farmer;
 
-    if($comment->buyer)
+            Notification::make()
+                ->title("{$buyer->full_name} commented on Product \n'{$product->product_name}' ( {$product->code})\n")
+                ->body("{$comment->content}")
+                ->sendToDatabase($farmer->user);
+        }
 
-    Notification::make()
-    ->title('Saved successfully')
-    ->sendToDatabase($recipient);
+
+
     }
+
+
+
 
 
 }
