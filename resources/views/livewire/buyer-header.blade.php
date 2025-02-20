@@ -35,7 +35,7 @@
                 <!-- Profile dropdown -->
                 <div class="relative" @click.away="profileOpen = false">
                     <button @click="profileOpen = !profileOpen" class="flex items-center focus:outline-none">
-                        <img class="w-8 h-8 rounded-full" src="{{ Auth::user()->getImage() }}" alt="Profile">
+                        <img class="w-8 h-8 rounded-full object-cover" src="{{ Auth::user()->getImage() }}" alt="Profile">
                     </button>
                     <div x-show="profileOpen" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
                         <a href="{{ route('edit.profile',['record'=> Auth::user()]) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
