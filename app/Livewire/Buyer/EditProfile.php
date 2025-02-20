@@ -26,7 +26,7 @@ public function mount(): void
         $this->form->fill($this->record->attributesToArray());
     }
 
-    public function form(Form $form): Form
+public function form(Form $form): Form
     {
         return $form
             ->schema(FilamentForm::profileForm())

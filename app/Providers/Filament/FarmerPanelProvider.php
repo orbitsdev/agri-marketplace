@@ -9,9 +9,11 @@ use Filament\PanelProvider;
 use Filament\Pages\Dashboard;
 use Filament\Navigation\MenuItem;
 use Filament\Support\Colors\Color;
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Farmer\Pages\Reports;
 use App\Http\Middleware\EnsureIsFarmer;
 use Filament\Navigation\NavigationItem;
+use App\Filament\Farmer\Pages\EditProfile;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\Pages\Auth\RegisterFarmer;
 use App\Livewire\DatabaseCustomNotifications;
@@ -68,6 +70,10 @@ class FarmerPanelProvider extends PanelProvider
                 Authenticate::class,
                 EnsureFarmerIsApproved::class,
                 EnsureIsFarmer::class
+            ])
+
+            ->userMenuItems([
+                'profile' => MenuItem::make()->url(fn (): string => EditProfile::getUrl(), )
             ])
             // ->plugins([
             //     FilamentEditProfilePlugin::make()
