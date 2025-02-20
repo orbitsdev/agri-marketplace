@@ -65,6 +65,7 @@ class FarmerPanelProvider extends PanelProvider
                 EnsureFarmerIsApproved::class,
                 EnsureIsFarmer::class
             ])
+            // ->databaseNotifications()
             ->navigationItems([
 
 
@@ -74,8 +75,8 @@ class FarmerPanelProvider extends PanelProvider
         ->group('Communication') // Optional: Group
         // ->badge(fn (): ?string => $this->getUnreadMessagesCount()) // Add badge
         // ->badgeColor('danger') // Set badge color (e.g., danger, primary, success, etc.)
-        ->sort(1), 
-                
+        ->sort(1),
+
                 // NavigationItem::make('Reports')
                 // ->url(fn (): string => Reports::getUrl())
                 //     ->icon('heroicon-o-arrow-down-tray')
@@ -87,9 +88,10 @@ class FarmerPanelProvider extends PanelProvider
                 //     ->isActiveWhen(fn () => request()->routeIs('filament.admin.pages.dashboard')),
                 // ...
             ])
+            ->databaseNotifications()
             ->sidebarCollapsibleOnDesktop()
-            
-            
+
+
             ;
     }
 }

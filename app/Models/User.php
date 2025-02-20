@@ -34,6 +34,10 @@ class User extends Authenticatable implements FilamentUser, HasName , HasMedia {
 
 
 
+
+
+
+
     public function getCoverUrlAttribute(): ?string
     {
       return self::getImage();
@@ -194,10 +198,10 @@ public function carts()
 }
 
 // has many notifications
-public function notifications()
-{
-    return $this->hasMany(Notification::class);
-}
+// public function notifications()
+// {
+//     return $this->hasMany(Notification::class);
+// }
 // scope with media
 public function scopeWithMedia($query)
 {

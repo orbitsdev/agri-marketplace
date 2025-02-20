@@ -31,7 +31,7 @@ class SalesOfTheMonth extends ChartWidget
             $ordersForWeek = Order::query()
                 ->byFarmer($farmerId)
                 ->whereBetween('order_date', [$currentWeekStart, $currentWeekEnd])
-                ->whereIn('status', [Order::COMPLETED, Order::OUT_FOR_DELIVERY])
+                ->whereIn('status', [Order::COMPLETED])
                 ->get();
 
             // Calculate the sales for the week using the `calculateTotalOrders` method

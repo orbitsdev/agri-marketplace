@@ -15,7 +15,7 @@
                 @foreach ($getRecord()->items as $item)
                     <tr>
                         <td class="border border-gray-300 px-4  ">
-                            <img src="{{ $item->product->getImage() }}" alt="Product Image" class="h-16 w-16 object-cover">
+                        <img src="{{ $item->product->getImage() }}" alt="Product Image" class="h-16 w-16 object-cover">
                         </td>
                         <td class="border border-gray-300 px-4  ">{{ $item->product_name }}</td>
                         <td class="border border-gray-300 px-4  ">{{ $item->short_description }}</td>

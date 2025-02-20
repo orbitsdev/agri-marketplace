@@ -18,6 +18,12 @@ return new class extends Migration
             $table->foreignId('farmer_id')->constrained('farmers')->onDelete('cascade'); // Farmer reference
             $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade'); // Allow replies
             $table->text('content'); // Message content
+            $table->enum('creator', [
+                'Buyer',
+                'Farmer',
+                'Admin',
+
+            ])->default('Buyer');
             $table->boolean('is_read')->default(false); // Message content
             $table->timestamps();
 
