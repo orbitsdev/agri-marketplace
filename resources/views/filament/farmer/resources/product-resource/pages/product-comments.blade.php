@@ -1,6 +1,6 @@
 <x-filament-panels::page>
     <div class="p-4 space-y-4">
-        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Product Comments</h2>
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Product Messages</h2>
 
         @forelse ($record->latestComments as $comment)
             <div class="p-3 border rounded-lg shadow-sm flex gap-3 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
