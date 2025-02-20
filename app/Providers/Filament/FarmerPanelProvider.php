@@ -91,7 +91,7 @@ class FarmerPanelProvider extends PanelProvider
             ])
             // ->databaseNotifications()
             ->databaseNotifications(DatabaseCustomNotifications::class)
-
+            
             ->sidebarCollapsibleOnDesktop()
 
 

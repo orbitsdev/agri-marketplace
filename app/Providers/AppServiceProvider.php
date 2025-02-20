@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
             'warning' => Color::Amber,
 
         ]);
-        Modal::closedByClickingAway(false);
+        // Modal::closedByClickingAway(false);
         // FilamentAsset::register([
         //     Css::make('custom-stylesheet', __DIR__ . '/../../resources/css/custom.css'),
         // ]);

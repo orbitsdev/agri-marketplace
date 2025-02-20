@@ -5,6 +5,7 @@ namespace App\Filament\Farmer\Resources\ProductResource\Pages;
 use App\Filament\Farmer\Resources\ProductResource;
 use Filament\Resources\Pages\Page;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
+use Filament\Actions\Action;
 class ProductComments extends Page
 {
     protected static string $resource = ProductResource::class;
@@ -12,6 +13,9 @@ class ProductComments extends Page
     protected static string $view = 'filament.farmer.resources.product-resource.pages.product-comments';
 
     use InteractsWithRecord;
+
+   
+
 
     public function getHeading(): string
     {
