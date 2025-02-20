@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Comment;
 use Filament\Notifications\Notification;
+use Filament\Notifications\Actions\Action;
 class CommentObserver
 {
     /**
@@ -32,7 +33,14 @@ class CommentObserver
             Notification::make()
                 ->title($notificationTitle)
                 ->body("\"{$comment->content}\"")
-                ->sendToDatabase($recipient);
+                ->sendToDatabase($recipient)
+
+                ->actions([
+                    Action::make('markAsUnread')
+                        ->button()
+                        ->markAsUnread(),
+                ])
+                ;
         }
 
 
