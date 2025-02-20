@@ -11,7 +11,7 @@
                     <p class="text-sm font-semibold text-gray-900 dark:text-gray-200">
                         {{ $comment->buyer->full_name ?? 'Unknown Buyer' }}
                     </p>
-                    <p class="text-base text-gray-700 dark:text-gray-300">
+                    <p class="text-base text-gray-900 dark:text-gray-200">
                         {{ $comment->content }}
                     </p>
 
@@ -32,7 +32,7 @@
                                         <p class="text-sm font-semibold text-gray-900 dark:text-gray-200">
                                             {{ $reply->buyer->full_name ?? 'Unknown' }}
                                         </p>
-                                        <p class="text-sm text-gray-700 dark:text-gray-300">
+                                        <p class="text-sm text-gray-900 dark:text-gray-200">
                                             {{ $reply->content }}
                                         </p>
                                     </div>
