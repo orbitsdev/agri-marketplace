@@ -58,7 +58,7 @@
             </div>
             <div class="border-t border-gray-200 pt-4 pb-3">
                 <div class="px-5 flex items-center">
-                    <img class="w-10 h-10 rounded-full" src="{{ Auth::user()->getImage() }}" alt="Profile">
+                    <img class="w-10 h-10 rounded-full object-cover" src="{{ Auth::user()->getImage() }}" alt="Profile">
                     <div class="ml-3">
                         <div class="text-base font-medium text-gray-800">{{ Auth::user()->full_name }}</div>
                     </div>
