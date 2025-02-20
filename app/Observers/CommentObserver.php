@@ -25,7 +25,6 @@ class CommentObserver
                 $parentComment = Comment::find($comment->parent_id);
 
                 if ($parentComment) {
-                    $recipient = $parentComment->buyer->user;
                     $notificationTitle = "{$buyer->full_name} replied to a comment on '{$product->product_name}' ({$product->code})";
                 }
             }
