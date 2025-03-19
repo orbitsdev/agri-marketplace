@@ -61,25 +61,25 @@ class FarmerResource extends Resource
 
 
 
-                // TextEntry::make('created_at')
-                //     ->label('Created At')
-                //     ->dateTime()
-                //     ->dateTimeTooltip(),
+                TextEntry::make('created_at')
+                    ->label('Created At')
+                    ->dateTime()
+                    ->dateTimeTooltip(),
 
-                // TextEntry::make('updated_at')
-                //     ->label('Updated At')
-                //     ->dateTime()
-                //     ->dateTimeTooltip(),
+                TextEntry::make('updated_at')
+                    ->label('Updated At')
+                    ->dateTime()
+                    ->dateTimeTooltip(),
 
-                // RepeatableEntry::make('documents')
-                // ->columnSpanFull()
-                //     ->schema([
-                //     // TextEntry::make('name'),
-                //         View::make('infolists.components.file-link')
+                RepeatableEntry::make('documents')
+                ->columnSpanFull()
+                    ->schema([
+                    // TextEntry::make('name'),
+                        View::make('infolists.components.file-link')
 
 
-                //     ])
-                //     ->columns(1)
+                    ])
+                    ->columns(1),
                 // RepeatableEntry::make('documents')
                 // ->columnSpanFull()
                 //     ->schema([
