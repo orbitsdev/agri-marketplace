@@ -41,7 +41,7 @@ class UserResource extends Resource
                     }, isIndividual: true, isGlobal:false)->label('Full Name'),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(isIndividual: true,),
-               
+
                 // Tables\Columns\TextColumn::make('role'),
 
                 Tables\Columns\TextColumn::make('role')
@@ -50,7 +50,7 @@ class UserResource extends Resource
                     User::FARMER => 'success',
                     User::BUYER => 'info',
                     User::ADMIN=> 'warning',
-                  
+
                     default => 'gray'
                 }),
                 ToggleColumn::make('is_active')->label('Active/Disabled'),
@@ -75,8 +75,8 @@ class UserResource extends Resource
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
             ])
-            ->modifyQueryUsing(fn (Builder $query) => $query->isNotSuperAdmin())
-            
+            ->modifyQueryUsing(fn (Builder $query) => $query->isNotSuperAdmin()->latest())
+
             ;
     }
 
