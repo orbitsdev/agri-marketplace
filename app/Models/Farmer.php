@@ -7,13 +7,35 @@ use App\Models\Order;
 use App\Models\Comment;
 use App\Models\Product;
 use App\Models\Document;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Farmer extends Model
+class Farmer extends Model implements HasMedia
 {
     use HasFactory;
 
+    use InteractsWithMedia;
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('image')->singleFile();
+
+    }
+
+
+
+public function getImage()
+{
+    if ($this->hasMedia()) {
+        return $this->getFirstMediaUrl();
+    }
+
+    return url('images/avatar.png');
+
+
+}
     public const STATUS_PENDING = 'Pending';
     public const STATUS_APPROVED = 'Approved';
     public const STATUS_REJECTED = 'Rejected';

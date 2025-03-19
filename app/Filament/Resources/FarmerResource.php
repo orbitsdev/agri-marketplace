@@ -41,7 +41,7 @@ class FarmerResource extends Resource
     {
         return $infolist
             ->schema([
-                SpatieMediaLibraryImageEntry::make('image')->label('Profile'),
+                // SpatieMediaLibraryImageEntry::make('user.image')->label('Profile'),
                 TextEntry::make('user.fullName')
                     ->label('Farm Owner'),
 
@@ -80,16 +80,16 @@ class FarmerResource extends Resource
 
                 //     ])
                 //     ->columns(1)
-                RepeatableEntry::make('documents')
-                ->columnSpanFull()
-                    ->schema([
-                    // TextEntry::make('name'),
-                        View::make('infolists.components.file-link')
+                // RepeatableEntry::make('documents')
+                // ->columnSpanFull()
+                //     ->schema([
+                //     // TextEntry::make('name'),
+                //         View::make('infolists.components.file-link')
 
 
-                    ])
-                    ->contained(false)
-                    ->columns(1),
+                //     ])
+                //     ->contained(false)
+                //     ->columns(1),
 
                     TextEntry::make('status')
                     ->label('Status')

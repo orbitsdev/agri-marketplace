@@ -38,6 +38,7 @@ class User extends Authenticatable implements FilamentUser, HasName , HasMedia ,
 
 
 
+
     public function getFilamentAvatarUrl(): ?string
     {
         $avatarColumn = config('filament-edit-profile.avatar_column', 'avatar_url');
