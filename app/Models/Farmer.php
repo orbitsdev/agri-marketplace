@@ -103,8 +103,7 @@ public function getImage()
 
 
     public function documents(){
-        return $this->hasMany(Document::class,
-            'farmer_id');
+        return $this->hasMany(Document::class, 'farmer_id');
     }
 
     public function orders() {
