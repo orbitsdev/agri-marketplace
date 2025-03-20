@@ -220,13 +220,17 @@ class FarmerResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])->groups([
                 Group::make('status')
                     ->titlePrefixedWithLabel(false),
 
-            ])->defaultGroup('status');;
+            ])->defaultGroup('status')
+            ->modifyQueryUsing(fn (Builder $query) => $query->whereHas('user'))
+
+            ;
+
     }
 
     public static function getRelations(): array
