@@ -1,9 +1,7 @@
 <div>
     <x-buyer-layout>
 
-        <div class="div bg-red-400">
-        Remove Content Fix Bug error
-        </div>
+       
         <div class="bg-white">
             <div class="mx-auto max-w-2xl px-4 pt-16 sm:px-6 sm:py-24 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
                 <!-- Product details -->
