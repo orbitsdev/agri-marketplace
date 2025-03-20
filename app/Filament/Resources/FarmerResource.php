@@ -172,7 +172,7 @@ class FarmerResource extends Resource
             ->actions([
                 ActionGroup::make([
                     Action::make('Export Documents')
-                    ->label('Export Farmer Documents')
+                    ->label('Farmer Documents Lists')
                     ->icon('heroicon-o-arrow-down-tray')
                     ->url(fn (Model $record) => route('export.farmer.documents', ['farmer' => $record->id]), shouldOpenInNewTab: true)
                     ->hidden(fn (Model $record) => !$record->documents()->exists()),
