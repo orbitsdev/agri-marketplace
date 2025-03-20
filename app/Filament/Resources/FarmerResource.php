@@ -124,9 +124,15 @@ class FarmerResource extends Resource
             ->columns([
                 TextColumn::make('user.fullName')
                     ->searchable(query: function (Builder $query, string $search): Builder {
-                        return $query->where('last_name', 'like', "%{$search}%")
+
+
+                        return $query->whereHas('user',function($q) use($search){
+                            $q->where('last_name', 'like', "%{$search}%")
                             ->orWhere('first_name', 'like', "%{$search}%")
                             ->orWhere('middle_name', 'like', "%{$search}%");
+                        });
+
+
                     })->label('Farm Owner'),
                 TextColumn::make('farm_name')
                     ->searchable(),
@@ -220,7 +226,6 @@ class FarmerResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])->groups([
                 Group::make('status')
