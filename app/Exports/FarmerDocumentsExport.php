@@ -22,6 +22,7 @@ class FarmerDocumentsExport implements FromView, ShouldAutoSize
             ->where('id', $this->farmerId)
             ->firstOrFail();
 
+            dd($farmer);
         return view('exports.farmer-documents', [
             'farmer' => $farmer,
         ]);

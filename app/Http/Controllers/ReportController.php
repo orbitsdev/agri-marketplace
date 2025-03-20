@@ -69,8 +69,7 @@ public function exportOrdersByStatus()
 public function exportFarmerDocuments(Farmer $farmer)
 {
     $fileName = "{$farmer->user->full_name}_{$farmer->farm_name}_documents.xlsx";
-    dd($farmer->documents);
-    return;
+  
     return Excel::download(new FarmerDocumentsExport($farmer->id), $fileName);
 }
 
