@@ -17,6 +17,7 @@ use Filament\Support\Enums\MaxWidth;
 use App\Http\Controllers\FilamentForm;
 use Filament\Infolists\Components\View;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
@@ -34,7 +35,7 @@ class FarmerResource extends Resource
     protected static ?string $model = Farmer::class;
 
     protected static ?string $navigationIcon = 'phosphor-farm';
-    protected static ?string $navigationLabel = 'Farms';
+    protected static ?string $navigationLabel = 'Farmers';
     protected static ?int $navigationSort = 2;
 
     public static function infolist(Infolist $infolist): Infolist
@@ -102,6 +103,8 @@ class FarmerResource extends Resource
                         default => 'gray',
                     }),
 
+
+
                     TextEntry::make('remarks')
                     ->label('Remarks')->markdown()->columnSpanFull()
                     ->hidden(function (Model $record) {
@@ -150,6 +153,8 @@ class FarmerResource extends Resource
 
                         default => 'gray'
                     }),
+
+                    ViewColumn::make('files')->view('tables.columns.farm-documents-column'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -164,6 +169,11 @@ class FarmerResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
+                    Action::make('Export Documents')
+                    ->label('Export Farmer Documents')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->url(fn (Model $record) => route('export.farmer.documents', ['farmer' => $record->id]), shouldOpenInNewTab: true)
+                    ->hidden(fn (Model $record) => !$record->documents()->exists()),
                     Tables\Actions\ViewAction::make()->modalWidth('7xl'),
                     // Action::make('View')
                     // ->icon('heroicon-s-eye')
@@ -232,7 +242,7 @@ class FarmerResource extends Resource
                     ->titlePrefixedWithLabel(false),
 
             ])->defaultGroup('status')
-            ->modifyQueryUsing(fn (Builder $query) => $query->whereHas('user'))
+            ->modifyQueryUsing(fn (Builder $query) => $query->whereHas('user')->with(['user','documents.media']))
 
             ;
 

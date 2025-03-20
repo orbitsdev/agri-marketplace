@@ -101,7 +101,13 @@ Route::get('/farmer/status', WaitingForApproval::class)->name('farmer.waiting-fo
 
 
 
+
 });
+
+
+Route::get('/report/farmer-documents/{farmer}', [ReportController::class, 'exportFarmerDocuments'])
+->name('export.farmer.documents');
+
 Route::get('/account-deactivated', AccountIsDeactivatedPage::class)
     ->name('account.deactivated')
     ->middleware(['auth', 'redirect.if.active']);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Farmer;
 use Illuminate\Http\Request;
 use App\Exports\OutOfStockExport;
 use App\Exports\TotalOrdersExport;
@@ -10,6 +11,7 @@ use App\Exports\MonthlySalesExport;
 use App\Exports\TotalProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\OrdersByStatusExport;
+use App\Exports\FarmerDocumentsExport;
 
 class ReportController extends Controller
 {
@@ -61,6 +63,15 @@ public function exportOrdersByStatus()
     $filename = 'Orders_By_Status_' . now()->format('Y-m-d') . '.xlsx';
 
     return Excel::download(new OrdersByStatusExport, $filename);
+}
+
+
+public function exportFarmerDocuments(Farmer $farmer)
+{
+    $fileName = "{$farmer->user->full_name}_{$farmer->farm_name}_documents.xlsx";
+    dd($farmer->documents);
+    return;
+    return Excel::download(new FarmerDocumentsExport($farmer->id), $fileName);
 }
 
 
