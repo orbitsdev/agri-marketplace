@@ -138,7 +138,7 @@ class FarmerResource extends Resource
 
                     })->label('Farm Owner'),
                 TextColumn::make('user.email')
-                    ->searchable(),
+                    ->searchable()->label('Email'),
                 TextColumn::make('farm_name')
                     ->searchable(),
                 TextColumn::make('location')
