@@ -36,3 +36,9 @@ Broadcast::channel('private-participant.{userId}', function ($user, $userId) {
 Broadcast::channel('private-conversation.{conversationId}', function ($user, $conversationId) {
     return $user->canAccessConversation($conversationId); // Replace with your logic
 });
+
+
+Broadcast::channel('notifications.{userId}', function ($user, $userId) {
+    return (int) $user->id === (int) $userId;
+});
+
