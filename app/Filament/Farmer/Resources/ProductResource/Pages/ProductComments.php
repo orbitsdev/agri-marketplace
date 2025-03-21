@@ -8,6 +8,7 @@ use App\Filament\Notification;
 use Filament\Resources\Pages\Page;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\MessageCreated;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Contracts\HasTable;
@@ -89,6 +90,24 @@ public function addReplyAction(): Action
                 ]);
 
                 DB::commit();
+
+
+            $receiver = $parentComment->buyer;
+            $sender = Auth::user();
+            $product = $parentComment->product;
+
+
+            $receiver->notify(new MessageCreated(
+                'message_reply',
+                $sender->full_name . ' replied to your comment on "' . $product->product_name . '"',
+                $data['content'],               // The reply content
+                $sender->full_name,             // Sender name
+                $receiver->full_name,           // Receiver name
+                $sender->id,                    // Sender ID
+                $receiver,                      // Receiver model
+                route('product.details', ['code'=> $product->code,'slug' => $product->slug]) // Link to the product or comment
+            ));
+
 
                 Notification::make()
                 ->title('Reply Sent')

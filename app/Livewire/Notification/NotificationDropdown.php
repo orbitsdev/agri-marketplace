@@ -4,7 +4,7 @@ namespace App\Livewire\Notification;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
-
+use Livewire\Attributes\On;
 class NotificationDropdown extends Component
 {
 
@@ -16,17 +16,34 @@ class NotificationDropdown extends Component
         $this->loadNotifications();
     }
 
+
+
+    #[On('refreshNotifications')] // ✅ Listens for real-time event
     public function loadNotifications()
     {
         $user = Auth::user();
 
         if ($user) {
+            // Fetch latest 20 notifications from database
             $this->notifications = $user->notifications()
                 ->latest()
                 ->take(20)
                 ->get();
 
+            // Get unread notifications count
             $this->unreadCount = $user->unreadNotifications()->count();
+        }
+    }
+
+
+    #[On('markAllAsRead')]
+    public function markAllAsReadAction()
+    {
+        $user = Auth::user();
+
+        if ($user) {
+            $user->unreadNotifications->markAsRead();
+            $this->loadNotifications();
         }
     }
 
@@ -52,8 +69,11 @@ class NotificationDropdown extends Component
             $this->loadNotifications();
         }
     }
+
+
     public function render()
     {
         return view('livewire.notification.notification-dropdown');
     }
+
 }

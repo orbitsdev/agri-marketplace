@@ -29,19 +29,18 @@ class TestEvent implements ShouldBroadcast
 
     public function broadcastWith(): array
     {
-        return ['id' => $this->user, 'message' => $this->message];
+        return ['id' => $this->user->id, 'message' => $this->message];
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
     public function broadcastOn(): array
     {
         return [
-            // new Channel('test-channel'),
-            new PrivateChannel('test.'.$this->user->id),
+            new Channel('test'), // ✅ Public channel for testing
         ];
+    }
+
+    public function broadcastAs()
+    {
+        return 'TestEventReceived'; // ✅ Custom event name
     }
 }

@@ -13,9 +13,11 @@ use App\Livewire\Buyer\EditProfile;
 use App\Livewire\FarmerNotApproved;
 use App\Livewire\WaitingForApproval;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\MessageCreated;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
 use App\Livewire\AccountIsDeactivatedPage;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,12 +120,27 @@ Route::get('/account-deactivated', AccountIsDeactivatedPage::class)
         // Retrieve a user instance (replace 1 with the actual user ID you want to test with)
         $user = Auth::user();
 
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
+       
 
         // Trigger the event
         event(new TestEvent($user));
+        return 'success';
+    });
 
-        return response()->json(['status' => 'Event triggered successfully!']);
+
+    Route::get('/test-example', function(){
+        $user = Auth::user();
+
+    $user->notify(new MessageCreated(
+        'info',
+        'New Message',
+        'You have received a new message!',
+        'Admin',
+        $user->name,
+        $user->id,
+        $user,
+        '/dashboard'
+    ));
+
+    return 'Notification sent!';
     });

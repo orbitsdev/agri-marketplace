@@ -24,6 +24,7 @@
             <div class="flex items-center space-x-4">
                 <!-- Cart Badge -->
                 @livewire('cart-badge')
+                @livewire('notification.notification-dropdown')
 
                 <!-- My Orders -->
                 <a href="{{ route('order.history', ['name' => Auth::user()->fullNameSlug()]) }}" class="relative text-gray-400 hover:text-gray-500">

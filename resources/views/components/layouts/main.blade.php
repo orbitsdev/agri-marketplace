@@ -21,7 +21,7 @@
         </style>
 
         @filamentStyles
-        @vite('resources/css/app.css',)
+        @vite(['resources/css/app.css', 'resources/js/app.js','resources/js/websocket.js'])
 
         <!-- Styles -->
         @livewireStyles
@@ -39,7 +39,7 @@
         @stack('modals')
         @livewireScripts
         @filamentScripts
-        @vite('resources/js/app.js')
+        {{-- @vite('resources/js/app.js') --}}
         <x-dialog z-index="z-50" blur="md" align="center" />
     </body>
 </html>
