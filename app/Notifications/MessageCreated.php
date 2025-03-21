@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
-class MessageCreated extends Notification implements ShouldBroadcastNow
+class MessageCreated extends Notification implements ShouldBroadcastNow,
  ShouldQueue
 {
     use Queueable;
