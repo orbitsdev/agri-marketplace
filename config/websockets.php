@@ -28,6 +28,7 @@ return [
         [
             'id' => env('PUSHER_APP_ID'),
             'name' => env('APP_NAME'),
+            'host' => env('PUSHER_APP_HOST'),
             'key' => env('PUSHER_APP_KEY'),
             'secret' => env('PUSHER_APP_SECRET'),
             'path' => env('PUSHER_APP_PATH'),
@@ -116,6 +117,7 @@ return [
      * You can see all available options at: http://php.net/manual/en/context.ssl.php
      */
     'ssl' => [
+
         'local_cert' => env('LARAVEL_WEBSOCKETS_SSL_LOCAL_CERT', null),
 
         'capath' => env('LARAVEL_WEBSOCKETS_SSL_CA', null),
