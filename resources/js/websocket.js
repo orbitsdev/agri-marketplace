@@ -9,8 +9,8 @@ window.Echo = new Echo({
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER || "mt1", // ✅ Fix missing cluster
     wsHost: import.meta.env.VITE_PUSHER_HOST || "agrimarket.store",
     wsPort: import.meta.env.VITE_PUSHER_PORT || 6001,
-    forceTLS: true, // ✅ Required for HTTPS
-    encrypted: true,
+    forceTLS: false, // ✅ Required for HTTPS
+    encrypted: false,
     disableStats: true,
     enabledTransports: ['ws', 'wss'],
 });
