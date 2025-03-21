@@ -11,7 +11,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
 class MessageCreated extends Notification implements ShouldBroadcastNow
-// ShouldQueue
+ ShouldQueue
 {
     use Queueable;
 
