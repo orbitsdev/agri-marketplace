@@ -118,17 +118,22 @@ return [
      */
     'ssl' => [
 
+        // 'local_cert' => env('LARAVEL_WEBSOCKETS_SSL_LOCAL_CERT', null),
+
+        // 'capath' => env('LARAVEL_WEBSOCKETS_SSL_CA', null),
+
+        // 'local_pk' => env('LARAVEL_WEBSOCKETS_SSL_LOCAL_PK', null),
+
+        // 'passphrase' => env('LARAVEL_WEBSOCKETS_SSL_PASSPHRASE', null),
+
+        // 'verify_peer' => env('APP_ENV') === 'production',
+
+        // 'allow_self_signed' => env('APP_ENV') !== 'production',
+
         'local_cert' => env('LARAVEL_WEBSOCKETS_SSL_LOCAL_CERT', null),
-
-        'capath' => env('LARAVEL_WEBSOCKETS_SSL_CA', null),
-
         'local_pk' => env('LARAVEL_WEBSOCKETS_SSL_LOCAL_PK', null),
-
         'passphrase' => env('LARAVEL_WEBSOCKETS_SSL_PASSPHRASE', null),
-
-        'verify_peer' => env('APP_ENV') === 'production',
-
-        'allow_self_signed' => env('APP_ENV') !== 'production',
+        'verify_peer' => env('LARAVEL_WEBSOCKETS_VERIFY_PEER', false),
     ],
 
     /*
