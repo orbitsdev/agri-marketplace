@@ -15,8 +15,9 @@
 
             <!-- Category Tabs (Responsive Horizontal Scroll) -->
             <div x-data="{ activeTab: '{{ $category }}' }" class="mt-6">
-                <div class="overflow-x-auto w-full">
-                    <div class="flex space-x-4 min-w-max px-2">
+                <!-- Ensure horizontal scroll works on small devices -->
+                <div class="w-full overflow-x-auto">
+                    <div class="flex min-w-full space-x-4 px-2">
                         <!-- All Products Tab -->
                         <button
                             x-on:click="activeTab = ''; $wire.set('category', '')"
@@ -37,6 +38,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- Search Box -->
             <div class="mt-8 relative max-w-md mx-auto w-full">
