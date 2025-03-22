@@ -5,24 +5,23 @@
                 <!-- Product Grid Layout -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-8">
                     <!-- Product Details -->
-                    <div class="lg:max-w-lg lg:self-end">
+                    <div class="lg:max-w-lg ">
                         <nav aria-label="Breadcrumb">
-                            <ol class="flex items-center space-x-2 text-sm">
-                                <li>
-                                    <a href="#" class="font-medium text-gray-500 hover:text-gray-900">
-                                        {{ $product->farmer->farm_name }} Farm
-                                    </a>
-                                    <svg viewBox="0 0 20 20" fill="currentColor" class="ml-2 size-5 text-gray-300">
-                                        <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
-                                    </svg>
-                                </li>
-                                <li>
+                            <div class="flex items-center space-x-2 text-sm">
+                                <a href="#" class="font-medium text-gray-500 hover:text-gray-900">
+                                    {{ $product->farmer->farm_name }} Farm
+                                </a>
+                                <svg viewBox="0 0 20 20" fill="currentColor" class="ml-2 size-5 text-gray-300">
+                                    <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+                                </svg>
+                                <div>
                                     <a href="{{ route('farmer.details', ['farmerId' => $product->farmer->id]) }}"
                                        class="font-medium text-gray-500 hover:text-gray-900">
                                         {{ $product->farmer->user->full_name }}
                                     </a>
-                                </li>
-                            </ol>
+                                </div>
+
+                            </div>
                         </nav>
 
                         <div class="mt-4">
@@ -51,6 +50,9 @@
                                 @markdown($product->description)
                             </div>
                         </section>
+                        <div class="mt-8">
+                            {{ ($this->addToCartAction)(['record' => $product->id]) }}
+                        </div>
                     </div>
 
                     <!-- Product Image -->
@@ -64,9 +66,7 @@
                     <!-- Add to Cart -->
                     <div class="mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start">
                         <section>
-                            <div class="mt-8">
-                                {{ ($this->addToCartAction)(['record' => $product->id]) }}
-                            </div>
+
                             <div class="mt-6 text-center">
                                 <a href="#" class="inline-flex items-center text-base font-medium text-gray-500 hover:text-gray-700">
                                     <svg class="mr-2 size-6 text-gray-400 group-hover:text-gray-500" fill="none"
