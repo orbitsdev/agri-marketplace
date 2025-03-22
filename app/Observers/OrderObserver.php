@@ -44,7 +44,7 @@ class OrderObserver
         Notification::make()
             ->title("New Order Received - {$order->order_number}")
             ->body("{$buyer->full_name} has placed an order for a total of PHP " . number_format($order->total, 2) . "")
-            ->sendToDatabase($farmer->user);
+            ->sendToDatabase($farmer->user,isEventDispatched: true);
     }
 
     /**
