@@ -46,3 +46,12 @@ Broadcast::channel('private-conversation.{conversationId}', function ($user, $co
 });
 
 
+
+
+Broadcast::channel('wirechat.user.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
+});
+
+Broadcast::channel('wirechat.group.{groupId}', function ($user, $groupId) {
+    return true; // You could add group access logic here
+});
