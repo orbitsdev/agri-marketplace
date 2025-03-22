@@ -35,8 +35,8 @@ class CommentObserver
             Notification::make()
                 ->title($notificationTitle)
                 ->body("\"{$comment->content}\"")
-                ->sendToDatabase($recipient)
-                ->size('YOOW')
+                ->sendToDatabase($recipient, isEventDispatched: true);
+
                 // ->mydata([
                 //     'comment_id' => $comment->id,
                 //     'product_id' => $product->id,
