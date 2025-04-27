@@ -56,9 +56,7 @@ class FarmerResource extends Resource
                 TextEntry::make('farm_name')
                     ->label('Farm Name'),
 
-                    ViewColumn::make('files')
-                    ->view('tables.columns.farm-documents-column')
-                    ->label('Documents'),
+                 
                 TextEntry::make('location')
                     ->label('Location'),
 
