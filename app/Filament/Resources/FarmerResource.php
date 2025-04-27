@@ -125,49 +125,107 @@ class FarmerResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('user.is_active')
+                ->label('Account ')
+                ->badge()
+                ->formatStateUsing(fn (bool $state): string => $state ? 'Active' : 'Inactive')
+                ->color(fn (bool $state): string => $state ? 'success' : 'danger')
+                ->sortable(),
+                TextColumn::make('status')
+                ->label('Application ')
+                ->badge()
+                ->color(fn(string $state): string => match ($state) {
+                    Farmer::STATUS_PENDING => 'info',
+                    Farmer::STATUS_APPROVED => 'success',
+                    Farmer::STATUS_REJECTED => 'danger',
+                    Farmer::STATUS_BLOCKED => 'danger',
+                    default => 'gray'
+                })
+                ->sortable(),
+                // Farm Owner Information
                 TextColumn::make('user.fullName')
                     ->searchable(query: function (Builder $query, string $search): Builder {
-
-
                         return $query->whereHas('user',function($q) use($search){
                             $q->where('last_name', 'like', "%{$search}%")
                             ->orWhere('first_name', 'like', "%{$search}%")
                             ->orWhere('middle_name', 'like', "%{$search}%");
                         });
+                    })
+                    ->label('Farm Owner')
+                    ->sortable(),
 
-
-                    })->label('Farm Owner'),
                 TextColumn::make('user.email')
-                    ->searchable()->label('Email')->copyable(),
+                    ->searchable()
+                    ->label('Email')
+                    ->copyable()
+                    ->sortable(),
+
+                // Account Status
+
+
+                // Farm Information
                 TextColumn::make('farm_name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make('location')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make('farm_size')
-                    ->searchable(),
-                TextColumn::make('status')
-                    ->badge()
-                    ->color(fn(string $state): string => match ($state) {
-                        Farmer::STATUS_PENDING => 'info',
-                        Farmer::STATUS_APPROVED => 'success',
-                        Farmer::STATUS_REJECTED => 'danger',
-                        Farmer::STATUS_BLOCKED => 'danger',
+                    ->searchable()
+                    ->sortable(),
 
-                        default => 'gray'
-                    }),
+                // Application Status
 
-                    ViewColumn::make('files')->view('tables.columns.farm-documents-column'),
+
+                // Documents
+                ViewColumn::make('files')
+                    ->view('tables.columns.farm-documents-column')
+                    ->label('Documents'),
+
+                // Timestamps
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->headerActions([
+                Action::make('export_farmers_excel')
+                    ->label('Export to Excel')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('success')
+                    ->url(fn() => route('export.farmers.excel'), shouldOpenInNewTab: true),
+                
+                Action::make('print_farmers_report')
+                    ->label('Print Report')
+                    ->icon('heroicon-o-printer')
+                    ->color('info')
+                    ->url(fn() => route('reports.printable.farmers'), shouldOpenInNewTab: true)
+            ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('active_status')
+                    ->label('Account Status')
+                    ->options([
+                        'active' => 'Active',
+                        'inactive' => 'Inactive',
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when($data['value'] === 'active', function (Builder $query): Builder {
+                            return $query->whereHas('user', function (Builder $query): Builder {
+                                return $query->where('is_active', true);
+                            });
+                        })->when($data['value'] === 'inactive', function (Builder $query): Builder {
+                            return $query->whereHas('user', function (Builder $query): Builder {
+                                return $query->where('is_active', false);
+                            });
+                        });
+                    })
             ])
             ->actions([
                 ActionGroup::make([
@@ -241,9 +299,25 @@ class FarmerResource extends Resource
                 ]),
             ])->groups([
                 Group::make('status')
-                    ->titlePrefixedWithLabel(false),
-
-            ])->defaultGroup('status')
+                    ->label('Application Status')
+                    ->titlePrefixedWithLabel(false)
+                    ->getTitleFromRecordUsing(function (Model $record): string {
+                        return match ($record->status) {
+                            Farmer::STATUS_PENDING => 'Pending',
+                            Farmer::STATUS_APPROVED => 'Approved',
+                            Farmer::STATUS_REJECTED => 'Rejected',
+                            Farmer::STATUS_BLOCKED => 'Blocked',
+                            default => ucfirst($record->status),
+                        };
+                    }),
+                Group::make('user.is_active')
+                    ->label('Account Status')
+                    ->titlePrefixedWithLabel(false)
+                    ->getTitleFromRecordUsing(function (Model $record): string {
+                        return $record->user->is_active ? 'Active' : 'Inactive';
+                    })
+            ])
+            ->defaultGroup('status')
             ->modifyQueryUsing(fn (Builder $query) => $query->whereHas('user')->with(['user','documents.media']))
 
             ;

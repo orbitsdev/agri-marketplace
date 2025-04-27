@@ -14,6 +14,7 @@ use App\Exports\TotalProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\OrdersByStatusExport;
 use App\Exports\FarmerDocumentsExport;
+use App\Exports\FarmersExport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -207,5 +208,23 @@ public function printableFarmerDocuments(Farmer $farmer)
     ]);
 }
 
+public function exportFarmersExcel()
+{
+    $filename = 'Farmers_Report_' . now()->format('Y-m-d') . '.xlsx';
+    return Excel::download(new FarmersExport, $filename);
+}
+
+public function printableFarmers()
+{
+    $farmers = Farmer::with(['user', 'documents.media'])
+        ->whereHas('user')
+        ->get();
+        
+    return view('reports.printable.farmers', [
+        'farmers' => $farmers,
+        'title' => 'Farmers Report',
+        'subtitle' => 'All Farmers'
+    ]);
+}
 
 }

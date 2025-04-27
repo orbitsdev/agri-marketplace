@@ -42,10 +42,10 @@
             @endforeach
         </tbody>
         <tfoot>
-            <tr>
-                <th colspan="2" style="text-align: right;">Status Total ({{ count($orders) }} orders)</th>
-                <th>₱{{ number_format($statusTotal, 2) }}</th>
-                <th colspan="2"></th>
+            <tr class="subtotal-row">
+                <td colspan="2" style="text-align: right;">Status Total ({{ count($orders) }} orders)</td>
+                <td>₱{{ number_format($statusTotal, 2) }}</td>
+                <td colspan="2"></td>
             </tr>
         </tfoot>
     </table>

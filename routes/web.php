@@ -121,6 +121,12 @@ Route::get('/report/farmer-documents/{farmer}', [ReportController::class, 'expor
 Route::get('/reports/printable/farmer-documents/{farmer}', [ReportController::class, 'printableFarmerDocuments'])
 ->name('reports.printable.farmer-documents');
 
+Route::get('/reports/farmers-excel', [ReportController::class, 'exportFarmersExcel'])
+->name('export.farmers.excel');
+
+Route::get('/reports/printable/farmers', [ReportController::class, 'printableFarmers'])
+->name('reports.printable.farmers');
+
 Route::get('/account-deactivated', AccountIsDeactivatedPage::class)
     ->name('account.deactivated')
     ->middleware(['auth', 'redirect.if.active']);
