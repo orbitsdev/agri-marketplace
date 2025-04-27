@@ -73,15 +73,14 @@ class FilamentForm extends Controller
                             ]),
 
 
-TextInput::make('phone')
-->prefix('+63')
-->mask('9999999999')
-->columnSpan([
-    'sm' => 2,
-    'md' => 4,
-    'lg' => 4,
-])
-,
+                        TextInput::make('phone')
+                            ->prefix('+63')
+                            ->mask('9999999999')
+                            ->columnSpan([
+                                'sm' => 2,
+                                'md' => 4,
+                                'lg' => 4,
+                            ]),
 
                         Select::make('role')
                             ->default(User::FARMER)
@@ -111,10 +110,9 @@ TextInput::make('phone')
                             ->dehydrated(fn(?string $state): bool => filled($state))
                             ->required(fn(string $operation): bool => $operation === 'create')
                             ->label(fn(string $operation) => $operation == 'create' ? 'Password' : 'New Password')
-                            ->helperText('Your password will be updated. Make sure to save it in a secure place before proceeding.')
-                            ,
+                            ->helperText('Your password will be updated. Make sure to save it in a secure place before proceeding.'),
 
-                            SpatieMediaLibraryFileUpload::make('image')
+                        SpatieMediaLibraryFileUpload::make('image')
                             ->image()
                             ->imageEditor()
                             ->columnSpanFull()
@@ -130,12 +128,13 @@ TextInput::make('phone')
                     }),
                 Wizard\Step::make('Farm Documents')
                     ->schema([
-                        ...self::farmDocuments(),
+                        ...self::farmRequiredDocuments(),
+                        // ...self::farmDocuments(),
                     ])->hidden(function (Get $get) {
                         return $get('role') !== User::FARMER;
                     }),
             ])
-                    ->skippable()
+                ->skippable()
                 ->columns([
                     'sm' => 2,
                     'md' => 4,
@@ -196,15 +195,14 @@ TextInput::make('phone')
                             ]),
 
 
-TextInput::make('phone')
-->prefix('+63')
-->mask('9999999999')
-->columnSpan([
-    'sm' => 2,
-    'md' => 4,
-    'lg' => 4,
-])
-,
+                        TextInput::make('phone')
+                            ->prefix('+63')
+                            ->mask('9999999999')
+                            ->columnSpan([
+                                'sm' => 2,
+                                'md' => 4,
+                                'lg' => 4,
+                            ]),
 
                         Select::make('role')
                             ->default(User::FARMER)
@@ -250,7 +248,8 @@ TextInput::make('phone')
                     }),
                 Wizard\Step::make('Farm Documents')
                     ->schema([
-                        ...self::farmDocuments(),
+                        ...self::farmRequiredDocuments()
+                        // ...self::farmDocuments(),
                     ])->hidden(function (Get $get) {
                         return $get('role') !== User::FARMER;
                     }),
@@ -340,7 +339,53 @@ TextInput::make('phone')
 
         ];
     }
+    public static function farmRequiredDocuments()
+    {
+        return [
+            Group::make()
+                ->columns([
+                    'sm' => 2,
+                    'md' => 4,
+                    'lg' => 6,
+                    'xl' => 8,
+                    '2xl' => 12,
+                ])
+                ->columnSpanFull()
+                ->relationship('farmer')
 
+                ->schema([
+                    TableRepeater::make('farmer_requirments_documents')
+                        ->relationship('farmer_requirements')
+                        ->maxItems(10)
+                        ->columnSpanFull()
+                        ->columnWidths([
+                            'name' => '200px',
+                        ])
+                        ->maxItems(6)
+                        ->withoutheader()
+                        ->schema([
+                            TextInput::make('requirement_id')
+                                ->disabled()
+                                ->label('Requirement')
+                                ->placeholder('Requirement Name')
+                                ->columnSpan([
+                                    'sm' => 2,
+                                    'md' => 4,
+                                    'lg' => 6,
+                                    'xl' => 8,
+                                    '2xl' => 12,
+                                ]),
+                            SpatieMediaLibraryFileUpload::make('file')
+                                ->required()
+                                ->label('Upload Document')
+                        ]),
+
+                ])->columnSpanFull(),
+
+
+
+        ];
+    }
     public static function farmDocuments()
     {
         return [
@@ -394,108 +439,109 @@ TextInput::make('phone')
         ];
     }
 
-    public static function farmerDetailsForm(): array{
+    public static function farmerDetailsForm(): array
+    {
         return [
             Wizard::make([
                 Wizard\Step::make('Farm Details')
                     ->schema(self::farmerForm()),
 
-                    Wizard\Step::make('Farm Documents')
+                Wizard\Step::make('Farm Documents')
                     ->schema(self::farmDocuments()),
 
-                    ])
+            ])
 
         ];
     }
 
     public static function productForm()
-{
-    return [
-        Section::make('Product Details')
-            ->description('Provide the necessary product details. Ensure all required fields are filled out correctly.')
-            ->columns([
-                'sm' => 2,
-                'md' => 4,
-                'lg' => 6,
-                'xl' => 8,
-                '2xl' => 12,
-            ])
-            ->columnSpanFull()
-            ->schema([
-                // Product Image
-                SpatieMediaLibraryFileUpload::make('image')
-                    ->columnSpanFull()
-                    ->label('Product Image')
-                    ->image()
-                    ->imageEditor()
-                    ->required(),
+    {
+        return [
+            Section::make('Product Details')
+                ->description('Provide the necessary product details. Ensure all required fields are filled out correctly.')
+                ->columns([
+                    'sm' => 2,
+                    'md' => 4,
+                    'lg' => 6,
+                    'xl' => 8,
+                    '2xl' => 12,
+                ])
+                ->columnSpanFull()
+                ->schema([
+                    // Product Image
+                    SpatieMediaLibraryFileUpload::make('image')
+                        ->columnSpanFull()
+                        ->label('Product Image')
+                        ->image()
+                        ->imageEditor()
+                        ->required(),
 
-                // Product Name
-                TextInput::make('product_name')
-                    ->required()
-                    ->label('Product Name')
-                    ->columnSpan([
-                        'sm' => 2,
-                        'md' => 4,
-                        'lg' => 12,
-                    ]),
+                    // Product Name
+                    TextInput::make('product_name')
+                        ->required()
+                        ->label('Product Name')
+                        ->columnSpan([
+                            'sm' => 2,
+                            'md' => 4,
+                            'lg' => 12,
+                        ]),
 
 
-                // Quantity
-                TextInput::make('quantity')
-                    ->required()
-                    ->numeric()
-                    ->default(1)
-                    ->label('Quantity')
-                    ->helperText('Enter the number of items available in stock.')
-                    ->columnSpan([
-                        'sm' => 2,
-                        'md' => 4,
-                        'lg' => 4,
-                    ]),
+                    // Quantity
+                    TextInput::make('quantity')
+                        ->required()
+                        ->numeric()
+                        ->default(1)
+                        ->label('Quantity')
+                        ->helperText('Enter the number of items available in stock.')
+                        ->columnSpan([
+                            'sm' => 2,
+                            'md' => 4,
+                            'lg' => 4,
+                        ]),
 
-                // Category Selection
-                Select::make('category_id')
-                    ->relationship('category', 'name')
-                    ->label('Product Category')
-                    ->required()
-                    ->searchable()
-                    ->preload()
-                    ->helperText('Select the appropriate category for this product.')
-                    ->columnSpan([
-                        'sm' => 2,
-                        'md' => 4,
-                        'lg' => 4,
-                    ]),
+                    // Category Selection
+                    Select::make('category_id')
+                        ->relationship('category', 'name')
+                        ->label('Product Category')
+                        ->required()
+                        ->searchable()
+                        ->preload()
+                        ->helperText('Select the appropriate category for this product.')
+                        ->columnSpan([
+                            'sm' => 2,
+                            'md' => 4,
+                            'lg' => 4,
+                        ]),
 
-                // Price
-                TextInput::make('price')
-                    ->required()
-                    ->numeric()
-                    ->label('Price')
-                    ->prefix('₱')
-                    ->helperText('Enter the price for a single unit.')
-                    ->columnSpan([
-                        'sm' => 2,
-                        'md' => 4,
-                        'lg' => 4,
-                    ]),
+                    // Price
+                    TextInput::make('price')
+                        ->required()
+                        ->numeric()
+                        ->label('Price')
+                        ->prefix('₱')
+                        ->helperText('Enter the price for a single unit.')
+                        ->columnSpan([
+                            'sm' => 2,
+                            'md' => 4,
+                            'lg' => 4,
+                        ]),
 
                     TextInput::make('short_description')
-                    ->required()
-                    ->label('Short Description')
-                    ->columnSpan([
-                        'sm' => 2,
-                        'md' => 4,
-                        'lg' => 12,
-                    ]),
-                // Description
-                Textarea::make('description')
-                    ->required()
-                    ->label('Product Description')
-                    ->columnSpanFull()
-                    ->helperText('Provide a detailed description of the product.')
-                    ->rows(5),
+                        ->required()
+                        ->label('Short Description')
+                        ->columnSpan([
+                            'sm' => 2,
+                            'md' => 4,
+                            'lg' => 12,
+                        ]),
+                    // Description
+                    Textarea::make('description')
+                        ->required()
+                        ->label('Product Description')
+                        ->columnSpanFull()
+                        ->helperText('Provide a detailed description of the product.')
+                        ->rows(5),
                     // ->toolbarButtons([
                     //     'attachFiles',
                     //     'blockquote',
@@ -513,41 +559,41 @@ TextInput::make('phone')
                     //     'undo',
                     // ]),
 
-                // Status
-                Select::make('status')
-                    ->options(Product::STATUS_OPTIONS)
-                    ->default('Available')
-                    ->required()
-                    ->label('Product Status')
-                    ->helperText('Set the current availability status of the product.')
-                    ->columnSpan([
-                        'sm' => 2,
-                        'md' => 4,
-                        'lg' => 4,
-                    ]),
+                    // Status
+                    Select::make('status')
+                        ->options(Product::STATUS_OPTIONS)
+                        ->default('Available')
+                        ->required()
+                        ->label('Product Status')
+                        ->helperText('Set the current availability status of the product.')
+                        ->columnSpan([
+                            'sm' => 2,
+                            'md' => 4,
+                            'lg' => 4,
+                        ]),
 
-                // Stock Alert Level
-                TextInput::make('alert_level')
-                    ->label('Stock Alert Level')
-                    ->numeric()
-                    ->default(20)
-                    ->helperText('Set the minimum stock level for triggering alerts.')
-                    ->required()
-                    ->columnSpan([
-                        'sm' => 2,
-                        'md' => 4,
-                        'lg' => 4,
-                    ]),
+                    // Stock Alert Level
+                    TextInput::make('alert_level')
+                        ->label('Stock Alert Level')
+                        ->numeric()
+                        ->default(20)
+                        ->helperText('Set the minimum stock level for triggering alerts.')
+                        ->required()
+                        ->columnSpan([
+                            'sm' => 2,
+                            'md' => 4,
+                            'lg' => 4,
+                        ]),
 
-                // Publish Toggle
-                Toggle::make('is_published')
-                    ->required()
-                    ->label('Publish')
-                    ->helperText('Toggle to make this product visible to buyers.')
-                    ->columnSpanFull(),
-            ]),
-    ];
-}
+                    // Publish Toggle
+                    Toggle::make('is_published')
+                        ->required()
+                        ->label('Publish')
+                        ->helperText('Toggle to make this product visible to buyers.')
+                        ->columnSpanFull(),
+                ]),
+        ];
+    }
 
 
     public static function locationForm(): array
@@ -587,11 +633,9 @@ TextInput::make('phone')
                 ->mask(9999),
 
 
-TextInput::make('phone')
-->prefix('+63')
-->mask('9999999999')
-
-,
+            TextInput::make('phone')
+                ->prefix('+63')
+                ->mask('9999999999'),
             Toggle::make('is_default')->default(true)
         ];
     }

@@ -189,6 +189,29 @@ public function getImage()
     return $this->hasMany(Comment::class, 'farmer_id');
 }
 
+/**
+ * Get the farmer requirements for this farmer.
+ */
+public function farmerRequirements()
+{
+    return $this->hasMany(FarmerRequirement::class);
+}
+
+public function farmer_requirements()
+{
+    return $this->hasMany(FarmerRequirement::class);
+}
+
+/**
+ * Get all requirements for this farmer.
+ */
+public function requirements()
+{
+    return $this->belongsToMany(Requirement::class, 'farmer_requirements')
+        ->withPivot(['status', 'is_checked', 'remarks'])
+        ->withTimestamps();
+}
+
 public function scopeVisibleToUser($query, $user)
     {
         return $query->where(function ($query) use ($user) {

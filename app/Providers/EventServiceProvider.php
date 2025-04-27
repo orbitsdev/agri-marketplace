@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Models\Comment;
+use App\Models\Farmer;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Observers\CommentObserver;
+use App\Observers\FarmerObserver;
 use App\Observers\OrderItemObserver;
 use App\Observers\OrderObserver;
 use App\Observers\ProductObserver;
@@ -37,6 +39,7 @@ class EventServiceProvider extends ServiceProvider
         Order::observe(OrderObserver::class);
         OrderItem::observe(OrderItemObserver::class);
         Comment::observe(CommentObserver::class);
+        Farmer::observe(FarmerObserver::class);
     }
 
     /**
