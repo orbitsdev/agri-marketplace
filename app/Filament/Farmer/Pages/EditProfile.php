@@ -27,45 +27,104 @@ public function form(Form $form): Form
         ]);
 }
 
+
     protected function mutateFormDataBeforeSave(array $data): array
 {
-   
+
 
     return $data;
+}
+
+public function generateAndSendOtp(): void
+{
+    $user = auth()->user();
+
+    // If there's an active OTP that hasn't expired, don't generate new
+    if ($user->otp_code && $user->otp_expires_at && now()->lessThan($user->otp_expires_at)) {
+        \Illuminate\Support\Facades\Log::info('OTP still active. No new OTP sent.');
+        return;
+    }
+
+    // Otherwise, generate new OTP
+    $otp = rand(100000, 999999);
+
+    $user->update([
+        'otp_code' => $otp,
+        'otp_attempts' => 3,
+        'otp_expires_at' => now()->addMinutes(5),
+    ]);
+
+    app(\App\Services\TeamSSProgramSmsService::class)
+        ->sendSms($user->phone, "Your verification code is: {$otp}");
+
+    \Illuminate\Support\Facades\Log::info('New OTP generated and sent: ' . $otp);
 }
 
 
 protected function getSaveFormAction(): Action
 {
+
+
+
     return Action::make('save')
         ->label('Save Changes')
         ->form([
-            TextInput::make('current_password')
-                ->label('Enter your current password to confirm')
-                ->password()
+            TextInput::make('otp_code')
+                ->label('Enter OTP Code')
+                ->mask('999999')
                 ->required(),
         ])
         ->modalHeading('Confirm Profile Update')
-        ->modalDescription('For your security, please confirm your current password.')
+        ->modalDescription('Please enter the OTP code sent to your registered mobile number.')
         ->modalSubmitActionLabel('Confirm and Save')
         ->requiresConfirmation()
+        ->beforeFormFilled(function () {
+            $this->generateAndSendOtp(); // ✅ Call only when modal opens
+        })
         ->action(function (array $data): void {
-
-
-            if (! Hash::check($data['current_password'], auth()->user()->password)) {
-                $this->addError('current_password', 'The current password you entered is incorrect.');
-
-               Notification::make()
-               ->title('Error')
-               ->body('The current password you entered is incorrect.')
-               ->danger()
-               ->send();
+            $user = auth()->user();
+            if ($user->otp_attempts <= 0) {
+                Notification::make()
+                    ->title('Too Many Attempts')
+                    ->body('You have exceeded the maximum number of attempts. Please request a new OTP.')
+                    ->danger()
+                    ->send();
+                $this->addError('otp_code', 'Too many failed attempts. Please request a new OTP.');
                 return;
             }
-        //    Notification::success('Profile updated successfully!')->send();
+
+            if (now()->greaterThan($user->otp_expires_at)) {
+                Notification::make()
+                    ->title('OTP Expired')
+                    ->body('Your OTP has expired. Please request a new OTP.')
+                    ->warning()
+                    ->send();
+                $this->addError('otp_code', 'Your OTP has expired. Please request a new OTP.');
+                return;
+            }
+
+            if ($user->otp_code !== $data['otp_code']) {
+                Notification::make()
+                    ->title('Invalid OTP')
+                    ->body('The OTP code you entered is invalid. Please try again.')
+                    ->danger()
+                    ->send();
+                $this->addError('otp_code', 'Invalid OTP code. Attempts left: ' . $user->otp_attempts);
+                $user->decrement('otp_attempts');
+                $user->save();
+                return;
+            }
+
+            $user->update([
+                'otp_code' => null,
+                'otp_attempts' => 3,
+                'otp_expires_at' => null,
+            ]);
+
+
          $this->save(); //
 
-        // (Optional) show success notification
+
         \Filament\Notifications\Notification::make()
             ->success()
             ->title('Profile Updated')
