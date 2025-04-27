@@ -7,7 +7,7 @@
                     $documentUrl = $media ? $media->getUrl() : null;
                 @endphp
 
-                <div class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                <div class="flex items-center justify-between  bg-gray-50 rounded-md">
                     <div>
                         <span class="font-medium">{{ $requirement->requirement ? $requirement->requirement->name : 'Document' }}</span>
                         @if($requirement->is_checked)
