@@ -439,13 +439,46 @@ class FilamentForm extends Controller
     {
         return [
             Wizard::make([
+                Wizard\Step::make('Personal Details')
+                    ->schema([
+                        TextInput::make('first_name')
+                        ->required()
+                        ->columnSpan(
+                            [
+                                'sm' => 2,
+                                'md' => 4,
+                                'lg' => 4,
+                            ]
+                        ),
+                    TextInput::make('middle_name')
+                        ->required()
+                        ->columnSpan(
+                            [
+                                'sm' => 2,
+                                'md' => 4,
+                                'lg' => 4,
+                            ]
+                        ),
+                    TextInput::make('last_name')
+                        ->required()
+                        ->columnSpan(
+                            [
+                                'sm' => 2,
+                                'md' => 4,
+                                'lg' => 4,
+                            ]
+                        ),
+                    TextInput::make('phone')
+                    ->prefix('+63')
+                    ->mask('9999999999')->required(),
+                    ]),
                 Wizard\Step::make('Farm Details')
                     ->schema(self::farmerForm()),
 
                 Wizard\Step::make('Farm Documents')
-                    ->schema(self::farmDocuments()),
+                    ->schema(self::farmRequiredDocuments()),
 
-            ])
+            ])->skippable()
 
         ];
     }

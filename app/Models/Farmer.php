@@ -40,25 +40,31 @@ public function getImage()
     public const STATUS_APPROVED = 'Approved';
     public const STATUS_REJECTED = 'Rejected';
     public const STATUS_BLOCKED = 'Blocked';
+    public const STATUS_DRAFT = 'Draft';
 
     // Status Options
     public const STATUS_OPTIONS = [
-
-        self::STATUS_PENDING =>   self::STATUS_PENDING,
+        // self::STATUS_DRAFT => self::STATUS_DRAFT,
+        self::STATUS_PENDING => self::STATUS_PENDING,
         self::STATUS_APPROVED => self::STATUS_APPROVED,
-        self::STATUS_REJECTED =>  self::STATUS_REJECTED,
-        self::STATUS_BLOCKED =>self::STATUS_BLOCKED,
+        self::STATUS_REJECTED => self::STATUS_REJECTED,
+        self::STATUS_BLOCKED => self::STATUS_BLOCKED,
     ];
 
 
     public const STATUSES = [
-        self::STATUS_PENDING =>   self::STATUS_PENDING,
+        // self::STATUS_DRAFT => self::STATUS_DRAFT,
+        self::STATUS_PENDING => self::STATUS_PENDING,
         self::STATUS_APPROVED => self::STATUS_APPROVED,
-        self::STATUS_REJECTED =>  self::STATUS_REJECTED,
-        self::STATUS_BLOCKED =>self::STATUS_BLOCKED,
+        self::STATUS_REJECTED => self::STATUS_REJECTED,
+        self::STATUS_BLOCKED => self::STATUS_BLOCKED,
     ];
 
     // Status Transitions
+    public const IF_DRAFT = [
+        self::STATUS_PENDING => self::STATUS_PENDING,
+    ];
+
     public const IF_PENDING = [
         self::STATUS_APPROVED => self::STATUS_APPROVED,
         self::STATUS_REJECTED => self::STATUS_REJECTED,
@@ -82,6 +88,7 @@ public function getImage()
     {
         // Map the current status to its allowed transitions
         $statusTransitions = [
+            self::STATUS_DRAFT => self::IF_DRAFT,
             self::STATUS_PENDING => self::IF_PENDING,
             self::STATUS_APPROVED => self::IF_APPROVED,
             self::STATUS_REJECTED => self::IF_REJECTED,

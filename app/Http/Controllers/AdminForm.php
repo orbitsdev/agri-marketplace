@@ -152,15 +152,11 @@ class AdminForm extends Controller
     {
         return [
             Select::make('status')
-
                 ->live(debounce: 500)
                 ->options(function (Model $record) {
                     return $record->getAvailableStatusTransitions();
                 })
-
-
                 ->required(),
-
 
             // Status Reason Textarea
             Textarea::make('remarks')
@@ -170,8 +166,77 @@ class AdminForm extends Controller
                 ->required()
                 ->rows(5)
                 ->hidden(function (Get $get) {
-
                     return !in_array($get('status'), [Farmer::STATUS_BLOCKED, Farmer::STATUS_REJECTED]);
+                }),
+
+            // Farmer Requirements Section
+            Section::make('Requirements Verification')
+                ->description('Review and verify the farmer\'s submitted requirements')
+                ->schema([
+                    TableRepeater::make('requirements')
+                    ->deletable(false)
+                    ->addable(false)
+                        ->relationship('farmerRequirements')
+                        ->columnSpanFull()
+                        ->columns([
+                            'requirement' => 'Requirement',
+                            'status' => 'Status',
+                            'is_checked' => 'Verified',
+                            'file' => 'Document',
+                        ])
+                        ->columnWidths([
+
+                            'file' => '500px',
+                        ])
+                        ->schema([
+
+                            Toggle::make('is_checked')
+                                ->label('Verified')
+                                ->inline(false)
+                                ->columnSpan(1),
+                            Select::make('requirement_id')
+                            ->label('Doc Type')
+                            ->relationship(
+                                'requirement',
+                                'name'
+                            )
+                            ->disabled()
+                                    ->dehydrated(false)
+                                    ->preload(),
+
+                            // Select::make('status')
+                            //     ->options([
+                            //         'Pending' => 'Pending',
+                            //         'Approved' => 'Approved',
+                            //         'Rejected' => 'Rejected',
+                            //     ])
+                            //     ->columnSpan(1),
+
+
+                            SpatieMediaLibraryFileUpload::make('file')
+                                ->label('Document')
+                                ->downloadable()
+                                ->previewable(true)
+                                // ->disabled()
+                                ->columnSpan(3),
+
+                            // Textarea::make('remarks')
+                            //     ->label('Notes')
+                            //     ->rows(2)
+                            //     ->columnSpanFull(),
+                        ])
+                        ->mutateRelationshipDataBeforeSaveUsing(function (array $data): array {
+                            // Keep only the fields that are in the fillable array
+                            return [
+
+                                'is_checked' => $data['is_checked'],
+
+                            ];
+                        })
+                ])
+                ->collapsible()
+                ->visible(function (Model $record) {
+                    return $record->farmerRequirements()->exists();
                 }),
         ];
     }

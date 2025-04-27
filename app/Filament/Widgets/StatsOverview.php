@@ -13,7 +13,7 @@ class StatsOverview extends BaseWidget
         $totalUsers = User::isNotSuperAdmin()->count();
 
         // Count users by role
-        $totalFarmers = User::where('role', 'Farmer')->count();
+        $totalFarmers = User::where('role', 'Farmer')->whereHas('farmer')->count();
         $totalBuyers = User::where('role', 'Buyer')->count();
 
         return [

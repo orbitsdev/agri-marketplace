@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ImageEntry;
 use App\Filament\Resources\FarmerResource\Pages;
@@ -37,6 +38,11 @@ class FarmerResource extends Resource
     protected static ?string $navigationIcon = 'phosphor-farm';
     protected static ?string $navigationLabel = 'Farmers';
     protected static ?int $navigationSort = 2;
+
+   public static function getNavigationBadge(): ?string
+{
+    return static::getModel()::where('status', 'Pending')->count();
+}
 
     public static function infolist(Infolist $infolist): Infolist
     {
@@ -201,7 +207,7 @@ class FarmerResource extends Resource
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('success')
                     ->url(fn() => route('export.farmers.excel'), shouldOpenInNewTab: true),
-                
+
                 Action::make('print_farmers_report')
                     ->label('Print Report')
                     ->icon('heroicon-o-printer')
@@ -248,13 +254,15 @@ class FarmerResource extends Resource
                         ->icon('heroicon-s-pencil-square')
                         ->modalWidth('6xl')
                         ->fillForm(function (Model $record) {
-
+                            // Load the farmer with requirements for the form
+                            $record->load(['farmerRequirements.requirement', 'farmerRequirements.media']);
+                            
                             $formData = ['status' => $record->status];
 
                             if (in_array($record->status, [Farmer::STATUS_REJECTED, Farmer::STATUS_BLOCKED])) {
                                 $formData['remarks'] = $record->remarks;
                             }
-
+                            
                             return $formData;
                         })
                         ->form(AdminForm::manageFarmForm())
@@ -277,11 +285,41 @@ class FarmerResource extends Resource
                                 return;
                             }
 
+                            // Get the old status for comparison
+                            $oldStatus = $record->status;
+                            $newStatus = $data['status'];
+                            
                             // Update the status and remarks
                             $record->update([
-                                'status' => $data['status'],
+                                'status' => $newStatus,
                                 'remarks' => $data['remarks'] ?? null,
                             ]);
+
+                            // Send SMS notification to farmer based on status
+                            if ($record->user && $record->user->phone) {
+                                $smsService = app(\App\Services\TeamSSProgramSmsService::class);
+                                $farmerName = $record->user->fullName;
+                                $message = '';
+                                
+                                switch ($newStatus) {
+                                    case Farmer::STATUS_APPROVED:
+                                        $message = "Hello {$farmerName}, your farm registration has been APPROVED! You can now start using the Agri-Marketplace platform to sell your products.";
+                                        break;
+                                    case Farmer::STATUS_REJECTED:
+                                        $message = "Hello {$farmerName}, your farm registration has been REJECTED. Reason: {$data['remarks']}. Please update your information and resubmit.";
+                                        break;
+                                    case Farmer::STATUS_BLOCKED:
+                                        $message = "Hello {$farmerName}, your farm account has been BLOCKED. Reason: {$data['remarks']}. Please contact support for assistance.";
+                                        break;
+                                    case Farmer::STATUS_PENDING:
+                                        $message = "Hello {$farmerName}, your farm registration is now PENDING review. We will notify you once it has been processed.";
+                                        break;
+                                }
+                                
+                                if (!empty($message)) {
+                                    $smsService->sendSms($record->user->phone, $message);
+                                }
+                            }
 
                             Notification::make()
                                 ->title('Farm Status Updated')
@@ -291,9 +329,9 @@ class FarmerResource extends Resource
                         ->color('gray'),
 
                     Tables\Actions\EditAction::make('Update')->form(AdminForm::farm()),
-                    Tables\Actions\DeleteAction::make(),
-                ]),
-            ])
+                    Tables\Actions\DeleteAction::make()->color('gray'),
+                ], ),
+            ],position: ActionsPosition::BeforeCells)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                 ]),
@@ -318,7 +356,7 @@ class FarmerResource extends Resource
                     })
             ])
             ->defaultGroup('status')
-            ->modifyQueryUsing(fn (Builder $query) => $query->whereHas('user')->with(['user','documents.media']))
+            ->modifyQueryUsing(fn (Builder $query) => $query->latest()->whereHas('user')->with(['user','documents.media']))
 
             ;
 

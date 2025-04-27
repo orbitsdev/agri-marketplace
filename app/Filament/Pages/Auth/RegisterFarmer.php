@@ -38,6 +38,10 @@ class RegisterFarmer extends Register
                         TextInput::make('last_name')
                             ->required(),
 
+                            TextInput::make('phone')
+                            ->prefix('+63')
+                            ->mask('9999999999')->required(),
+
 
                         $this->getEmailFormComponent(),
                         $this->getPasswordFormComponent(),
@@ -54,7 +58,7 @@ class RegisterFarmer extends Register
                             TextInput::make('contact')
                             ->label('Contact Number')
                             ->mask(99999999999)
-                         
+
 
                             ->tel()
                             ->maxLength(191),
@@ -82,39 +86,39 @@ class RegisterFarmer extends Register
                                 'undo',
                             ]),
                         ]),
-                       
+
                     ]),
-                Wizard\Step::make('Farm Documents')
-                    ->schema([
-                        Group::make()
+                // Wizard\Step::make('Farm Documents')
+                //     ->schema([
+                //         Group::make()
 
-                            ->columnSpanFull()
-                            ->relationship('farmer')
+                //             ->columnSpanFull()
+                //             ->relationship('farmer')
 
-                            ->schema([
-                                TableRepeater::make('farmer_documents')
-                                    ->relationship('documents')
-                                    ->columnSpanFull()
-                                    ->columnWidths([
+                //             ->schema([
+                //                 TableRepeater::make('farmer_documents')
+                //                     ->relationship('documents')
+                //                     ->columnSpanFull()
+                //                     ->columnWidths([
 
-                                        'name' => '200px',
-                                    ])
-                                    ->maxItems(6)
+                //                         'name' => '200px',
+                //                     ])
+                //                     ->maxItems(6)
 
-                                    ->withoutheader()
-                                    ->schema([
+                //                     ->withoutheader()
+                //                     ->schema([
 
-                                        // text input name
-                                        TextInput::make('name')
-                                            ->required(),
+                //                         // text input name
+                //                         TextInput::make('name')
+                //                             ->required(),
 
-                                        SpatieMediaLibraryFileUpload::make('file')
+                //                         SpatieMediaLibraryFileUpload::make('file')
 
 
-                                    ]),
+                //                     ]),
 
-                            ])->columnSpanFull(),
-                    ]),
+                //             ])->columnSpanFull(),
+                //     ]),
             ]),
 
         ])
@@ -148,7 +152,17 @@ class RegisterFarmer extends Register
         $data['role'] = User::FARMER;
 
 
-        $user = $this->getUserModel()::create($data);
+
+
+         $user = $this->getUserModel()::create($data);
+         $this->form->model($user)->saveRelationships();
+         $user->load('farmer');
+
+        //  Notification::make()
+        //  ->title("New Order Received - {$order->order_number}")
+        //  ->body("{$buyer->full_name} has placed an order for a total of PHP " . number_format($order->total, 2) . "")
+        //  ->sendToDatabase($farmer->user,isEventDispatched: true);
+
 
         app()->bind(
             \Illuminate\Auth\Listeners\SendEmailVerificationNotification::class,

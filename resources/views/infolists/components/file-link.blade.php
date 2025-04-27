@@ -1,4 +1,5 @@
 <div {{ $attributes }} class="text-xs p-0">
+   
     @php
         $record = $getRecord();
         $requirement = $record->requirement;

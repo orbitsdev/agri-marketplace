@@ -17,7 +17,7 @@ class FarmerObserver
     {
         // Get all active requirements
         $activeRequirements = Requirement::where('is_active', true)->get();
-        
+
         // Create farmer requirements for each active requirement
         foreach ($activeRequirements as $requirement) {
             FarmerRequirement::create([
@@ -27,7 +27,7 @@ class FarmerObserver
                 'is_checked' => false
             ]);
         }
-        
+
         // Notify the farmer about the requirements
         if ($farmer->user) {
             Notification::make()
@@ -51,7 +51,7 @@ class FarmerObserver
                 })
                 ->where('status', '!=', FarmerRequirement::STATUS_APPROVED)
                 ->count();
-            
+
             if ($pendingMandatoryRequirements > 0) {
                 // Log a warning that not all mandatory requirements are met
                 Log::warning("Farmer ID {$farmer->id} was approved but has {$pendingMandatoryRequirements} pending mandatory requirements.");
