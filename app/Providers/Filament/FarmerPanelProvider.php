@@ -18,6 +18,7 @@ use App\Filament\Farmer\Pages\ViewProfile;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\Pages\Auth\RegisterFarmer;
 use App\Livewire\DatabaseCustomNotifications;
+use App\Filament\Farmer\Widgets\StatsOverview;
 use App\Http\Middleware\EnsureFarmerIsApproved;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -31,11 +32,15 @@ use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use App\Filament\Farmer\Resources\FarmerResource\Widgets\LatestAdminOrders;
+use App\Filament\Farmer\Resources\FarmerResource\Widgets\ListOfAlertLevelProduct;
 
 class FarmerPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        //   // Widgets\AccountWidget::class,
+
+        //   // Widgets\FilamentInfoWidget::class,
         return $panel
             ->id('farmer')
             ->path('farmer')
@@ -50,11 +55,11 @@ class FarmerPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
 
             ])
-            ->discoverWidgets(in: app_path('Filament/Farmer/Widgets'), for: 'App\\Filament\\Farmer\\Widgets')
+            // ->discoverWidgets(in: app_path('Filament/Farmer/Widgets'), for: 'App\\Filament\\Farmer\\Widgets')
             ->widgets([
-                // Widgets\AccountWidget::class,
-                LatestAdminOrders::class,
-                // Widgets\FilamentInfoWidget::class,
+                StatsOverview::class,
+                   ListOfAlertLevelProduct::class,
+          LatestAdminOrders::class,
             ])
             ->middleware([
                 EncryptCookies::class,
