@@ -68,7 +68,7 @@ class ManageOrderRequest extends EditRecord
                         ->title('Stock Warning')
                         ->body("Low stock for {$item->product_name}: {$product->quantity} available, {$item->quantity} ordered")
                         ->warning()
-                        ->send();
+                        ->sendToDatabase(auth()->user(), isEventDispatched: true);
                 }
             }
             
@@ -78,7 +78,7 @@ class ManageOrderRequest extends EditRecord
                     ->title('Order Processed With Warnings')
                     ->body("Order was confirmed but some items have insufficient stock. Please check inventory.")
                     ->warning()
-                    ->send();
+                    ->sendToDatabase(auth()->user(), isEventDispatched: true);
             }
         }
 
