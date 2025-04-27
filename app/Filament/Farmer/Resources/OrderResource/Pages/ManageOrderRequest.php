@@ -41,21 +41,44 @@ class ManageOrderRequest extends EditRecord
         // Store old status before updating
         $previousStatus = $record->status; // ✅ Save old status for comparison
 
-        // Validate stock before confirming order
+        // Check stock before confirming order (only warn, don't prevent unless zero)
         if (isset($data['status']) && $data['status'] === 'Confirmed') {
+            $hasStockWarning = false;
+            
             foreach ($record->items as $item) {
                 $product = $item->product;
-
-                if (!$product || $product->quantity < $item->quantity) {
+                
+                // Only prevent if product doesn't exist or has zero quantity
+                if (!$product || $product->quantity == 0) {
                     Notification::make()
                         ->title('Stock Error')
-                        ->body("Insufficient stock for product: {$item->product_name}")
+                        ->body("No stock available for product: {$item->product_name}")
                         ->danger()
                         ->send();
-
+                        
                     DB::rollBack();
                     return $record;
                 }
+                
+                // Just show warning if stock is less than ordered quantity
+                if ($product->quantity < $item->quantity) {
+                    $hasStockWarning = true;
+                    
+                    Notification::make()
+                        ->title('Stock Warning')
+                        ->body("Low stock for {$item->product_name}: {$product->quantity} available, {$item->quantity} ordered")
+                        ->warning()
+                        ->send();
+                }
+            }
+            
+            // Add a summary notification if there were warnings
+            if ($hasStockWarning) {
+                Notification::make()
+                    ->title('Order Processed With Warnings')
+                    ->body("Order was confirmed but some items have insufficient stock. Please check inventory.")
+                    ->warning()
+                    ->send();
             }
         }
 

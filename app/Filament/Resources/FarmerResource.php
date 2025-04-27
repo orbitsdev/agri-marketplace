@@ -256,13 +256,13 @@ class FarmerResource extends Resource
                         ->fillForm(function (Model $record) {
                             // Load the farmer with requirements for the form
                             $record->load(['farmerRequirements.requirement', 'farmerRequirements.media']);
-                            
+
                             $formData = ['status' => $record->status];
 
                             if (in_array($record->status, [Farmer::STATUS_REJECTED, Farmer::STATUS_BLOCKED])) {
                                 $formData['remarks'] = $record->remarks;
                             }
-                            
+
                             return $formData;
                         })
                         ->form(AdminForm::manageFarmForm())
@@ -288,7 +288,7 @@ class FarmerResource extends Resource
                             // Get the old status for comparison
                             $oldStatus = $record->status;
                             $newStatus = $data['status'];
-                            
+
                             // Update the status and remarks
                             $record->update([
                                 'status' => $newStatus,
@@ -315,7 +315,7 @@ class FarmerResource extends Resource
                                         $message = "Hello {$farmerName}, your farm registration is now PENDING review. We will notify you once it has been processed.";
                                         break;
                                 }
-                                
+
                                 if (!empty($message)) {
                                     $smsService->sendSms($record->user->phone, $message);
                                 }
