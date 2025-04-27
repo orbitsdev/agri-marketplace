@@ -74,8 +74,8 @@ class ViewProfile extends Page
                 Section::make('Farm Documents')
                     ->collapsible()
                     ->schema([
-                        RepeatableEntry::make('farmer.documents')
-                            ->label('Documents')
+                        RepeatableEntry::make('farmer.farmer_requirements')
+                            ->label('Required Documents')
                             ->columnSpanFull()
                             ->schema([
                                 View::make('infolists.components.file-link'),

@@ -25,7 +25,8 @@ class FarmerRequirement extends Model implements HasMedia
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('documents')
+        
+        $this->addMediaCollection('file')
             ->singleFile();
 
     }
@@ -63,7 +64,7 @@ class FarmerRequirement extends Model implements HasMedia
      */
     public function getDocumentUrl()
     {
-        return $this->hasMedia('documents') ? $this->getFirstMediaUrl('documents') : null;
+        return $this->hasMedia('file') ? $this->getFirstMediaUrl('file') : null;
     }
 
     /**
@@ -71,7 +72,7 @@ class FarmerRequirement extends Model implements HasMedia
      */
     public function hasDocument(): bool
     {
-        return $this->hasMedia('documents');
+        return $this->hasMedia('file');
     }
 
     /**

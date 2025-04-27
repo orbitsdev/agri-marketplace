@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\RequirementsSeeder;
+use Database\Seeders\FarmerRequirementsSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,7 +22,7 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             LocationSeeder::class,
             RequirementsSeeder::class,
-
+            FarmerRequirementsSeeder::class,
         ]);
         // \App\Models\User::factory(10)->create();
 

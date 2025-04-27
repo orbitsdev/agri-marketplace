@@ -17,10 +17,12 @@ use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Textarea;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
+use Illuminate\Database\Eloquent\Builder;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
@@ -126,7 +128,7 @@ class FilamentForm extends Controller
                     ])->hidden(function (Get $get) {
                         return $get('role') !== User::FARMER;
                     }),
-                Wizard\Step::make('Farm Documents')
+                Wizard\Step::make('Application Requirements')
                     ->schema([
                         ...self::farmRequiredDocuments(),
                         // ...self::farmDocuments(),
@@ -274,7 +276,8 @@ class FilamentForm extends Controller
     public static function farmerForm()
     {
         return [
-            Group::make()
+            Section::make('Farm Information')
+                ->description('Provide details about your farm')
                 ->columns([
                     'sm' => 2,
                     'md' => 4,
@@ -284,59 +287,50 @@ class FilamentForm extends Controller
                 ])
                 ->columnSpanFull()
                 ->relationship('farmer')
-
                 ->schema([
                     TextInput::make('farm_name')
-
+                        ->label('Farm Name')
+                        ->placeholder('Enter your farm name')
                         ->required()
                         ->columnSpan([
                             'sm' => 2,
                             'md' => 4,
                             'lg' => 4,
-
                         ]),
-                    // text input location
+
                     TextInput::make('location')
+                        ->label('Farm Location')
+                        ->placeholder('Enter farm location')
                         ->required()
                         ->columnSpan([
                             'sm' => 2,
                             'md' => 4,
                             'lg' => 4,
-
                         ]),
-                    // text input farm size
+
                     TextInput::make('farm_size')
+                        ->label('Farm Size (hectares)')
+                        ->placeholder('Enter farm size')
                         ->required()
                         ->columnSpan([
                             'sm' => 2,
                             'md' => 4,
                             'lg' => 4,
-
                         ]),
-                    // text input description
+
                     RichEditor::make('description')
+                        ->label('Farm Description')
+                        ->placeholder('Describe your farm, including crops grown, farming methods, etc.')
                         ->columnSpanFull()
                         ->required()
                         ->toolbarButtons([
-                            'attachFiles',
-                            'blockquote',
                             'bold',
-                            'bulletList',
-                            'codeBlock',
-                            'h2',
-                            'h3',
                             'italic',
-                            'link',
+                            'bulletList',
                             'orderedList',
-                            'redo',
-                            'strike',
-                            'underline',
-                            'undo',
+                            'link',
                         ]),
                 ]),
-
-
-
         ];
     }
     public static function farmRequiredDocuments()
@@ -360,24 +354,26 @@ class FilamentForm extends Controller
                         ->columnSpanFull()
                         ->columnWidths([
                             'name' => '200px',
+                            'file' => '500px',
                         ])
-                        ->maxItems(6)
+                        ->addable(false)
+                        ->deletable(false)
+
                         ->withoutheader()
                         ->schema([
-                            TextInput::make('requirement_id')
+                            Select::make('requirement_id')
+                                ->label('Doc Type')
+                                ->relationship(
+                                    'requirement',
+                                    'name'
+                                )
                                 ->disabled()
-                                ->label('Requirement')
-                                ->placeholder('Requirement Name')
-                                ->columnSpan([
-                                    'sm' => 2,
-                                    'md' => 4,
-                                    'lg' => 6,
-                                    'xl' => 8,
-                                    '2xl' => 12,
-                                ]),
+                                        ->dehydrated(false)
+                                        ->preload(),
                             SpatieMediaLibraryFileUpload::make('file')
-                                ->required()
-                                ->label('Upload Document')
+
+                                ->label('Upload')
+
                         ]),
 
                 ])->columnSpanFull(),
