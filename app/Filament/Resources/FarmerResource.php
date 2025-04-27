@@ -30,6 +30,8 @@ use Filament\Infolists\Components\RepeatableEntry;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\FarmerResource\RelationManagers;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry\TextEntrySize;
 
 class FarmerResource extends Resource
 {
@@ -48,77 +50,94 @@ class FarmerResource extends Resource
     {
         return $infolist
             ->schema([
-                // SpatieMediaLibraryImageEntry::make('image')->label('Profile'),
-                TextEntry::make('user.fullName')
-                    ->label('Farm Owner'),
-
-
-                TextEntry::make('farm_name')
-                    ->label('Farm Name'),
-
-
-                TextEntry::make('location')
-                    ->label('Location'),
-
-                TextEntry::make('farm_size')
-                    ->label('Farm Size'),
-
-
-                TextEntry::make('description')
-                    ->label('Description')->markdown()->columnSpanFull(),
-
-
-
-                // TextEntry::make('created_at')
-                //     ->label('Created At')
-                //     ->dateTime()
-                //     ->dateTimeTooltip(),
-
-                // TextEntry::make('updated_at')
-                //     ->label('Updated At')
-                //     ->dateTime()
-                //     ->dateTimeTooltip(),
-
-                // RepeatableEntry::make('documents')
-                // ->columnSpanFull()
-                //     ->schema([
-                //     // TextEntry::make('name'),
-                //         View::make('infolists.components.file-link')
-
-
-                //     ])
-                //     ->columns(1)
-                RepeatableEntry::make('farmer_requirements')
-                ->columnSpanFull()
+                // Farm Owner Information Section
+                Section::make('Farm Owner Information')
                     ->schema([
-                    // TextEntry::make('name'),
-                        View::make('infolists.components.file-link')
+                        TextEntry::make('user.fullName')
+                            ->label('Owner Name')
+                            ->size(TextEntry\TextEntrySize::Large),
 
+                        TextEntry::make('user.email')
+                            ->label('Email')
+                            ->icon('heroicon-m-envelope'),
 
+                        TextEntry::make('user.phone')
+                            ->label('Phone')
+                            ->icon('heroicon-m-phone'),
                     ])
-                    ->contained(false)
-                    ->columns(1),
+                    ->columns(3)
+                    ->collapsible(),
 
-                    TextEntry::make('status')
-                    ->label('Status')
-                    ->badge()
-                    ->color(fn(string $state): string => match ($state) {
-                        Farmer::STATUS_PENDING => 'info',
-                        Farmer::STATUS_APPROVED => 'success',
-                        Farmer::STATUS_REJECTED => 'danger',
-                        Farmer::STATUS_BLOCKED => 'danger',
-                        default => 'gray',
-                    }),
+                // Farm Details Section
+                Section::make('Farm Details')
+                    ->schema([
+                        TextEntry::make('farm_name')
+                            ->label('Farm Name')
+                            ->size(TextEntry\TextEntrySize::Large),
 
+                        TextEntry::make('location')
+                            ->label('Location')
+                            ->icon('heroicon-m-map-pin'),
 
+                        TextEntry::make('farm_size')
+                            ->label('Farm Size')
+                            ->icon('heroicon-m-square-2-stack'),
 
-                    TextEntry::make('remarks')
-                    ->label('Remarks')->markdown()->columnSpanFull()
-                    ->hidden(function (Model $record) {
+                        TextEntry::make('description')
+                            ->label('Description')
+                            ->markdown()
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(3)
+                    ->collapsible(),
 
-                        return !in_array($record->status, [Farmer::STATUS_BLOCKED, Farmer::STATUS_REJECTED]);
-                    }),
+                // Application Status Section
+                Section::make('Application Status')
+                    ->schema([
+                        TextEntry::make('status')
+                            ->label('Current Status')
+                            ->badge()
+                            ->size(TextEntry\TextEntrySize::Large)
+                            ->color(fn(string $state): string => match ($state) {
+                                Farmer::STATUS_PENDING => 'info',
+                                Farmer::STATUS_APPROVED => 'success',
+                                Farmer::STATUS_REJECTED => 'danger',
+                                Farmer::STATUS_BLOCKED => 'danger',
+                                default => 'gray',
+                            }),
 
+                        TextEntry::make('remarks')
+                            ->label('Remarks')
+                            ->markdown()
+                            ->columnSpanFull()
+                            ->hidden(function (Model $record) {
+                                return !in_array($record->status, [Farmer::STATUS_BLOCKED, Farmer::STATUS_REJECTED]);
+                            }),
+
+                        TextEntry::make('created_at')
+                            ->label('Registered On')
+                            ->dateTime()
+                            ->icon('heroicon-m-calendar'),
+
+                        TextEntry::make('updated_at')
+                            ->label('Last Updated')
+                            ->dateTime()
+                            ->icon('heroicon-m-clock'),
+                    ])
+                    ->columns(2)
+                    ->collapsible(),
+
+                // Required Documents Section
+                Section::make('Required Documents')
+                    ->schema([
+                        RepeatableEntry::make('farmer_requirements')
+                            ->schema([
+                                View::make('infolists.components.file-link')
+                            ])
+                            ->contained(false)
+                            ->columns(1),
+                    ])
+                    ->collapsible(),
             ]);
     }
 
