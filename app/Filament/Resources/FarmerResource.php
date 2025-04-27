@@ -56,7 +56,7 @@ class FarmerResource extends Resource
                 TextEntry::make('farm_name')
                     ->label('Farm Name'),
 
-                 
+
                 TextEntry::make('location')
                     ->label('Location'),
 
@@ -88,7 +88,7 @@ class FarmerResource extends Resource
 
                 //     ])
                 //     ->columns(1)
-                RepeatableEntry::make('documents')
+                RepeatableEntry::make('farmer_requirements')
                 ->columnSpanFull()
                     ->schema([
                     // TextEntry::make('name'),
