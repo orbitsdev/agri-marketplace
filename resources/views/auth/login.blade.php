@@ -31,12 +31,12 @@
                 <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
             </div>
 
-            <div class="block mt-4">
+            {{-- <div class="block mt-4">
                 <label for="remember_me" class="flex items-center">
                     <x-checkbox id="remember_me" name="remember" />
                     <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
                 </label>
-            </div>
+            </div> --}}
 
             <div class="mt-4">
                 <x-button class="w-full flex items-center justify-center py-3" type="submit">

@@ -24,11 +24,11 @@ class RedirectIfAuthenticated
                 // return redirect(RouteServiceProvider::HOME);
 
                 if ($request->is('admin/*')) {
-                    return redirect('/admin/dashboard'); // Redirect to admin dashboard
+                    return redirect('/admin/dashboard');
                 }
 
                 if ($request->is('farmer/*')) {
-                    return redirect('/farmer/dashboard'); // Redirect to farmer dashboard
+                    return redirect('/farmer/dashboard'); 
                 }
 
                 // Default Jetstream redirection
