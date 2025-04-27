@@ -56,6 +56,9 @@ class FarmerResource extends Resource
                 TextEntry::make('farm_name')
                     ->label('Farm Name'),
 
+                    ViewColumn::make('files')
+                    ->view('tables.columns.farm-documents-column')
+                    ->label('Documents'),
                 TextEntry::make('location')
                     ->label('Location'),
 
@@ -160,8 +163,13 @@ class FarmerResource extends Resource
                     ->label('Farm Owner')
                     ->sortable(),
 
+                    ViewColumn::make('files')
+                    ->view('tables.columns.farm-documents-column')
+                    ->label('Documents'),
+
                 TextColumn::make('user.email')
                     ->searchable()
+                    ->toggleable(isToggledHiddenByDefault:true)
                     ->label('Email')
                     ->copyable()
                     ->sortable(),
@@ -172,23 +180,24 @@ class FarmerResource extends Resource
                 // Farm Information
                 TextColumn::make('farm_name')
                     ->searchable()
+                    ->toggleable(isToggledHiddenByDefault:true)
                     ->sortable(),
 
                 TextColumn::make('location')
                     ->searchable()
+                    ->toggleable(isToggledHiddenByDefault:true)
                     ->sortable(),
 
                 TextColumn::make('farm_size')
                     ->searchable()
+                    ->toggleable(isToggledHiddenByDefault:true)
                     ->sortable(),
 
                 // Application Status
 
 
                 // Documents
-                ViewColumn::make('files')
-                    ->view('tables.columns.farm-documents-column')
-                    ->label('Documents'),
+
 
                 // Timestamps
                 TextColumn::make('created_at')
@@ -300,7 +309,7 @@ class FarmerResource extends Resource
                                 $smsService = app(\App\Services\TeamSSProgramSmsService::class);
                                 $farmerName = $record->user->fullName;
                                 $message = '';
-                                
+
                                 switch ($newStatus) {
                                     case Farmer::STATUS_APPROVED:
                                         $message = "Hello {$farmerName}, your farm registration has been APPROVED! You can now start using the Agri-Marketplace platform to sell your products.";
