@@ -203,12 +203,17 @@
             </div>
         </div>
 
-        <p class="destruction-notice">When countdown reaches ZERO, <span class="highlight">please contact us to restore service</span></p>
-
         <p class="quote">
             "True appreciation comes when you are the one who made the effort."
         </p>
 
+
+
+        <p class="contact">
+            If you need to restore service or have already made a payment, please contact the developer at <span class="highlight">orbitsdev@gmail.com</span>
+        </p>
+
+        <a href="mailto:orbinobrian0506@gmail.com" class="btn">Contact Developer</a>
 
 
         {{-- <p class="contact">
