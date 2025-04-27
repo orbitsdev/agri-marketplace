@@ -55,7 +55,11 @@ public function generateAndSendOtp(): void
     ]);
 
     app(\App\Services\TeamSSProgramSmsService::class)
-        ->sendSms($user->phone, "Your verification code is: {$otp}");
+    ->sendSms(
+        $user->phone,
+        "[AgriMarket] Your verification code is {$otp}. It will expire in 5 minutes. Do not share this code with anyone."
+    );
+
 
     \Illuminate\Support\Facades\Log::info('New OTP generated and sent: ' . $otp);
 }
