@@ -33,12 +33,10 @@
         @endforeach
     </tbody>
     <tfoot>
-        <tr style="background-color: #1d4ed8; color: white;">
-            <th colspan="6" align="right" style="background-color: #106c3b; color: white;">Total Sales</th>
-            <th align="left" style="background-color: #106c3b; color: white;">
-                ₱{{ number_format($totalSales, 2) }}
-            </th>
-            <th></th>
+        <tr class="subtotal-row">
+            <td colspan="6" style="text-align: right;">Total Sales</td>
+            <td>₱{{ number_format($totalSales, 2) }}</td>
+            <td></td>
         </tr>
     </tfoot>
 </table>

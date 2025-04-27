@@ -99,6 +99,14 @@ Route::get('/farmer/status', WaitingForApproval::class)->name('farmer.waiting-fo
     Route::get('/reports/total-orders', [ReportController::class, 'exportTotalOrders'])->name('reports.total-orders');
 
     Route::get('/reports/orders-by-status', [ReportController::class, 'exportOrdersByStatus'])->name('reports.orders-by-status');
+    
+    // Printable Report Routes
+    Route::get('/reports/printable/monthly-sales', [ReportController::class, 'printableMonthlySales'])->name('reports.printable.monthly-sales');
+    Route::get('/reports/printable/yearly-sales', [ReportController::class, 'printableYearlySales'])->name('reports.printable.yearly-sales');
+    Route::get('/reports/printable/total-products', [ReportController::class, 'printableTotalProducts'])->name('reports.printable.total-products');
+    Route::get('/reports/printable/out-of-stock-products', [ReportController::class, 'printableOutOfStockProducts'])->name('reports.printable.out-of-stock-products');
+    Route::get('/reports/printable/total-orders', [ReportController::class, 'printableTotalOrders'])->name('reports.printable.total-orders');
+    Route::get('/reports/printable/orders-by-status', [ReportController::class, 'printableOrdersByStatus'])->name('reports.printable.orders-by-status');
 
 
 
@@ -109,6 +117,9 @@ Route::get('/farmer/status', WaitingForApproval::class)->name('farmer.waiting-fo
 
 Route::get('/report/farmer-documents/{farmer}', [ReportController::class, 'exportFarmerDocuments'])
 ->name('export.farmer.documents');
+
+Route::get('/reports/printable/farmer-documents/{farmer}', [ReportController::class, 'printableFarmerDocuments'])
+->name('reports.printable.farmer-documents');
 
 Route::get('/account-deactivated', AccountIsDeactivatedPage::class)
     ->name('account.deactivated')

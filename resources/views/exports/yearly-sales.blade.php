@@ -24,10 +24,10 @@
         @endforeach
     </tbody>
     <tfoot>
-        <tr style="background-color: #1d4ed8; color: white;">
-            <th align="right" style="background-color: #FFCC99;">Yearly Total</th>
-            <th align="left" style="background-color: #FFCC99;">{{ $totalYearlyOrders }}</th>
-            <th align="left" style="background-color: #FFCC99;">₱{{ number_format($totalYearlySales, 2) }}</th>
+        <tr class="subtotal-row">
+            <td align="right">Yearly Total</td>
+            <td align="left">{{ $totalYearlyOrders }}</td>
+            <td align="left">₱{{ number_format($totalYearlySales, 2) }}</td>
         </tr>
     </tfoot>
 </table>
