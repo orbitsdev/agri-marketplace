@@ -35,6 +35,7 @@ public function form(Form $form): Form
     return $data;
 }
 
+
 public function generateAndSendOtp(): void
 {
     $user = auth()->user();
@@ -54,12 +55,19 @@ public function generateAndSendOtp(): void
         'otp_expires_at' => now()->addMinutes(5),
     ]);
 
-    app(\App\Services\TeamSSProgramSmsService::class)
+    // Original TeamSSProgramSmsService code (commented out as it's expired)
+    // app(\App\Services\TeamSSProgramSmsService::class)
+    // ->sendSms(
+    //     $user->phone,
+    //     "[AgriMarket] Your verification code is {$otp}. It will expire in 5 minutes. Do not share this code with anyone."
+    // );
+    
+    // Using SmsService instead
+    app(\App\Services\SmsService::class)
     ->sendSms(
         $user->phone,
         "[AgriMarket] Your verification code is {$otp}. It will expire in 5 minutes. Do not share this code with anyone."
     );
-
 
     \Illuminate\Support\Facades\Log::info('New OTP generated and sent: ' . $otp);
 }
