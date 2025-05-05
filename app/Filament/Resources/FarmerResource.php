@@ -323,7 +323,12 @@ class FarmerResource extends Resource
 
                             // Send SMS notification to farmer based on status
                             if ($record->user && $record->user->phone) {
-                                $smsService = app(\App\Services\TeamSSProgramSmsService::class);
+                                // Original TeamSSProgramSmsService code (commented out as it's expired)
+                                // $smsService = app(\App\Services\TeamSSProgramSmsService::class);
+                                
+                                // Using SmsService instead
+                                $smsService = app(\App\Services\SmsService::class);
+                                
                                 $farmerName = $record->user->fullName;
                                 $message = '';
 
