@@ -14,11 +14,13 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            ['name' => 'Vegetables', 'description' => 'Fresh and organic vegetables'],
-            ['name' => 'Fruits', 'description' => 'Sweet and fresh fruits'],
-            ['name' => 'Dairy', 'description' => 'Milk, cheese, and other dairy products'],
-            ['name' => 'Nuts', 'description' => 'Healthy and nutritious nuts'],
-            ['name' => 'Grains', 'description' => 'Cereals, wheat, and other grains'],
+            ['name' => 'Bread', 'description' => 'Freshly baked artisanal breads'],
+            ['name' => 'Pastries', 'description' => 'Delicious sweet and savory pastries'],
+            ['name' => 'Cakes', 'description' => 'Celebration and everyday cakes for all occasions'],
+            ['name' => 'Cookies', 'description' => 'Homemade cookies and biscuits'],
+            ['name' => 'Desserts', 'description' => 'Specialty desserts and sweet treats'],
+            ['name' => 'Savory', 'description' => 'Savory baked goods and snacks'],
+            ['name' => 'Gluten-Free', 'description' => 'Gluten-free bakery options'],
         ];
 
         foreach ($categories as $category) {
