@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
         Model::unguard();
 
         FilamentColor::register([
-            'primary' => "#00993c",
+            'primary' => "#d97d2b",
 
             'danger' => Color::Red,
             'gray' => Color::Zinc,
@@ -48,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
         // ]);
 
         FilamentColor::register([
-            'primary' => "#048E5C",
+            'primary' => "#c45e21",
 
         ]);
 

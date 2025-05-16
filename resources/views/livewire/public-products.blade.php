@@ -1,5 +1,5 @@
 <div class="bg-white">
-    <x-buyer-layout>
+    <x-public-layout>
         <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <!-- Header -->
             <div class="border-b border-gray-200 pb-10 pt-14">
@@ -62,7 +62,7 @@
                     <div class="mt-8 grid grid-cols-1 gap-y-10 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
                         @forelse ($products as $product)
                             <div>
-                                <a href="{{ route('product.details', ['code'=> $product->code,'slug' => $product->slug]) }}" class="relative block group">
+                                <a href="/public/products/{{ $product->code }}/{{ $product->slug }}" class="relative block group">
                                     <div class="relative h-72 w-full overflow-hidden rounded-lg">
                                         <img src="{{ $product->getImage() }}" alt="{{ $product->product_name }}"
                                             class="h-full w-full object-cover transition-transform group-hover:scale-105">
@@ -78,7 +78,9 @@
                                     </div>
                                 </a>
                                 <div class="mt-4">
-                                    {{ ($this->addToCartAction)(['record' => $product->id]) }}
+                                    <a href="{{ route('login') }}" class="w-full inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700">
+                                        Login to Add to Cart
+                                    </a>
                                 </div>
                             </div>
                         @empty
@@ -93,7 +95,5 @@
                 </section>
             </div>
         </main>
-    </x-buyer-layout>
-
-    <x-filament-actions::modals />
+    </x-public-layout>
 </div>

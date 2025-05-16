@@ -31,10 +31,13 @@ use App\Http\Controllers\NotificationController;
 */
 
 Route::get('/', function () {
-    // return view('welcome');
-    return redirect()->route('dashboard');
-
+    return redirect()->route('public.products');
 });
+
+// Public routes that don't require authentication
+Route::get('/products', \App\Livewire\PublicProducts::class)->name('public.products');
+Route::get('/public/products/{code}/{slug}', \App\Livewire\PublicProductDetails::class)->name('public.product.details');
+Route::get('/public/farmer/{farmerId}', \App\Livewire\PublicFarmerDetails::class)->name('public.farmer.details');
 
 Route::middleware([
     'auth:sanctum',

@@ -15,7 +15,7 @@
         @endif
 
         <div class="flex flex-col justify-center items-center mt-4 mb-8">
-            <p class="text-3xl text-eucalyptus-700 font-bold">AGRI-MARKET</p>
+            <p class="text-3xl text-eucalyptus-700 font-bold">SWEET DELIGHT BAKERY</p>
         </div>
 
         <form method="POST" action="{{ route('login') }}">
@@ -47,7 +47,7 @@
             <div class="mt-4 text-center">
                 <p class="text-sm text-gray-600">
                     {{ __("Don't have an account?") }}
-                    <a href="{{ route('register') }}" class="text-eucalyptus-700  hover:underline">
+                    <a href="{{ route('register') }}" class="text-eucalyptus-700 hover:underline">
                         {{ __('Register here') }}
                     </a>
                 </p>

@@ -39,23 +39,23 @@ export default {
                  sans: ['Poppins', ...defaultTheme.fontFamily.sans],
             },
             colors: {
-              
+
 
               // Reapply Tailwind's default colors to avoid being overridden
-              
+
 
               'primary': {
-                '50': '#eefbf2',
-                '100': '#d5f6dd',
-                '200': '#afebc0',
-                '300': '#7bda9c',
-                '400': '#45c274',
-                '500': '#22a759',
-                '600': '#148746',
-                '700': '#106c3b',
-                '800': '#0f5630',
-                '900': '#0d4327',
-                '950': '#062817',
+                '50': '#fdf8f1',
+                '100': '#f8edd8',
+                '200': '#f2d9b0',
+                '300': '#e9be7e',
+                '400': '#e19c4c',
+                '500': '#d97d2b',
+                '600': '#c45e21',
+                '700': '#a3451d',
+                '800': '#85391e',
+                '900': '#6e321c',
+                '950': '#3f190e',
                         },
 
                         green: colors.green, // Default green palette
@@ -66,23 +66,60 @@ export default {
               negative: colors.red,
               warning: colors.amber,
               info: colors.blue,
-                
+
               // Add custom WireUI or Filament-specific colors explicitly
               'eucalyptus': {
-                  '50': '#ecfdf4',
-                  '100': '#d1fae3',
-                  '200': '#a7f3cc',
-                  '300': '#6de8b1',
-                  '400': '#33d491',
-                  '500': '#0fba78',
-                  '600': '#048e5c',
-                  '700': '#037951',
-                  '800': '#065f41',
-                  '900': '#064e37',
-                  '950': '#022c20',
+                  '50': '#fbf7f4',
+                  '100': '#f5ebe3',
+                  '200': '#ead6c6',
+                  '300': '#ddb99f',
+                  '400': '#cc9671',
+                  '500': '#c07c54',
+                  '600': '#b26546',
+                  '700': '#94503b',
+                  '800': '#794334',
+                  '900': '#653a2f',
+                  '950': '#361c16',
               },
+            //   'primary': {
+            //     '50': '#eefbf2',
+            //     '100': '#d5f6dd',
+            //     '200': '#afebc0',
+            //     '300': '#7bda9c',
+            //     '400': '#45c274',
+            //     '500': '#22a759',
+            //     '600': '#148746',
+            //     '700': '#106c3b',
+            //     '800': '#0f5630',
+            //     '900': '#0d4327',
+            //     '950': '#062817',
+            //             },
 
-              
+            //             green: colors.green, // Default green palette
+            //   indigo: colors.indigo, // Default indigo palette
+            //   gray: colors.gray, // Default gray palette
+            //   secondary: colors.gray,
+            //   positive: colors.emerald,
+            //   negative: colors.red,
+            //   warning: colors.amber,
+            //   info: colors.blue,
+
+            //   // Add custom WireUI or Filament-specific colors explicitly
+            //   'eucalyptus': {
+            //       '50': '#ecfdf4',
+            //       '100': '#d1fae3',
+            //       '200': '#a7f3cc',
+            //       '300': '#6de8b1',
+            //       '400': '#33d491',
+            //       '500': '#0fba78',
+            //       '600': '#048e5c',
+            //       '700': '#037951',
+            //       '800': '#065f41',
+            //       '900': '#064e37',
+            //       '950': '#022c20',
+            //   },
+
+
 
             }
         },
