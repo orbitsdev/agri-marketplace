@@ -4,12 +4,10 @@
             <!-- Header -->
             <div class="border-b border-gray-200 pb-10 pt-14">
                 <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900">
-                    AGRI MARKET - Freshly Baked Happiness
+                    AGRI MARKET - Fresh From the Farm
                 </h1>
                 <p class="mt-4 text-sm sm:text-base text-gray-500">
-                    Welcome to AGRI MARKET, your destination for delicious baked goods made with premium ingredients. 
-                    Discover our selection of artisanal breads, pastries, cakes, and desserts crafted with passion and expertise. 
-                    Every bite brings the authentic taste of traditional recipes with a modern twist.
+                    Welcome to AGRI MARKET, your trusted marketplace for fresh agricultural products. Discover a wide range of grains, coffee, corn, rice, coconut, and more—sourced directly from local farmers and delivered with quality and care. Support local agriculture and enjoy healthy, farm-fresh food for your family.
                 </p>
             </div>
 
