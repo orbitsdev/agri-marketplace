@@ -1,6 +1,6 @@
 <header class="relative bg-white border-b border-gray-200">
     <p class="flex h-10 items-center justify-center bg-gradient-to-r from-primary-500 via-purple-500 to-pink-500 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
-        Sweet Delight Bakery - Fresh Baked Goods Delivered To Your Door
+        AGRI MARKET - Fresh Produce Delivered To Your Door
     </p>
 
     <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" x-data="{ mobileMenuOpen: false, profileOpen: false }">
@@ -16,7 +16,7 @@
 
             <!-- Desktop menu -->
             <div class="hidden lg:flex space-x-8">
-                <a href="{{route('dashboard')}}" class="text-sm font-medium text-gray-700 hover:text-gray-800">Bakery Products</a>
+                <a href="{{route('dashboard')}}" class="text-sm font-medium text-gray-700 hover:text-gray-800">Agriculture Products</a>
                 {{-- <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">Farms</a>
                 <a href="#" class="text-sm font-medium text-gray-700 hover:text-gray-800">About us</a> --}}
             </div>
@@ -61,7 +61,7 @@
         <!-- Mobile menu -->
         <div x-show="mobileMenuOpen" class="lg:hidden">
             <div class="pt-2 pb-3 space-y-1">
-                <a href="{{route('dashboard')}}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">Bakery Products</a>
+                <a href="{{route('dashboard')}}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">Agriculture Products</a>
                 {{-- <a href="#" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">Farms</a>
                 <a href="#" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">About us</a> --}}
             </div>

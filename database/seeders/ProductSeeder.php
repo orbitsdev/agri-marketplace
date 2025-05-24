@@ -15,6 +15,8 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
+        // The following products are agriculture-focused and match the AGRI MARKET theme.
+        // If you need to switch back to bakery, refer to the commented bakery categories in CategorySeeder.php.
 
         $categories = Category::all();
 

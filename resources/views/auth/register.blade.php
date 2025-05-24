@@ -10,7 +10,7 @@
         <x-validation-errors class="mb-4" />
 
         <div class="flex flex-col justify-center items-center mt-4 mb-8">
-            <p class="text-3xl text-eucalyptus-700 font-bold">SWEET DELIGHT BAKERY</p>
+            <p class="text-3xl text-eucalyptus-700 font-bold">AGRI MARKET</p>
         </div>
 
         <form method="POST" action="{{ route('register') }}">

@@ -9,7 +9,7 @@
                         <nav aria-label="Breadcrumb">
                             <div class="flex items-center space-x-2 text-sm">
                                 <a href="#" class="font-medium text-gray-500 hover:text-gray-900">
-                                    Sweet Delight Bakery
+                                    AGRI MARKET
                                 </a>
                                 <svg viewBox="0 0 20 20" fill="currentColor" class="ml-2 size-5 text-gray-300">
                                     <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
@@ -17,7 +17,7 @@
                                 <div>
                                     <a href="#"
                                        class="font-medium text-gray-500 hover:text-gray-900">
-                                        Artisanal Baked Goods
+                                        Fresh Agricultural Products
                                     </a>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                         <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
                             <h2 class="text-xl md:text-2xl font-bold text-gray-900">Product Inquiry</h2>
                             <p class="text-sm text-gray-500 mt-2 md:mt-0">
-                                Have questions about this bakery product? Login to chat with us.
+                                Have questions about this product? Login to chat with us.
                             </p>
                         </div>
 
