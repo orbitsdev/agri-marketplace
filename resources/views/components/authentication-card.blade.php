@@ -5,8 +5,7 @@
     </div>
 
     <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg relative">
-        <h1>AGRI MARKET - Fresh From the Farm</h1>
-        <p>Welcome to AGRI MARKET, your trusted marketplace for fresh agricultural products. Discover a wide range of grains, coffee, corn, rice, coconut, and more—sourced directly from local farmers and delivered with quality and care. Support local agriculture and enjoy healthy, farm-fresh food for your family.</p>
+        
         {{ $slot }}
     </div>
 </div>
